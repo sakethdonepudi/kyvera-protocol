@@ -86,9 +86,9 @@ Add `--revoke` to seed a revoked identity instead of an active one.
 
 1. Open `/create`.
 2. Under **Nostr identity**, click **Generate key** (or connect NIP-07).
-3. Under **Bitcoin Cash identity**, click **Generate demo wallet**.
+3. Under **BCH identity**, either **Connect Wallet** (WizardConnect) or select **Demo** and click **Generate demo wallet**.
 4. Read the **BCH proof message** and the canonical Nostr event content. Nothing is hidden.
-5. Click **Sign and publish binding**.
+5. Click **Publish identity**.
 
 Expected: **Binding published**, with one relay accepted. The dashboard link opens `/identity/<npub>`.
 

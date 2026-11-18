@@ -247,8 +247,8 @@ export default function CreatePage() {
           Bind a Nostr identity to a BCH wallet.
         </h1>
         <p className="mt-3 text-[13.5px] leading-relaxed text-ivory-muted">
-          Two independent keys, one canonical record. You will see the exact bytes each key signs
-          before anything is published. Private keys never leave your browser or extension.
+          Two keys, one canonical record. You see the exact bytes before publishing. Private keys
+          never leave your browser.
         </p>
       </div>
 
@@ -295,8 +295,7 @@ export default function CreatePage() {
               </div>
             ) : (
               <p className="mt-3 text-[12.5px] leading-relaxed text-ivory-muted">
-                Generate a throwaway Nostr key for the demo, or connect a NIP-07 browser extension to
-                sign with a key you already control.
+                Generate a throwaway key, or connect a NIP-07 signer.
               </p>
             )}
             {nostrError ? (
@@ -369,7 +368,9 @@ export default function CreatePage() {
                         </span>
                         <Badge tone="neutral">address connected</Badge>
                       </div>
-                      <div className="mt-1 break-all font-mono text-[12px] text-ivory">{walletAddress}</div>
+                      <div className="mt-1 font-mono text-[14px] text-ivory" title={walletAddress}>
+                        {shortAddress(walletAddress)}
+                      </div>
                       <div className="mt-2 flex flex-wrap gap-2">
                         <CopyButton value={walletAddress} />
                         <Button variant="ghost" className="px-2 py-1 text-[10px]" onClick={() => void wallet.disconnect()}>
@@ -550,8 +551,8 @@ export default function CreatePage() {
             ) : bchMode !== "demo" && draft ? (
               <div className="space-y-2">
                 <p className="text-[12px] leading-relaxed text-ivory-muted">
-                  The record commits to this digest. Your BCH signature covers the domain-separated
-                  message, and the Nostr event covers the canonical record containing both proofs.
+                  The BCH signature covers the proof message. The Nostr event covers the canonical
+                  record containing both proofs.
                 </p>
                 <pre className="scroll-pane max-h-64 overflow-auto rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-ivory-dim">
 {JSON.stringify(draft.payload, null, 2)}
@@ -560,7 +561,7 @@ export default function CreatePage() {
               </div>
             ) : (
               <p className="text-[12.5px] text-ivory-muted">
-                Configure both keys to preview the signed payload. Nothing is published yet.
+                Configure both keys to preview the signed payload.
               </p>
             )}
             {previewError ? <Alert tone="danger">{previewError}</Alert> : null}
@@ -596,10 +597,10 @@ export default function CreatePage() {
             >
               {phase === "publishing" ? (
                 <>
-                  <Spinner /> Signing and publishing…
+                  <Spinner /> Publishing…
                 </>
               ) : (
-                "Sign and publish binding"
+                "Publish identity"
               )}
             </Button>
 
@@ -636,8 +637,7 @@ export default function CreatePage() {
               </div>
             ) : (
               <p className="mt-3 text-[11px] leading-relaxed text-muted">
-                Publishing writes one signed Nostr event. If the local demo relay is not running,
-                the record is still saved in this browser and can be re-published later.
+                Signed locally. Saved in this browser even if the relay is offline.
               </p>
             )}
           </Card>

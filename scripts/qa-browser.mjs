@@ -82,7 +82,7 @@ async function desktopFlow() {
   await page.getByRole("button", { name: "Generate demo wallet" }).click();
   await page.getByText("BCH proof message").waitFor({ timeout: 15_000 });
   record("create page renders proof preview", true);
-  await page.getByRole("button", { name: "Sign and publish binding" }).click();
+  await page.getByRole("button", { name: "Publish identity" }).click();
   await page.getByText("Binding published").waitFor({ timeout: 20_000 });
   const stored = await page.evaluate(() =>
     JSON.parse(localStorage.getItem("kyvera.identities.v1") ?? "{}"),
@@ -100,7 +100,7 @@ async function desktopFlow() {
   await page.getByPlaceholder("Base64 wallet signature").fill("not-a-real-signature");
   await page.getByRole("button", { name: "Verify ownership" }).click();
   await page.getByText(/signature/i).last().waitFor({ timeout: 10_000 });
-  const lockedBeforeProof = await page.getByRole("button", { name: "Sign and publish binding" }).isDisabled();
+  const lockedBeforeProof = await page.getByRole("button", { name: "Publish identity" }).isDisabled();
   record("create page rejects an invalid wallet signature", true);
   record("publish stays locked until ownership is verified", lockedBeforeProof);
 
