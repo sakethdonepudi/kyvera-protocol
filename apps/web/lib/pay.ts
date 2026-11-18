@@ -117,6 +117,9 @@ export interface DestinationSnapshot {
   subject: string;
   address: string;
   status: IdentityStatus;
+  /** Last observed head, used to detect a rollback after the intent was formed. */
+  headSequence?: number | null;
+  headRecordId?: string | null;
 }
 
 export function destinationChanged(
@@ -124,10 +127,29 @@ export function destinationChanged(
   next: DestinationSnapshot | null,
 ): boolean {
   if (!previous || !next) return true;
-  return (
+  if (
     previous.subject !== next.subject ||
     previous.address !== next.address ||
     previous.status !== "ACTIVE" ||
     next.status !== "ACTIVE"
-  );
+  ) {
+    return true;
+  }
+  if (
+    typeof previous.headSequence === "number" &&
+    typeof next.headSequence === "number" &&
+    next.headSequence < previous.headSequence
+  ) {
+    return true;
+  }
+  if (
+    previous.headSequence !== undefined &&
+    previous.headSequence === next.headSequence &&
+    previous.headRecordId &&
+    next.headRecordId &&
+    previous.headRecordId !== next.headRecordId
+  ) {
+    return true;
+  }
+  return false;
 }

@@ -24,7 +24,7 @@
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **128/128**, 13 files |
+| `pnpm test` | **134/134**, 13 files |
 | `pnpm typecheck` | pass (all packages + web) |
 | `pnpm qa:browser` | **54/54**, 0 console/page errors |
 | `pnpm build` | pass, 16 routes |

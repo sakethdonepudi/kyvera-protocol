@@ -132,11 +132,7 @@ function PayInner() {
       setSubject(normalized);
       const result = await refreshIdentity(normalized, relays, NETWORK);
       setResolution(result);
-      setSnapshot(
-        result.activeBch
-          ? { subject: result.subject, address: result.activeBch.address, status: result.status }
-          : null,
-      );
+      setSnapshot(snapshotOf(result));
       setPhase(result.status === "ACTIVE" ? "verified" : "idle");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
@@ -150,12 +146,15 @@ function PayInner() {
     setChangeWarning("");
     setPhase("resolving");
     try {
-      // Re-resolve immediately before showing the wallet handoff.
-      const fresh = await refreshIdentity(subject, relays, NETWORK);
+      // Re-resolve immediately before showing the wallet handoff. The
+      // checkpoint detects a relay set that rolls back a previously seen head.
+      const checkpoint =
+        snapshot?.headSequence != null && snapshot.headRecordId
+          ? { sequence: snapshot.headSequence, recordId: snapshot.headRecordId }
+          : undefined;
+      const fresh = await refreshIdentity(subject, relays, NETWORK, checkpoint);
       setResolution(fresh);
-      const nextSnapshot = fresh.activeBch
-        ? { subject: fresh.subject, address: fresh.activeBch.address, status: fresh.status }
-        : null;
+      const nextSnapshot = snapshotOf(fresh);
       if (destinationChanged(snapshot, nextSnapshot)) {
         setSnapshot(nextSnapshot);
         setHandoff(false);
@@ -460,4 +459,15 @@ function PayInner() {
       </div>
     </div>
   );
+}
+
+function snapshotOf(resolution: IdentityResolution): DestinationSnapshot | null {
+  if (!resolution.activeBch) return null;
+  return {
+    subject: resolution.subject,
+    address: resolution.activeBch.address,
+    status: resolution.status,
+    headSequence: resolution.head?.record.payload.sequence ?? null,
+    headRecordId: resolution.head?.recordId ?? null,
+  };
 }

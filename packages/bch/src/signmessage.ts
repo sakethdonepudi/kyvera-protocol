@@ -160,10 +160,19 @@ export function verifyBitcoinMessageSignature(
   };
 }
 
-/** True when a BCH compressed public key and a Nostr x-only key are the same key. */
+/**
+ * True when a BCH public key and a Nostr x-only key are the same secp256k1 key.
+ * Handles both compressed (33-byte) and uncompressed (65-byte) BCH public keys.
+ * Nostr uses the x-coordinate only, so both forms must be compared by x.
+ */
 export function sameSecp256k1Key(bchPublicKeyHex: string, nostrPublicKeyHex: string): boolean {
-  if (bchPublicKeyHex.length !== 66 || nostrPublicKeyHex.length !== 64) return false;
-  return bchPublicKeyHex.slice(2).toLowerCase() === nostrPublicKeyHex.toLowerCase();
+  const key = bchPublicKeyHex.toLowerCase();
+  const nostr = nostrPublicKeyHex.toLowerCase();
+  if (!/^[0-9a-f]{64}$/.test(nostr)) return false;
+  let x: string | undefined;
+  if (/^0[23][0-9a-f]{64}$/.test(key)) x = key.slice(2);
+  else if (/^04[0-9a-f]{128}$/.test(key)) x = key.slice(2, 66);
+  return x !== undefined && x === nostr;
 }
 
 export function publicKeyFromPrivateKey(privateKey: Uint8Array): Uint8Array {

@@ -93,13 +93,17 @@ export function verifyBchIdentityProof(input: {
         message: "declared BCH public key does not hash to the declared address",
       };
     }
-    if (input.nostrPublicKey && sameSecp256k1Key(input.expectedPublicKey, input.nostrPublicKey)) {
-      return {
-        ok: false,
-        code: "KEY_REUSE",
-        message: "the BCH and Nostr identities use the same secp256k1 key",
-      };
-    }
+  }
+
+  // This check must not depend on the optional declared public key: external
+  // wallets publish publicKey: null, and a wallet may use an uncompressed key.
+  // The recovered key is the authoritative signer in both cases.
+  if (input.nostrPublicKey && check.publicKey && sameSecp256k1Key(check.publicKey, input.nostrPublicKey)) {
+    return {
+      ok: false,
+      code: "KEY_REUSE",
+      message: "the BCH and Nostr identities use the same secp256k1 key",
+    };
   }
 
   return { ok: true, code: "OK", message: "ok", publicKey: check.publicKey };

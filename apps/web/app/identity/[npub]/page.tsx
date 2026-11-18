@@ -73,7 +73,11 @@ export default function IdentityPage() {
     setBusy(true);
     setActionMessage("");
     try {
-      const result = await rotateDemoIdentity(stored, headRecord, relays, NETWORK);
+      const fresh = await refreshIdentity(stored.subject, relays, NETWORK);
+      if (fresh.status !== "ACTIVE" || !fresh.head) {
+        throw new Error(`Identity is not ACTIVE (${fresh.status}); rotation aborted.`);
+      }
+      const result = await rotateDemoIdentity(stored, fresh.head.record, relays, NETWORK);
       setActionMessage(`Rotated to ${result.newAddress}. The previous wallet is now superseded.`);
       setAction("none");
       setConfirmText("");
@@ -90,7 +94,11 @@ export default function IdentityPage() {
     setBusy(true);
     setActionMessage("");
     try {
-      await revokeDemoIdentity(stored, headRecord, relays);
+      const fresh = await refreshIdentity(stored.subject, relays, NETWORK);
+      if (fresh.status !== "ACTIVE" || !fresh.head) {
+        throw new Error(`Identity is not ACTIVE (${fresh.status}); revocation aborted.`);
+      }
+      await revokeDemoIdentity(stored, fresh.head.record, relays);
       setActionMessage("The identity was revoked. No payment address is current.");
       setAction("none");
       setConfirmText("");

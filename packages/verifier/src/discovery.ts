@@ -282,11 +282,12 @@ function addressStatus(
     return resolution.status;
   }
   if (resolution.status === "REVOKED") {
-    const entry = resolution.superseded.find(
-      (candidate) => candidate.address.toLowerCase() === address.toLowerCase(),
-    );
-    // Only the wallet that was current when the revocation happened is REVOKED.
-    // Addresses rotated away earlier stay SUPERSEDED.
+    // An address can appear more than once (A → B → A). Use the latest
+    // supersession entry; otherwise an earlier historical occurrence could
+    // mask the fact that the currently revoked address was revoked.
+    const entry = [...resolution.superseded]
+      .reverse()
+      .find((candidate) => candidate.address.toLowerCase() === address.toLowerCase());
     if (entry && entry.replacedBy !== "revoked") return "SUPERSEDED";
     return "REVOKED";
   }

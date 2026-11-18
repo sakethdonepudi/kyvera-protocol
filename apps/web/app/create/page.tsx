@@ -282,6 +282,7 @@ export default function CreatePage() {
                   <button
                     key={mode}
                     onClick={() => connectNostr(mode)}
+                    aria-pressed={nostrMode === mode}
                     className={cn(
                       "rounded-md px-2.5 py-1 text-[11px] transition-colors",
                       nostrMode === mode ? "bg-ivory/10 text-ivory" : "text-ivory-muted hover:text-ivory",
@@ -346,6 +347,7 @@ export default function CreatePage() {
                       setPublishedEvent(null);
                       setReports(null);
                     }}
+                    aria-pressed={bchMode === mode}
                     className={cn(
                       "rounded-full px-2.5 py-1 text-[10.5px] transition-colors",
                       bchMode === mode ? "bg-ivory text-charcoal-950" : "text-ivory-muted hover:text-ivory",
@@ -372,6 +374,7 @@ export default function CreatePage() {
                     setPublishedEvent(null);
                     setReports(null);
                   }}
+                  aria-pressed={network === value}
                   className={cn(
                     "rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em]",
                     network === value

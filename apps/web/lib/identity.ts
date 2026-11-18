@@ -89,6 +89,7 @@ export async function refreshIdentity(
   subject: string,
   relays: string[],
   network: BchNetwork,
+  checkpoint?: { sequence: number; recordId: string },
 ): Promise<IdentityResolution> {
   const stored = getIdentity(subject);
   return resolveIdentity({
@@ -96,6 +97,7 @@ export async function refreshIdentity(
     relays,
     network,
     additionalEvents: stored?.events ?? [],
+    checkpoint,
     now: Math.floor(Date.now() / 1000),
   });
 }

@@ -1,10 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { buildBchProofMessage } from "@kyvera/core";
-import { signBitcoinMessage } from "@kyvera/bch";
+import {
+  buildBchProofMessage,
+  createBindPayload,
+  digestOf,
+  sealRecord,
+} from "@kyvera/core";
+import {
+  bchKeyPairFromPrivateKey,
+  hashBitcoinMessage,
+  publicKeyToAddress,
+  signBitcoinMessage,
+} from "@kyvera/bch";
+import { buildRecordEvent } from "@kyvera/nostr";
+import { binToBase64, secp256k1 } from "@bitauth/libauth";
 import {
   AuthRequestService,
   applyCheckpointToResolution,
   buildAuthRequestEvent,
+  createBindRecord,
   createRotateRecord,
   resolveEvents,
   validateAppSession,
@@ -61,6 +74,63 @@ describe("security challenge suite", () => {
     const result = verifyAt(event);
     expect(result.ok).toBe(false);
     expect(result.code).toBe("BCH_SIGNATURE_NOT_BY_ADDRESS");
+  });
+
+  it("rejects an external-wallet bind that reuses the Nostr key", async () => {
+    const identity = await makeIdentity("sc-bind-key-reuse");
+    const reused = bchKeyPairFromPrivateKey(identity.secret);
+    const created = await createBindRecord({
+      signer: identity.signer,
+      bchPrivateKey: reused.privateKey,
+      bch: { ...reused.identity, publicKey: null },
+      issuedAt: T0,
+    });
+    const result = verifyAt(created.event);
+    expect(result.ok).toBe(false);
+    expect(result.code).toBe("KEY_REUSE");
+  });
+
+  it("rejects an uncompressed BCH proof that reuses the Nostr key", async () => {
+    const identity = await makeIdentity("sc-uncompressed-reuse");
+    const uncompressed = secp256k1.derivePublicKeyUncompressed(identity.secret);
+    if (typeof uncompressed === "string") throw new Error(uncompressed);
+    const address = publicKeyToAddress(uncompressed, "mainnet");
+    const payload = createBindPayload({
+      subject: identity.subject,
+      bch: { address, network: "mainnet", publicKey: null },
+      issuedAt: T0,
+      nonce: "ab".repeat(32),
+    });
+    const digest = digestOf(payload);
+    const compact = secp256k1.signMessageHashRecoverableCompact(
+      identity.secret,
+      hashBitcoinMessage(buildBchProofMessage("new", address, digest)),
+    );
+    if (typeof compact === "string") throw new Error(compact);
+    const signature = binToBase64(
+      Uint8Array.from([27 + compact.recoveryId, ...compact.signature]),
+    );
+    const record = sealRecord(payload, [
+      { algorithm: "bch-signmessage-v1", role: "new", address, signature },
+    ]);
+    const built = await buildRecordEvent(record, identity.signer);
+    expect(built.ok).toBe(true);
+    const result = verifyAt(built.event!);
+    expect(result.ok).toBe(false);
+    expect(result.code).toBe("KEY_REUSE");
+  });
+
+  it("rejects duplicate protocol tags that make relay indexing ambiguous", async () => {
+    const identity = await makeIdentity("sc-duplicate-tags");
+    const duplicate = await identity.signer.signEvent({
+      kind: identity.bind.event.kind,
+      created_at: identity.bind.event.created_at,
+      tags: [...identity.bind.event.tags, ["d", "kyvera:evil"]],
+      content: identity.bind.event.content,
+    });
+    const result = verifyAt(duplicate);
+    expect(result.ok).toBe(false);
+    expect(result.code).toBe("D_TAG_INVALID");
   });
 
   it("rejects a tampered Nostr event", async () => {
@@ -137,6 +207,27 @@ describe("security challenge suite", () => {
     expect(resolution.status).toBe("STALE");
     expect(resolution.reasonCode).toBe("MISSING_CHAIN_SEGMENT");
     expect(resolution.head?.record.payload.sequence).toBe(0);
+  });
+
+  it("uses unique addressable d tags and detects latest-only history loss", async () => {
+    const identity = await makeIdentity("sc-retention");
+    const rotateB = await rotate(identity, identity.bind, identity.bchA, identity.bchB, T0 + 60);
+    const revocation = await revoke(identity, rotateB, identity.bchB, T0 + 120);
+    const dTag = (event: (typeof identity.bind)["event"]) =>
+      event.tags.find((tag) => tag[0] === "d")?.[1];
+    const tags = [identity.bind.event, rotateB.event, revocation.event].map(dTag);
+    expect(tags.every(Boolean)).toBe(true);
+    expect(new Set(tags).size).toBe(3);
+
+    // A relay that keeps only the latest addressable event cannot produce a
+    // current-authorization guarantee: the genesis binding is missing.
+    const latestOnly = resolveEvents([revocation.event], {
+      now: NOW,
+      subject: identity.subject,
+    }).resolution;
+    expect(latestOnly.status).toBe("STALE");
+    expect(latestOnly.reasonCode).toBe("MISSING_GENESIS");
+    expect(latestOnly.activeBch).toBeNull();
   });
 
   it("detects conflicting authorization branches", async () => {

@@ -63,6 +63,20 @@ describe("decentralized discovery", () => {
     expect(result.sync.total).toBe(2);
   });
 
+  it("reports a revoked address that appeared earlier as REVOKED, not SUPERSEDED", async () => {
+    const identity = await makeIdentity("relay-revoked-readdress");
+    const toB = await rotate(identity, identity.bind, identity.bchA, identity.bchB, T0 + 60);
+    const backA = await rotate(identity, toB, identity.bchB, identity.bchA, T0 + 120);
+    const revocation = await revoke(identity, backA, identity.bchA, T0 + 180);
+    full.seed(identity.bind.event, toB.event, backA.event, revocation.event);
+    const result = await resolveAddress({
+      address: identity.bchA.identity.address,
+      relays: [full.url],
+      now: NOW,
+    });
+    expect(result.status).toBe("REVOKED");
+  });
+
   it("returns STALE, never ACTIVE, when no relay responds", async () => {
     const identity = await makeIdentity("relay-unreachable");
     const result = await resolveIdentity({

@@ -142,13 +142,17 @@ function AuthDemoInner() {
         if (!provider) throw new Error("This browser holds no demo key for this identity, and no NIP-07 extension was detected.");
         signer = nip07Signer(provider);
       }
+      // Re-resolve at authentication time. A cached resolution must never
+      // authorize a session after a rotation, revocation or stale relay view.
+      const fresh = await refreshIdentity(resolution.subject, relays, NETWORK);
+      setResolution(fresh);
       const event = await buildAuthRequestEvent({
         request,
         signer,
         createdAt: Math.floor(Date.now() / 1000),
       });
       setLastEvent(event);
-      const result = service().verify(event, resolution);
+      const result = service().verify(event, fresh);
       setCheck({ code: result.check.code, message: result.check.message, ok: result.check.authenticated });
       if (result.check.authenticated && result.session) {
         setSession(result.session);
@@ -201,7 +205,11 @@ function AuthDemoInner() {
     setError("");
     setSessionNotice("");
     try {
-      await revokeDemoIdentity(stored, resolution.head.record, relays);
+      const freshHead = await refreshIdentity(subject, relays, NETWORK);
+      if (freshHead.status !== "ACTIVE" || !freshHead.head) {
+        throw new Error(`Identity is not ACTIVE (${freshHead.status}); revocation aborted.`);
+      }
+      await revokeDemoIdentity(stored, freshHead.head.record, relays);
       setRequest(null);
       setLastEvent(null);
       const fresh = await refreshResolution();
@@ -226,7 +234,11 @@ function AuthDemoInner() {
     setError("");
     setSessionNotice("");
     try {
-      const result = await rotateDemoIdentity(stored, resolution.head.record, relays, NETWORK);
+      const freshHead = await refreshIdentity(subject, relays, NETWORK);
+      if (freshHead.status !== "ACTIVE" || !freshHead.head) {
+        throw new Error(`Identity is not ACTIVE (${freshHead.status}); rotation aborted.`);
+      }
+      const result = await rotateDemoIdentity(stored, freshHead.head.record, relays, NETWORK);
       setRequest(null);
       setLastEvent(null);
       const fresh = await refreshResolution();

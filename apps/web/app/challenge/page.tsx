@@ -190,8 +190,12 @@ export default function ChallengePage() {
         }
         signer = nip07Signer(provider);
       }
+      // Re-resolve at authentication time so a cached ACTIVE state cannot
+      // issue a session after rotation or revocation.
+      const fresh = await refreshIdentity(live.subject, DEFAULT_RELAYS, NETWORK);
+      setLive(fresh);
       const result = await runChallengeAuth({
-        resolution: live,
+        resolution: fresh,
         signer,
         origin: window.location.origin,
         domain: window.location.host,
@@ -260,7 +264,14 @@ export default function ChallengePage() {
     setLiveError("");
     const previousAddress = live.activeBch.address;
     try {
-      const result = await rotateDemoIdentity(stored, live.head.record, DEFAULT_RELAYS, NETWORK);
+      // A stale head would publish a competing sequence record. Re-resolve
+      // immediately before signing the rotation.
+      const before = await refreshIdentity(live.subject, DEFAULT_RELAYS, NETWORK);
+      if (before.status !== "ACTIVE" || !before.head) {
+        throw new Error(`Identity is not ACTIVE (${before.status}); rotation aborted.`);
+      }
+      setLive(before);
+      const result = await rotateDemoIdentity(stored, before.head.record, DEFAULT_RELAYS, NETWORK);
       const fresh = await refreshIdentity(live.subject, DEFAULT_RELAYS, NETWORK);
       setLive(fresh);
       setLiveOldAddress(previousAddress);
@@ -371,6 +382,7 @@ export default function ChallengePage() {
             <button
               key={value}
               onClick={() => switchMode(value)}
+              aria-pressed={mode === value}
               className={cn(
                 "rounded-full border px-3.5 py-2 font-mono text-[9.5px] uppercase tracking-[0.12em] transition-colors",
                 mode === value

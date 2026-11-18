@@ -92,7 +92,7 @@ The compliance gate is implemented at `/auth-demo` and `packages/verifier/src/au
 ### 4.2 Authentication evidence
 
 - Automated: `tests/auth-request.test.ts` — 12 tests, including replay, expiry, origin/session/identity/address mismatch, revoked/stale, session rotation/revocation/logout, unauthorized rotation.
-- Adversarial: `tests/security-challenge.test.ts` — 11 tests covering forged BCH/Nostr proofs, unauthorized rotation, replay, expiry, revocation, missing history, conflict, rollback and payment gating.
+- Adversarial: `tests/security-challenge.test.ts` — 15 tests covering forged BCH/Nostr proofs, unauthorized rotation, replay, expiry, revocation, missing history, conflict, rollback and payment gating.
 - Browser: `/auth-demo` session issuance, replay rejection, unauthorized-rotation check, session invalidation after rotation, logout, revoked-identity block. `/challenge` runs the same journey across five stages, including live mode (54/54 browser checks overall).
 - Standalone: `pnpm rp:demo` — framework-independent relying party, 10/10 checks with no KYVERA website, API or relay.
 - The relying party is separate from the identity dashboard and has its own origin/session state.

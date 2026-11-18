@@ -11,7 +11,7 @@
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **128 / 128 tests pass** across 13 files |
+| `pnpm test` | **134 / 134 tests pass** across 13 files |
 | `pnpm typecheck` | **pass** for core, bch, nostr, verifier and web |
 | `pnpm build` | **pass** (Next.js production build; one third-party top-level-await warning) |
 | `pnpm demo:lifecycle` | **all assertions pass** (6 lifecycle scenarios) |
@@ -37,12 +37,12 @@ $ pnpm test
  ✓ tests/interop.test.ts (2 tests)
  ✓ tests/property.test.ts (12 tests)
  ✓ tests/auth-request.test.ts (12 tests)
- ✓ tests/security-challenge.test.ts (11 tests)
- ✓ tests/pay.test.ts (11 tests)
+ ✓ tests/security-challenge.test.ts (15 tests)
+ ✓ tests/pay.test.ts (12 tests)
  ✓ tests/smoke.test.ts (1 test)
- ✓ tests/relay.test.ts (13 tests)
+ ✓ tests/relay.test.ts (14 tests)
  Test Files  13 passed (13)
-      Tests  128 passed (128)
+      Tests  134 passed (134)
    Duration  ~2.7s
 ```
 
@@ -137,7 +137,7 @@ All checks passed.
 | Competing revocations | `CONFLICT` |
 | Historical address lookup | returns the superseded step |
 
-### 3.4 Chain and discovery (`tests/chain.test.ts` — 9, `tests/relay.test.ts` — 13)
+### 3.4 Chain and discovery (`tests/chain.test.ts` — 9, `tests/relay.test.ts` — 14)
 
 | Case | Expected |
 | --- | --- |
@@ -181,7 +181,7 @@ The older `/auth` page tests the core challenge-response primitive. The full rel
 | Event edited after signing | `EVENT_SIGNATURE` |
 | Outside time window | `TIMESTAMP_OUT_OF_WINDOW` |
 
-### 3.6 Security challenge suite (`tests/security-challenge.test.ts` — 11)
+### 3.6 Security challenge suite (`tests/security-challenge.test.ts` — 15)
 
 Explicit adversarial cases:
 

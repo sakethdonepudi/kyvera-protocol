@@ -143,7 +143,7 @@ addresses.
 ## 8. Reproducible commands
 
 ```bash
-pnpm test                 # 128 tests
+pnpm test                 # 134 tests
 pnpm rp:demo              # standalone relying party, 10/10
 pnpm cli <npub> --relay wss://relay.example
 pnpm wallet:verify <cashaddr> <base64-signature>

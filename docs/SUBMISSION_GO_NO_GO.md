@@ -1,0 +1,137 @@
+# Submission GO / NO-GO
+
+**Date:** 2026-11-19
+**Project:** KYVERA
+**Bounty:** Paytaca Decentralized Identity · BCH Blaze 2026
+**Baseline:** commit `6cc811f` plus the audit fixes and documents in this commit
+
+---
+
+## Verdict
+
+# CONDITIONAL GO
+
+**GO** for a local judge demonstration and a bounty submission that is explicitly
+scoped to the identity, authentication, rotation, revocation and interoperability
+prototype.
+
+**NO-GO** for any claim of real-wallet interoperability, production readiness,
+real-funds safety, Mainnet Track eligibility, or a completed on-chain payment.
+
+The conditions are listed in §4. They are not optional if the submission claims
+those capabilities.
+
+---
+
+## 1. Evidence by environment
+
+| Environment | Status | What was actually verified |
+| --- | --- | --- |
+| **Verified locally** | ✅ | 134/134 tests across 13 files; strict typecheck; production build (16 routes); 54/54 browser checks; `pnpm rp:demo` 10/10; local relay discovery tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
+| **Verified with real wallets** | ❌ | No Paytaca, Cashonize or Selene installation was available. No wallet pairing, wallet-produced message signature, account switch, wrong network, rejection or disconnect was recorded |
+| **Verified on public relays** | ◐ | Read-only probe only: `wss://relay.damus.io` failed from this environment; `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published; retention was not tested |
+| **Verified in production** | ❌ | No public deployment. `next start` works locally, but no domain, TLS, Vercel deployment or production relay behavior was verified |
+| **Untested / blocked** | ❌ | Real-wallet signing, public-relay retention, mainnet transaction, txid receipt, third-party attestation, full accessibility audit, independent security review |
+
+---
+
+## 2. Bounty requirement status
+
+| Requirement | Local status | Evidence | Submission claim |
+| --- | --- | --- | --- |
+| **R1** Self-held identity creation/management | ✅ | `/create`, 134 tests, browser QA | Local prototype |
+| **R2** Dual-key BCH–Nostr binding | ✅ | Canonical records, proof verification, key-reuse tests | Local prototype |
+| **R3** Decentralized discovery | ✅ local / ◐ public | Multi-relay tests, `STALE`/`PARTIAL`; no public KYVERA event | Do not claim public retention |
+| **R4** Independent verification and authentication | ✅ | `@kyvera/verifier`, `/auth-demo`, `/challenge`, `pnpm rp:demo` 10/10 | Strong local evidence |
+| **R5** Working prototype + documentation | ◐ | App, SDK, CLI, standalone verifier, docs; no public deployment | Local/demo only |
+| Rotation stretch goal | ✅ | Rotation, revocation, Time Machine, challenge stage | Local prototype |
+| Payment stretch goal | ◐ | BIP21 handoff only; no transaction or txid | **Do not claim completed payment** |
+| Mainnet Track | ❌ | No wallet-tested integration, no mainnet tx, no deployment | **No claim** |
+
+---
+
+## 3. Reproduced commands and results
+
+```text
+pnpm install --frozen-lockfile   PASS (fresh clone)
+pnpm test                        PASS 134/134, 13 files
+pnpm typecheck                   PASS
+pnpm build                       PASS, 16 routes
+pnpm qa:browser                  PASS 54/54, 0 console/page errors
+pnpm rp:demo                     PASS 10/10, no KYVERA API/relay
+pnpm audit --prod                PASS, 0 known vulnerabilities
+```
+
+Fresh clone: `git clone` of the audit commit, `pnpm install --frozen-lockfile`,
+`pnpm test` and `pnpm build` passed. The install emits a non-fatal warning that
+the `kyvera-verify` bin points to an unbuilt `dist/cli.js`; it resolves after
+`pnpm build` or `pnpm cli`.
+
+Public relay read-only probe:
+
+```text
+wss://relay.damus.io  ok=false eose=false events=0 error=connection failed
+wss://nos.lol         ok=true  eose=true  events=1
+```
+
+Accessibility probe: no unnamed `button`/`a` controls on `/`, `/challenge`,
+`/merchant`, `/create`, `/pay`, `/auth-demo`, `/developers`. Keyboard focus and
+reduced-motion checks pass in browser QA. This is not a full WCAG audit.
+
+---
+
+## 4. Conditions for GO
+
+1. **Real-wallet evidence.** Execute `docs/WALLET_DEVICE_TEST.md` on Paytaca and
+   Cashonize. Record pairing approval, address match, exact message, wallet
+   signature, account switch, wrong network, rejection and disconnect. Selene is
+   BIP21-only unless a WizardConnect implementation is confirmed.
+2. **Do not claim payment completion.** `/pay` is a BIP21 handoff. Either present
+   it as such, or integrate a wallet-approved transaction with source outputs and
+   display a real txid/result. Do not fabricate one.
+3. **Address residual freshness risks.** For payment and sessions, decide whether
+   `PARTIAL` relay sync is acceptable. Recommended: require `FULL` or an explicit
+   independent-relay policy. Persist checkpoints; use multiple operators.
+4. **Production deployment.** Set `NEXT_PUBLIC_KYVERA_RELAYS` and
+   `NEXT_PUBLIC_KYVERA_DOMAIN`, deploy, verify headers/routes, and repeat browser
+   QA against the deployed origin.
+5. **Public-relay retention.** Publish a disposable test identity only with
+   authorization, then verify kind-30078 retention and discovery over time.
+6. **Licensing.** Review `THIRD_PARTY_NOTICES.md`; confirm the LGPL-3.0-or-later
+   status of `@wizardconnect/*` for the exact versions distributed.
+7. **Independent review.** This audit is internal. Obtain a separate review before
+   protecting real funds or making security guarantees.
+
+---
+
+## 5. What is safe to say
+
+- KYVERA is a local, open-source prototype for BCH–Nostr identity continuity.
+- It binds two independent keys, verifies both proofs, resolves a hash-linked
+  authorization chain and rejects unauthorized transitions.
+- It demonstrates rotation, revocation, conflicts, stale history and independent
+  relying-party authentication.
+- It has 134 automated tests, 54 browser checks and a 10/10 standalone relying
+  party demonstration.
+- It is honest about wallet and payment limitations.
+
+## 6. What is not safe to say
+
+- “Works with Paytaca / Cashonize / Selene” without a real-device row.
+- “Production ready”, “audited” or “real-funds safe”.
+- “Mainnet Track eligible”.
+- “Completed BCH payment” or “transaction confirmed”.
+- “Public relay history is complete” or “rollback-proof”.
+- “Independent security audit completed”.
+
+---
+
+## 7. Final recommendation
+
+Submit the current build as a **local prototype** with the Trust Challenge,
+standalone relying party, merchant demonstration and explicit limitations. Treat
+the missing real-wallet and transaction evidence as disclosed gaps rather than
+completed features.
+
+**CONDITIONAL GO** for that scope. **NO-GO** for production, real-funds or
+Mainnet claims until the conditions above are met.

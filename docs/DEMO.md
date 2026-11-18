@@ -176,7 +176,7 @@ Do not claim a live wallet test in the video unless one is actually performed on
 ## 6. Evidence to capture for submission
 
 - Screenshots: create preview, dashboard ACTIVE, dashboard after rotation, verifier SUPERSEDED, auth success, dashboard REVOKED.
-- Terminal: `pnpm test` summary (128 tests), `pnpm demo:lifecycle` (all checks).
+- Terminal: `pnpm test` summary (134 tests), `pnpm demo:lifecycle` (all checks).
 - CLI output for ACTIVE and SUPERSEDED.
 - A short screen recording following the script above.
 

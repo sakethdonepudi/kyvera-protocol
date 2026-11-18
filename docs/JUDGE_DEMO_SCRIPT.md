@@ -109,7 +109,7 @@ Open `demo/kyvera-standalone.html` directly. It contains the same six scenarios 
 
 ## Claims that are safe
 
-- 128 automated tests across 13 files, including property/fuzz tests and an explicit adversarial suite.
+- 134 automated tests across 13 files, including property/fuzz tests and an explicit adversarial suite.
 - `pnpm rp:demo` — independent relying party, 10/10 checks with no KYVERA API or relay.
 - Independent BCH `signmessage` vector verified.
 - Eight explicit statuses, including `SUPERSEDED`, `CONFLICT`, `STALE`.

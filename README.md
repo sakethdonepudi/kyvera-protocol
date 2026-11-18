@@ -187,7 +187,7 @@ open demo/kyvera-standalone.html
 ## 8. Running tests
 
 ```bash
-pnpm test           # 128 tests across 13 files (unit, integration, security, property)
+pnpm test           # 134 tests across 13 files (unit, integration, security, property)
 pnpm typecheck      # strict TypeScript for every package
 pnpm build          # production build
 pnpm demo:lifecycle # executable lifecycle demo with assertions
@@ -330,7 +330,7 @@ Honest status as of 2026-11-19:
 - [x] Chain resolution with eight explicit result states
 - [x] Relay discovery, partial-sync and rollback-checkpoint handling
 - [x] Independent TypeScript SDK and CLI
-- [x] 128 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
+- [x] 134 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
 - [x] Responsive editorial web application, verified end-to-end in Chrome, mobile viewport, reduced motion and keyboard navigation
 - [x] Identity Time Machine with per-record proof and relay inspection
 - [x] Interactive security laboratory with six real scenarios
@@ -346,7 +346,9 @@ Honest status as of 2026-11-19:
 - [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review
 
-**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`REQUIREMENTS_MATRIX.md`](docs/REQUIREMENTS_MATRIX.md) · [`PAYTACA_COMPLIANCE.md`](docs/PAYTACA_COMPLIANCE.md) · [`TRUST_CHALLENGE.md`](docs/TRUST_CHALLENGE.md) · [`INTEGRATION.md`](docs/INTEGRATION.md) · [`JUDGE_3_MINUTE.md`](docs/JUDGE_3_MINUTE.md) · [`WALLET_UX_AUDIT.md`](docs/WALLET_UX_AUDIT.md) · [`WALLET_DEVICE_TEST.md`](docs/WALLET_DEVICE_TEST.md) · [`WALLET_RELEASE_READINESS.md`](docs/WALLET_RELEASE_READINESS.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
+**License:** MIT (see `LICENSE`). Third-party notices: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`REQUIREMENTS_MATRIX.md`](docs/REQUIREMENTS_MATRIX.md) · [`PAYTACA_COMPLIANCE.md`](docs/PAYTACA_COMPLIANCE.md) · [`TRUST_CHALLENGE.md`](docs/TRUST_CHALLENGE.md) · [`INTEGRATION.md`](docs/INTEGRATION.md) · [`JUDGE_3_MINUTE.md`](docs/JUDGE_3_MINUTE.md) · [`WALLET_UX_AUDIT.md`](docs/WALLET_UX_AUDIT.md) · [`WALLET_DEVICE_TEST.md`](docs/WALLET_DEVICE_TEST.md) · [`WALLET_RELEASE_READINESS.md`](docs/WALLET_RELEASE_READINESS.md) · [`FINAL_SECURITY_AUDIT.md`](docs/FINAL_SECURITY_AUDIT.md) · [`SUBMISSION_GO_NO_GO.md`](docs/SUBMISSION_GO_NO_GO.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
 
 Deadline note: DoraHacks lists **22 November 2026, 14:00 UTC (19:30 IST)**. The BCH Blaze site footer still says 14–28 November; DoraHacks is authoritative. The Mainnet Track separately requires a live demo, WizardConnect/XO and at least one mainnet transaction; confirm with organizers whether those apply to a bounty-only entry.
 

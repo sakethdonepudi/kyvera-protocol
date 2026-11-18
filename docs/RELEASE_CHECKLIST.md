@@ -12,7 +12,7 @@
 | Check | Command | Result |
 | --- | --- | --- |
 | Repository commit | `git rev-parse HEAD` | `82a3e1b…` (3.0 working tree) |
-| Unit/integration/security tests | `pnpm test` | **128/128 pass**, 13 files, ~3s |
+| Unit/integration/security tests | `pnpm test` | **134/134 pass**, 13 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 16 routes |
 | Browser QA | `pnpm qa:browser` | **54/54**, 0 console/page errors |
@@ -59,10 +59,10 @@ Every important claim links to a source, test or running demonstration.
 | 8 explicit statuses | `packages/core/src/types.ts` | landing status matrix, `ResolutionPanel` |
 | Time Machine shows real proof data | `apps/web/components/time-machine.tsx` | browser QA step 6 |
 | Historical vs current comparison | `TimeMachine` Compare mode | browser QA, `/demo` |
-| Payment destination policy | `apps/web/lib/pay.ts` | `tests/pay.test.ts` (11), browser QA |
+| Payment destination policy | `apps/web/lib/pay.ts` | `tests/pay.test.ts` (12), browser QA |
 | WizardConnect pairing | `apps/web/app/pay/page.tsx` | browser QA dialog; physical wallet untested |
 | Warm light theme | `globals.css`, `tailwind.config.ts`, toggle | browser QA theme check |
-| 128-test suite | `tests/` | `pnpm test` |
+| 134-test suite | `tests/` | `pnpm test` |
 | Relying-party authentication | `apps/web/app/auth-demo/page.tsx`, `packages/verifier/src/auth.ts` | `tests/auth-request.test.ts` (12), browser QA |
 | Trust Challenge | `apps/web/app/challenge/page.tsx`, `apps/web/lib/challenge.ts` | browser QA demo + live; security suite |
 | Standalone relying party | `examples/relying-party/demo.mjs` | `pnpm rp:demo` → 10/10 |
@@ -123,7 +123,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | Security headers | ✅ verified on `next start` |
 | Static assets (`/vectors.json`, standalone, icon) | ✅ 200 |
 | Routes | ✅ 16 routes build and render (`/pay` included) |
-| KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (11) |
+| KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (12) |
 | WizardConnect pairing | ✅ dialog opens; ❌ untested with a physical wallet |
 | Theme / glass system | ✅ dark + warm light, reduced motion, mobile |
 | Browser QA | ✅ **54/54**, challenge/merchant/pay/theme/auth-demo included |

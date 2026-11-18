@@ -61,10 +61,6 @@ export function generateNostrSecretKey(): Uint8Array {
   return generateSecretKey();
 }
 
-function tag(event: KyveraEvent, name: string): string[] | undefined {
-  return event.tags.find((entry) => entry[0] === name);
-}
-
 /** Fresh copy: nostr-tools caches verification on the object, which would let a mutated event "verify". */
 export function freshEvent(event: KyveraEvent): KyveraEvent {
   return {
@@ -192,20 +188,25 @@ export function parseRecordEvent(event: KyveraEvent): ParsedRecordEvent {
     return { ok: false, code: "TIMESTAMP_MISMATCH", message: "created_at must equal payload.issuedAt" };
   }
 
+  const one = (name: string) => {
+    const matches = fresh.tags.filter((entry) => entry[0] === name);
+    return matches.length === 1 ? matches[0]![1] : undefined;
+  };
+
   const digest = computePayloadDigest(record.payload);
   const expectedDTag = `${NOSTR_D_PREFIX}:${record.payload.subject}:${record.payload.sequence}:${digest}`;
   const expectedAddresses = [...new Set(record.proofs.bch.map((proof) => proof.address))].sort();
   const addressTags = fresh.tags.filter((entry) => entry[0] === "b").map((entry) => entry[1] ?? "").sort();
 
   const checks: Array<[boolean, string, string]> = [
-    [tag(fresh, "d")?.[1] === expectedDTag, "D_TAG_INVALID", "d tag does not commit to subject, sequence and payload"],
-    [tag(fresh, "k")?.[1] === NOSTR_K_TAG, "K_TAG_INVALID", `k tag must be ${NOSTR_K_TAG}`],
-    [tag(fresh, "s")?.[1] === record.payload.subject, "SUBJECT_TAG_INVALID", "s tag does not match subject"],
-    [tag(fresh, "seq")?.[1] === String(record.payload.sequence), "SEQ_TAG_INVALID", "seq tag does not match payload"],
+    [one("d") === expectedDTag, "D_TAG_INVALID", "d tag must occur exactly once and commit to subject, sequence and payload"],
+    [one("k") === NOSTR_K_TAG, "K_TAG_INVALID", `k tag must occur exactly once and equal ${NOSTR_K_TAG}`],
+    [one("s") === record.payload.subject, "SUBJECT_TAG_INVALID", "s tag must occur exactly once and match subject"],
+    [one("seq") === String(record.payload.sequence), "SEQ_TAG_INVALID", "seq tag must occur exactly once and match payload"],
     [
-      tag(fresh, "prev")?.[1] === (record.payload.previous ?? "genesis"),
+      one("prev") === (record.payload.previous ?? "genesis"),
       "PREV_TAG_INVALID",
-      "prev tag does not match payload",
+      "prev tag must occur exactly once and match payload",
     ],
     [
       addressTags.length === expectedAddresses.length &&

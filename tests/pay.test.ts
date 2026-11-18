@@ -98,6 +98,19 @@ describe("payment policy", () => {
 });
 
 describe("destination change detection", () => {
+  it("cancels an intent when the observed head rolls back or changes", () => {
+    const base = {
+      subject: "a".repeat(64),
+      address,
+      status: "ACTIVE" as const,
+      headSequence: 1,
+      headRecordId: "b".repeat(64),
+    };
+    expect(destinationChanged(base, { ...base, headSequence: 0 })).toBe(true);
+    expect(destinationChanged(base, { ...base, headRecordId: "c".repeat(64) })).toBe(true);
+    expect(destinationChanged(base, { ...base })).toBe(false);
+  });
+
   const snapshot = { subject: "a".repeat(64), address, status: "ACTIVE" as const };
 
   it("detects address, subject and status changes", () => {
