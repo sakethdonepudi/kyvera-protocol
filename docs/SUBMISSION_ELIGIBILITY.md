@@ -79,8 +79,8 @@ The Details page also warns judges will look at projects in a low-priority queue
 | Requirement | A. Paytaca bounty only | B. Mainnet Track | KYVERA today |
 | --- | --- | --- | --- |
 | Public deployment / live URL | **Ambiguous** — "working demonstration" is required, but a hosted URL is not explicitly stated | **Mandatory** (M3) | ❌ Not deployed |
-| WizardConnect or XO | **Not stated** | **Mandatory** (M6) | ❌ No WizardConnect; XO not implemented |
-| BCH mainnet transaction feature | **Not stated** | **Mandatory** (M2) | ❌ No mainnet transaction feature |
+| WizardConnect or XO | **Not stated** | **Mandatory** (M6) | ◐ WizardConnect adapter integrated and pairing dialog works; **not tested with a physical wallet**. No XO. |
+| BCH mainnet transaction feature | **Not stated** | **Mandatory** (M2) | ◐ BIP21 handoff can initiate a wallet payment; no in-app tx construction, broadcast or txid. Confirm whether this satisfies "using the app". |
 | Demo video | **Ambiguous** — "working demonstration"; video not explicitly required | **Not explicitly required**; live demo is required | ❌ Not recorded |
 | Presentation deck (Widget Factory) | **Not stated** on bounty page | **Mandatory** in top banner (M5) | ❌ Not prepared |
 | Source repository | **Required** ("source code") | **Mandatory** banner link (M5) | ⚠️ Repository exists but is **private**; it must be public or explicitly accessible to judges |
@@ -114,10 +114,10 @@ The Details page also warns judges will look at projects in a low-priority queue
 | Bounty R4 verification/auth | ✅ SDK, CLI, challenge-response |
 | Bounty R5 demonstration/docs | ✅ locally; no hosted URL |
 | Rotation stretch goal | ✅ rotation; recovery explicitly not claimed |
-| Mainnet M2 mainnet transaction | ❌ |
+| Mainnet M2 mainnet transaction | ◐ BIP21 handoff only; no in-app broadcast/txid |
 | Mainnet M3 live demo | ❌ |
 | Mainnet M5 presentation/banner | ❌ |
-| Mainnet M6 WizardConnect/XO | ❌ |
+| Mainnet M6 WizardConnect/XO | ◐ WizardConnect adapter, untested with wallet; no XO |
 | Mainnet M7/M8 roll call/Telegram | ❌ unverified |
 
-**Eligibility verdict:** KYVERA is technically strong for the Paytaca bounty's five requirements but **not currently eligible for the Mainnet Track**. Bounty-only eligibility is **unresolved** and must be confirmed with the sponsor/organizers. Do not submit claiming Mainnet Track eligibility without deployment, WizardConnect (or XO), and a usable mainnet transaction feature.
+**Eligibility verdict:** KYVERA is technically strong for the Paytaca bounty's five requirements but **not currently eligible for the Mainnet Track as-is**. Bounty-only eligibility is **unresolved** and must be confirmed with the sponsor/organizers. Do not submit claiming Mainnet Track eligibility without a public deployment, a wallet-tested WizardConnect/XO integration, and a confirmed mainnet transaction flow.

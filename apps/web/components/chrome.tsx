@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "./ui";
+import { ThemeToggle } from "./theme-toggle";
 
 const NAV = [
-  { href: "/create", label: "Create" },
+  { href: "/#protocol", label: "Product" },
   { href: "/verify", label: "Verify" },
-  { href: "/lab", label: "Security lab" },
+  { href: "/demo", label: "Time Machine" },
+  { href: "/lab", label: "Security Lab" },
   { href: "/developers", label: "Developers" },
 ];
 
@@ -25,7 +27,7 @@ function Mark({ size = 26 }: { size?: number }) {
 export function Header() {
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-40 border-b border-ivory/[0.1] bg-charcoal-950/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-ivory/[0.12] bg-charcoal-950/70 shadow-[0_12px_40px_-30px_rgba(0,0,0,0.8)] backdrop-blur-glass">
       <div className="mx-auto flex h-[68px] max-w-[1240px] items-center justify-between px-5">
         <Link href="/" className="group flex items-center gap-3">
           <span className="text-ivory transition-colors group-hover:text-signal">
@@ -39,9 +41,11 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
           {NAV.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const active =
+              pathname === item.href ||
+              (item.href !== "/#protocol" && pathname.startsWith(`${item.href}/`));
             return (
               <Link
                 key={item.href}
@@ -59,35 +63,39 @@ export function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          <ThemeToggle />
           <Link
-            href="/verify"
-            className="hidden font-mono text-[10px] uppercase tracking-[0.16em] text-ivory-muted hover:text-ivory lg:block"
+            href="/pay#wallet"
+            className="hidden rounded-full border border-ivory/18 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-dim transition-colors hover:border-ivory/40 hover:text-ivory sm:block"
           >
-            Public verifier
+            Connect wallet
           </Link>
           <Link
             href="/create"
-            className="rounded-[2px] bg-signal px-3.5 py-2 text-[12px] font-semibold text-charcoal-950 transition-colors hover:bg-signal-bright"
+            className="rounded-full bg-signal px-3.5 py-2 text-[12px] font-semibold text-charcoal-950 transition-colors hover:bg-signal-bright"
           >
             Create identity
           </Link>
         </div>
       </div>
-      <div className="border-t border-ivory/[0.07] px-5 py-2 md:hidden">
-        <nav className="mx-auto flex max-w-lg items-center justify-between" aria-label="Primary mobile">
+      <div className="border-t border-ivory/[0.07] px-5 py-2 lg:hidden">
+        <nav className="scroll-pane mx-auto flex max-w-2xl items-center justify-between gap-2 overflow-x-auto" aria-label="Primary mobile">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "font-mono text-[9.5px] uppercase tracking-[0.12em]",
+                "whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em]",
                 pathname === item.href ? "text-signal" : "text-ivory-muted",
               )}
             >
               {item.label}
             </Link>
           ))}
+          <Link href="/pay#wallet" className="whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em] text-ivory-dim">
+            Connect wallet
+          </Link>
         </nav>
       </div>
     </header>
@@ -111,19 +119,19 @@ export function Footer() {
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-2">
           <Link href="/verify" className="hover:text-ivory">
-            Public verifier
-          </Link>
-          <Link href="/lab" className="hover:text-ivory">
-            Security lab
+            Verify
           </Link>
           <Link href="/demo" className="hover:text-ivory">
-            Guided demo
+            Time Machine
+          </Link>
+          <Link href="/lab" className="hover:text-ivory">
+            Security Lab
+          </Link>
+          <Link href="/pay" className="hover:text-ivory">
+            Pay
           </Link>
           <Link href="/interop" className="hover:text-ivory">
             Wallet probe
-          </Link>
-          <Link href="/developers" className="hover:text-ivory">
-            SDK &amp; CLI
           </Link>
           <a
             href="https://github.com/sakethdonepudi/kyvera-protocol"

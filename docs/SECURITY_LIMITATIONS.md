@@ -80,6 +80,8 @@ BCH control is proven by a compact recoverable ECDSA signature over the Bitcoin 
 
 The format matches the convention used by Electron Cash, Cashonize and Paytaca, and an independent `nostr-bch-bind` vector is verified in `tests/interop.test.ts`. However, no signature was produced by a live wallet in this workspace. Do not claim "tested with Electron Cash" until that is done.
 
+KYVERA Pay integrates WizardConnect and opens a real pairing dialog, but no physical wallet was available to complete pairing or payment. KYVERA Pay is a BIP21 handoff: it does not construct/broadcast a transaction and does not receive a txid. Do not claim transaction-level payment or a receipt.
+
 A related prior-art observation: Paytaca's extension reportedly mis-encoded message lengths above 252 bytes (paytaca/paytaca-app#831, fixed in #832). KYVERA keeps proof messages short (~150 bytes) but has not independently re-tested that wallet build.
 
 ### 2.3 Demo key storage
@@ -95,7 +97,7 @@ NIP-07 and external-wallet modes avoid storage; the demo mode is clearly labelle
 
 ### 2.4 No audit
 
-No independent security review, formal verification or external fuzzing campaign has been performed. The chain state machine has 94 automated tests, including property-based canonicalization/chain fuzzing and adversarial cases, but tests cannot prove the absence of bugs.
+No independent security review, formal verification or external fuzzing campaign has been performed. The chain state machine has 105 automated tests, including property-based canonicalization/chain fuzzing and adversarial cases, but tests cannot prove the absence of bugs.
 
 ### 2.5 Dependency risk
 

@@ -45,7 +45,7 @@ export function RelayEditor({
               type="button"
               aria-label={`Remove ${relay}`}
               onClick={() => onChange(relays.filter((entry) => entry !== relay))}
-              className="text-ivory-muted hover:text-[#E5A49C]"
+              className="text-ivory-muted hover:text-danger"
             >
               ×
             </button>

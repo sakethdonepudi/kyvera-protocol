@@ -154,8 +154,9 @@ Status values: **Implemented** (code + automated evidence), **Partial** (works b
 | `tests/vectors.test.ts` | 5 | Published vectors: canonical, BCH message, record ids, chain outcomes |
 | `tests/interop.test.ts` | 2 | Independent BCH `signmessage` vector |
 | `tests/property.test.ts` | 12 | Property/fuzz: canonical idempotence, key order, NFC, numeric edges, duplicate keys, depth limits; chain subsets/mutations; malformed event metadata |
+| `tests/pay.test.ts` | 11 | Payment amount parsing, BIP21 encoding, ACTIVE/network/assurance policy, destination-change cancellation |
 | `tests/smoke.test.ts` | 1 | End-to-end creation |
-| **Total** | **94** | |
+| **Total** | **105** | |
 
 ---
 

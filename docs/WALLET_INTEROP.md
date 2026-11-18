@@ -15,6 +15,7 @@ KYVERA proves BCH address control with the standard wallet `signmessage` format 
 | Electron Cash | — | — | — | — | **Not tested** | — |
 | Cashonize | — | — | — | — | **Not tested** | — |
 | `nostr-bch-bind` reference implementation | published vector | `signmessage` | P2PKH mainnet | base64 compact recoverable | **Verified** | `tests/interop.test.ts` |
+| WizardConnect (Paytaca / Selene / Cashonize) | — | pairing + address derivation | — | QR pairing | **Pairing dialog verified; no physical wallet test** | `/pay`, `@wizardconnect/react` |
 
 The independent vector proves the format is not merely self-consistent. It does **not** prove that a specific wallet version produces compatible signatures. Do not claim wallet compatibility until the table has a real row.
 
@@ -119,7 +120,19 @@ Rotation with an external wallet requires signatures for both the current and ne
 
 ---
 
-## 6. Known limitations
+## 6. WizardConnect connection (KYVERA Pay)
+
+`/pay` integrates `@wizardconnect/core`, `@wizardconnect/dapp` and `@wizardconnect/react`:
+
+- pairing QR/dialog opens and reports `connecting`/`connected`/`error`;
+- the wallet name is displayed;
+- the first receive address is derived locally from the wallet public key;
+- no seed phrase or private key is requested;
+- the connection is used to verify the wallet/network context, while payment is a BIP21 handoff.
+
+This is a real library integration, but **no physical Paytaca/Selene/Cashonize wallet was available for the pairing test**. Do not claim wallet compatibility until a connection and a payment are recorded.
+
+## 7. Known limitations
 
 - Only P2PKH is supported. P2SH, multisig and token-aware addresses are rejected.
 - Hardware-wallet PSBT flows are not implemented.

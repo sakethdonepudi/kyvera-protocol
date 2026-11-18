@@ -68,7 +68,7 @@ export function LifecycleDemo() {
 
       <div className="p-5">
         {error ? (
-          <p className="text-[12px] text-[#E5A49C]">{error}</p>
+          <p className="text-[12px] text-danger">{error}</p>
         ) : !state ? (
           <div className="flex items-center gap-2 py-8 text-[12px] text-ivory-dim">
             <Spinner /> Signing deterministic records and resolving…

@@ -24,12 +24,12 @@ export function Button({
       "border border-ivory/20 bg-transparent text-ivory hover:border-ivory/45 hover:bg-ivory/[0.04]",
     ghost: "text-ivory-dim hover:text-ivory hover:bg-ivory/[0.05]",
     danger:
-      "border border-danger/40 bg-danger/[0.07] text-[#E5A49C] hover:bg-danger/[0.14] hover:border-danger/60",
+      "border border-danger/40 bg-danger/[0.07] text-danger hover:bg-danger/[0.14] hover:border-danger/60",
   };
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-[2px] px-4 py-2.5 text-[13px] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-70",
+        "inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-70",
         variants[variant],
         className,
       )}
@@ -52,7 +52,7 @@ export function Card({
   return (
     <Tag
       className={cn(
-        "rounded-[2px] border border-ivory/[0.13] bg-charcoal-900/55",
+        "rounded-xl border border-ivory/[0.13] bg-charcoal-900/55",
         className,
       )}
     >
@@ -74,12 +74,12 @@ export function Badge({
     neutral: "border-ivory/18 bg-transparent text-ivory-dim",
     accent: "border-accent/45 bg-accent/[0.08] text-accent-bright",
     warn: "border-signal/45 bg-signal/[0.07] text-signal-bright",
-    danger: "border-danger/45 bg-danger/[0.07] text-[#E5A49C]",
+    danger: "border-danger/45 bg-danger/[0.07] text-danger",
   };
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-[2px] border px-2 py-1 font-mono text-[9.5px] font-medium uppercase tracking-[0.14em]",
+        "inline-flex items-center gap-1.5 rounded-full border px-2 py-1 font-mono text-[9.5px] font-medium uppercase tracking-[0.14em]",
         tones[tone],
         className,
       )}
@@ -93,13 +93,35 @@ export function StatusBadge({ status }: { status: IdentityStatus }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-[2px] border px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em]",
+        "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em]",
         statusClasses(status),
       )}
     >
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
       {STATUS_LABEL[status]}
     </span>
+  );
+}
+
+/** Semantic alias: a verification result must use the same status semantics. */
+export const VerificationBadge = StatusBadge;
+
+export function CopyableHash({
+  value,
+  label = "Hash",
+  className,
+}: {
+  value: string;
+  label?: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex items-start gap-2", className)}>
+      <code className="min-w-0 flex-1 break-all font-mono text-[10px] leading-relaxed text-ivory-dim">
+        {value}
+      </code>
+      <CopyButton value={value} label={label} />
+    </div>
   );
 }
 
@@ -115,7 +137,7 @@ export function Label({ children, htmlFor }: { children: ReactNode; htmlFor?: st
 }
 
 const fieldClasses =
-  "w-full rounded-[2px] border border-ivory/15 bg-charcoal-950/80 px-3.5 py-2.5 text-[13px] text-ivory placeholder:text-ivory-muted/60 transition-colors focus:border-signal/70 focus:outline-none";
+  "w-full rounded-lg border border-ivory/15 bg-charcoal-950/80 px-3.5 py-2.5 text-[13px] text-ivory placeholder:text-ivory-muted/60 transition-colors focus:border-signal/70 focus:outline-none";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldClasses, className)} {...props} />;
@@ -157,7 +179,7 @@ export function CopyButton({ value, label = "Copy" }: { value: string; label?: s
           setCopied(false);
         }
       }}
-      className="shrink-0 rounded-[2px] border border-ivory/15 px-2 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-ivory-muted transition-colors hover:border-ivory/40 hover:text-ivory"
+      className="shrink-0 rounded-full border border-ivory/15 px-2 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-ivory-muted transition-colors hover:border-ivory/40 hover:text-ivory"
     >
       {copied ? "Copied" : label}
     </button>
@@ -175,12 +197,12 @@ export function Alert({
 }) {
   const tones = {
     info: "border-ivory/15 bg-ivory/[0.02] text-ivory-dim",
-    warn: "border-signal/30 bg-signal/[0.04] text-[#F0B39E]",
-    danger: "border-danger/35 bg-danger/[0.05] text-[#E5A49C]",
+    warn: "border-signal/30 bg-signal/[0.04] text-signal-bright",
+    danger: "border-danger/35 bg-danger/[0.05] text-danger",
     success: "border-accent/35 bg-accent/[0.05] text-accent-bright",
   };
   return (
-    <div className={cn("rounded-[2px] border px-4 py-3 text-[12px] leading-relaxed", tones[tone])}>
+    <div className={cn("rounded-lg border px-4 py-3 text-[12px] leading-relaxed", tones[tone])}>
       {title ? <div className="mb-1 font-semibold">{title}</div> : null}
       {children}
     </div>
@@ -209,6 +231,24 @@ export function Spinner({ className }: { className?: string }) {
 
 export function Divider() {
   return <div className="h-px w-full bg-ivory/[0.1]" />;
+}
+
+export function GlassPanel({
+  children,
+  className,
+  strong = false,
+  id,
+}: {
+  children: ReactNode;
+  className?: string;
+  strong?: boolean;
+  id?: string;
+}) {
+  return (
+    <div id={id} className={cn(strong ? "glass-strong" : "glass", "rounded-xl", className)}>
+      {children}
+    </div>
+  );
 }
 
 export function Kicker({ children }: { children: ReactNode }) {

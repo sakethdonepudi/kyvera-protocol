@@ -19,11 +19,16 @@
     "@kyvera/core": "workspace:*",
     "@kyvera/nostr": "workspace:*",
     "@kyvera/verifier": "workspace:*",
+    "@wizardconnect/core": "^0.2.11",
+    "@wizardconnect/dapp": "^0.2.8",
+    "@wizardconnect/react": "^0.2.7",
     "next": "15.5.29",
+    "qrcode": "^1.5.4",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
   "devDependencies": {
+    "@types/qrcode": "^1.5.5",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",

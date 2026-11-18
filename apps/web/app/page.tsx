@@ -29,32 +29,37 @@ export default function LandingPage() {
 
           <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1.08fr_0.92fr]">
             <div>
-              <h1 className="max-w-[720px] font-display text-[46px] leading-[0.98] tracking-editorial text-ivory sm:text-[70px]">
-                Keys change.
+              <h1 className="max-w-[760px] font-display text-[46px] leading-[0.98] tracking-editorial text-ivory sm:text-[68px]">
+                Your keys change.
                 <br />
-                Trust shouldn&apos;t
+                Your identity
                 <br />
-                <span className="text-signal">disappear.</span>
+                <span className="text-signal">continues.</span>
               </h1>
               <p className="mt-8 max-w-xl text-[14px] leading-relaxed text-ivory-dim">
-                A BCH address and a Nostr key can be bound with signatures. The harder question is what
-                remains authorized after a wallet is rotated, revoked or compromised. KYVERA makes that
-                distinction explicit, testable and independently verifiable.
+                Cryptographically verify Bitcoin Cash and Nostr identities across wallet rotation,
+                revocation, and decentralized discovery.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
                   href="/demo"
-                  className="inline-flex items-center gap-2 rounded-[2px] bg-signal px-5 py-3 text-[13px] font-semibold text-charcoal-950 transition-colors hover:bg-signal-bright"
+                  className="inline-flex items-center gap-2 rounded-full bg-signal px-5 py-3 text-[13px] font-semibold text-charcoal-950 transition-colors hover:bg-signal-bright"
                 >
-                  Watch the 90-second demo
+                  Explore Live Demo
                   <span aria-hidden="true">→</span>
                 </Link>
                 <Link
                   href="/verify"
-                  className="inline-flex items-center gap-2 rounded-[2px] border border-ivory/25 px-5 py-3 text-[13px] text-ivory transition-colors hover:border-ivory/55 hover:bg-ivory/[0.04]"
+                  className="inline-flex items-center gap-2 rounded-full border border-ivory/25 bg-ivory/[0.03] px-5 py-3 text-[13px] text-ivory backdrop-blur-sm transition-colors hover:border-ivory/55 hover:bg-ivory/[0.07]"
                 >
-                  Verify an identity
+                  Verify an Identity
+                </Link>
+                <Link
+                  href="/pay"
+                  className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-ivory-muted hover:text-signal"
+                >
+                  Pay by identity →
                 </Link>
               </div>
 
@@ -77,7 +82,7 @@ export default function LandingPage() {
 
               <div className="mt-10 grid max-w-lg grid-cols-3 gap-px bg-ivory/[0.1]">
                 {[
-                  ["82", "automated tests"],
+                  ["94", "automated tests"],
                   ["8", "explicit states"],
                   ["0", "verification servers"],
                 ].map(([value, label]) => (
@@ -92,7 +97,9 @@ export default function LandingPage() {
             </div>
 
             <div className="lg:pt-2">
-              <LifecycleDemo />
+              <div className="glass rounded-2xl p-1.5">
+                <LifecycleDemo />
+              </div>
               <p className="mt-3 font-mono text-[9px] leading-relaxed tracking-[0.06em] text-ivory-muted">
                 This is an actual verification run in your browser, not a recorded animation. The fixture
                 keys are deterministic and unspendable.
@@ -147,7 +154,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="border-y border-ivory/[0.1] bg-charcoal-900/40">
+      <section id="protocol" className="border-y border-ivory/[0.1] bg-charcoal-900/40">
         <div className="mx-auto max-w-[1240px] px-5 py-20">
           <div className="grid gap-12 lg:grid-cols-[1fr_1fr]">
             <div>
@@ -271,9 +278,46 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-[1240px] px-5 py-20">
+        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+          <div>
+            <div className="kicker">05 / Pay by identity</div>
+            <h2 className="mt-3 font-display text-[34px] leading-[1.08] tracking-editorial text-ivory">
+              Pay the person.
+              <br />
+              Verify the destination.
+            </h2>
+            <p className="mt-4 max-w-md text-[12.5px] leading-relaxed text-ivory-dim">
+              Resolve an npub, verify the current BCH authorization chain, then hand a BIP21 payment to
+              Paytaca, Selene or Cashonize through WizardConnect. No key, no custody, no fabricated receipt.
+            </p>
+            <Link
+              href="/pay"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-signal px-5 py-3 text-[13px] font-semibold text-charcoal-950 hover:bg-signal-bright"
+            >
+              Open KYVERA Pay →
+            </Link>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              ["WizardConnect", "Connect Paytaca, Selene or Cashonize and derive the wallet address locally."],
+              ["BIP21 handoff", "The wallet previews and broadcasts the payment. KYVERA never auto-broadcasts."],
+              ["Honest receipt", "This handoff does not return a txid, so no receipt is invented. A txid-aware adapter is future work."],
+            ].map(([title, body], index) => (
+              <div key={title} className="glass rounded-xl p-5">
+                <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-signal">0{index + 1}</div>
+                <h3 className="mt-3 text-[14px] font-medium text-ivory">{title}</h3>
+                <p className="mt-2 text-[11.5px] leading-relaxed text-ivory-muted">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="border-t border-ivory/[0.1]">
         <div className="mx-auto max-w-[1240px] px-5 py-20">
-          <div className="kicker">05 / The result space</div>
+          <div className="kicker">06 / The result space</div>
           <h2 className="mt-4 max-w-2xl font-display text-[34px] leading-[1.08] tracking-editorial text-ivory">
             Uncertainty is a result,
             <br />
@@ -287,7 +331,7 @@ export default function LandingPage() {
                     status === "ACTIVE"
                       ? "font-mono text-[10px] uppercase tracking-[0.14em] text-accent"
                       : ["REVOKED", "CONFLICT", "INVALID"].includes(status)
-                        ? "font-mono text-[10px] uppercase tracking-[0.14em] text-[#E5A49C]"
+                        ? "font-mono text-[10px] uppercase tracking-[0.14em] text-danger"
                         : status === "SUPERSEDED" || status === "STALE"
                           ? "font-mono text-[10px] uppercase tracking-[0.14em] text-signal"
                           : "font-mono text-[10px] uppercase tracking-[0.14em] text-ivory-muted"

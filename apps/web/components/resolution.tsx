@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { ChainStep } from "@kyvera/core";
 import type { AddressResolution, IdentityResolution } from "@kyvera/verifier";
 import { Badge, Card, CopyButton, Divider, SectionLabel, StatusBadge, cn } from "./ui";
@@ -22,7 +23,7 @@ function StepRow({ step, index, head }: { step: ChainStep; index: number; head: 
             "rounded border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
             payload.type === "bind" && "border-accent/30 bg-accent/10 text-accent-bright",
             payload.type === "rotate" && "border-signal/30 bg-signal/10 text-signal-bright",
-            payload.type === "revoke" && "border-danger/30 bg-danger/10 text-[#E5A49C]",
+            payload.type === "revoke" && "border-danger/30 bg-danger/10 text-danger",
           )}
         >
           {payload.type}
@@ -85,6 +86,12 @@ export function ResolutionPanel({
             </div>
             <div className="flex items-center gap-2">
               <CopyButton value={active.address} />
+              <Link
+                href={`/pay?npub=${encodeURIComponent(resolution.subject)}`}
+                className="rounded-md border border-signal/40 bg-signal/[0.07] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.08em] text-signal-bright hover:bg-signal/[0.12]"
+              >
+                Pay
+              </Link>
             </div>
           </div>
         ) : (
@@ -131,7 +138,7 @@ export function ResolutionPanel({
                       >
                         <span className="text-ivory-dim">{shortAddress(entry.address)}</span>
                         <span className="text-ivory-muted/70">→</span>
-                        <span className={entry.replacedBy === "revoked" ? "text-[#E5A49C]" : "text-accent"}>
+                        <span className={entry.replacedBy === "revoked" ? "text-danger" : "text-accent"}>
                           {entry.replacedBy === "revoked" ? "revoked" : shortAddress(entry.replacedBy)}
                         </span>
                         <span className="ml-auto text-[10px] text-ivory-muted/70">seq #{entry.sequence}</span>
@@ -147,7 +154,7 @@ export function ResolutionPanel({
                 <Divider />
                 <div className="pt-5">
                   <SectionLabel>Equivocation evidence</SectionLabel>
-                  <p className="text-[12px] text-[#E5A49C]">
+                  <p className="text-[12px] text-danger">
                     Sequence {resolution.conflict.sequence} has {resolution.conflict.recordIds.length} competing
                     valid records.
                   </p>
@@ -198,7 +205,7 @@ export function ResolutionPanel({
             <ul className="space-y-2">
               {resolution.rejected.slice(0, 6).map((entry, index) => (
                 <li key={`${entry.eventId}-${index}`} className="text-[11.5px] leading-relaxed">
-                  <span className="font-mono text-[10px] uppercase text-[#E5A49C]">{entry.code}</span>
+                  <span className="font-mono text-[10px] uppercase text-danger">{entry.code}</span>
                   <span className="ml-2 text-ivory-muted">{entry.message}</span>
                 </li>
               ))}

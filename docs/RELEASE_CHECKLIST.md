@@ -1,7 +1,7 @@
 # Release Checklist
 
 **Date:** 2026-11-18
-**Candidate:** `ff3e69d` + release-candidate working tree
+**Candidate:** `82a3e1b` + KYVERA 3.0 working tree
 **Target:** BCH Blaze 2026 · Paytaca Decentralized Identity bounty
 **Status:** local release candidate; **not deployed, not submitted**.
 
@@ -11,11 +11,11 @@
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Repository commit | `git rev-parse HEAD` | `ff3e69d…` (clean before RC changes) |
-| Unit/integration/security tests | `pnpm test` | **94/94 pass**, 10 files, ~3s |
+| Repository commit | `git rev-parse HEAD` | `82a3e1b…` (3.0 working tree) |
+| Unit/integration/security tests | `pnpm test` | **105/105 pass**, 11 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
-| Production build | `pnpm build` | pass, 12 routes |
-| Browser QA | `pnpm qa:browser` | **28/28**, 0 console/page errors |
+| Production build | `pnpm build` | pass, 13 routes |
+| Browser QA | `pnpm qa:browser` | **34/34**, 0 console/page errors |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |
 | Dependency audit | `pnpm audit --prod` | **0 known vulnerabilities** |
@@ -56,6 +56,11 @@ Every important claim links to a source, test or running demonstration.
 | No backend/API key | `docs/ARCHITECTURE.md`, `packages/verifier` | `/verify`, standalone file from `file://` |
 | 8 explicit statuses | `packages/core/src/types.ts` | landing status matrix, `ResolutionPanel` |
 | Time Machine shows real proof data | `apps/web/components/time-machine.tsx` | browser QA step 6 |
+| Historical vs current comparison | `TimeMachine` Compare mode | browser QA, `/demo` |
+| Payment destination policy | `apps/web/lib/pay.ts` | `tests/pay.test.ts` (11), browser QA |
+| WizardConnect pairing | `apps/web/app/pay/page.tsx` | browser QA dialog; physical wallet untested |
+| Warm light theme | `globals.css`, `tailwind.config.ts`, toggle | browser QA theme check |
+| 105-test suite | `tests/` | `pnpm test` |
 | Lab runs real verifier functions | `apps/web/lib/lab.ts`, `app/lab` | browser QA, standalone |
 | Mobile/reduced motion/keyboard | design system/global CSS | browser QA checks 12–14 |
 | Production CSP permits WASM | `apps/web/next.config.mjs` | `scripts/prod-smoke.mjs` |
@@ -77,7 +82,7 @@ See [`SUBMISSION_ELIGIBILITY.md`](SUBMISSION_ELIGIBILITY.md).
 | Registration / roll call / Telegram | ❌ unverified |
 | Deadline | **22 Nov 2026, 14:00 UTC (19:30 IST)** |
 
-**Do not submit as Mainnet Track eligible without deployment, WizardConnect/XO and a usable mainnet transaction. Confirm bounty-only eligibility with Paytaca/BLAZE organizers.**
+**Do not submit as Mainnet Track eligible without a public deployment, a wallet-tested WizardConnect/XO integration and a confirmed in-app mainnet transaction. Confirm bounty-only eligibility with Paytaca/BLAZE organizers.**
 
 ---
 
@@ -107,7 +112,11 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | Production relay fallback (no localhost) | ✅ `wss://relay.damus.io,wss://nos.lol` |
 | Security headers | ✅ verified on `next start` |
 | Static assets (`/vectors.json`, standalone, icon) | ✅ 200 |
-| Routes | ✅ 12 routes build and render |
+| Routes | ✅ 13 routes build and render (`/pay` included) |
+| KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (11) |
+| WizardConnect pairing | ✅ dialog opens; ❌ untested with a physical wallet |
+| Theme / glass system | ✅ dark + warm light, reduced motion, mobile |
+| Browser QA | ✅ **34/34**, pay and theme included |
 | CSP + WASM | ✅ fixed and smoke-tested |
 | No secrets in client bundle | ✅ scanned |
 | Demo/lab/standalone work without relay | ✅ |
@@ -120,7 +129,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 
 1. **Repository visibility** — `sakethdonepudi/kyvera-protocol` is currently **private**. Mainnet Track requires a public GitHub/lab link.
 2. **Deployment** — no public URL; required for Mainnet Track and strongly expected for the bounty.
-3. **Mainnet Track features** — WizardConnect/XO and a usable mainnet BCH transaction are absent.
+3. **Mainnet Track features** — WizardConnect adapter is integrated but untested with a physical wallet; no XO integration; payments are a BIP21 handoff without in-app broadcast/txid.
 4. **Wallet interoperability** — no real wallet signature recorded.
 5. **Presentation** — Widget Factory deck and top-of-page banner not prepared.
 6. **Video** — 90-second demo video not recorded.

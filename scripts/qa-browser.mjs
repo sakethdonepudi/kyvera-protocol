@@ -87,6 +87,19 @@ async function desktopFlow() {
   record("create page publishes a binding", true, identity.npub);
   await shot(page, "05-create-published");
 
+  await page.goto(`${BASE}/pay?npub=${encodeURIComponent(identity.npub)}`, { waitUntil: "networkidle" });
+  await page.getByText("Destination is currently authorized").waitFor({ timeout: 20_000 });
+  await page.getByRole("button", { name: "Connect wallet" }).click();
+  await page.getByText(/Scan with Paytaca/).waitFor({ timeout: 20_000 });
+  record("WizardConnect opens a wallet pairing dialog", true);
+  await page.getByRole("button", { name: /close/i }).first().click();
+  await page.getByPlaceholder(/leave blank for open amount/).fill("0.001");
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Re-verify and prepare payment" }).click();
+  await page.getByText("Open in BCH wallet").waitFor({ timeout: 20_000 });
+  record("KYVERA Pay prepares a verified BIP21 handoff", true);
+  await shot(page, "06-pay");
+
   await page.goto(`${BASE}/identity/${identity.npub}`, { waitUntil: "networkidle" });
   await page.getByText("Identity time machine").waitFor({ timeout: 20_000 });
   record("dashboard renders time machine", true);
@@ -95,6 +108,10 @@ async function desktopFlow() {
   await page.getByRole("button", { name: "Cryptographic" }).click();
   await page.getByText("Payload digest").first().waitFor();
   record("time machine inspects genesis record and proof digests", true);
+  await page.getByRole("button", { name: "Compare" }).click();
+  await page.getByText("Historical proof").first().waitFor();
+  await page.getByText("Current authorization").first().waitFor();
+  record("time machine compares historical validity and current authorization", true);
   await shot(page, "06-time-machine");
 
   await page.getByRole("button", { name: "Prepare rotation" }).click();
@@ -141,6 +158,11 @@ async function desktopFlow() {
   record("verifier refuses the revoked identity", true);
   await shot(page, "12-verify-revoked");
 
+  await page.goto(`${BASE}/pay?npub=${encodeURIComponent(identity.npub)}`, { waitUntil: "networkidle" });
+  await page.getByText("Payment blocked").first().waitFor({ timeout: 20_000 });
+  record("pay blocks a revoked identity", true);
+  await shot(page, "13-pay-revoked");
+
   return { identity, oldAddress };
 }
 
@@ -151,6 +173,7 @@ async function mobileFlow() {
     ["mobile-demo", "/demo"],
     ["mobile-lab", "/lab"],
     ["mobile-create", "/create"],
+    ["mobile-pay", "/pay"],
   ]) {
     await page.goto(`${BASE}${path}`, { waitUntil: "networkidle" });
     await page.waitForTimeout(1000);
@@ -179,6 +202,11 @@ async function accessibilityFlow() {
   );
 
   await page.goto(`${BASE}/`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: /warm light/i }).click();
+  const theme = await page.evaluate(() => document.documentElement.dataset.theme);
+  record("warm light theme toggles", theme === "light", String(theme));
+  await page.getByRole("button", { name: /dark theme/i }).click();
+
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");

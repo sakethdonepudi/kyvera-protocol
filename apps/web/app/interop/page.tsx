@@ -287,7 +287,7 @@ export default function InteropPage() {
               {probes.length > 0 ? (
                 <button
                   onClick={() => persist([])}
-                  className="font-mono text-[9px] uppercase tracking-[0.1em] text-ivory-muted hover:text-[#E5A49C]"
+                  className="font-mono text-[9px] uppercase tracking-[0.1em] text-ivory-muted hover:text-danger"
                 >
                   clear
                 </button>

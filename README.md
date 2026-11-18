@@ -55,7 +55,12 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 - **Guided 90-second demo** (`/demo`): the full argument in eight steps, with no wallet or relay required.
 - **Standalone HTML demo** (`demo/kyvera-standalone.html`): the real verifier bundled into one file for judges who cannot install dependencies.
 - **Wallet probe** (`/interop`): test a real Electron Cash / Cashonize / Paytaca `signmessage` signature and record the actual result. No compatibility is claimed until a real row exists.
-- **Editorial design system** (`docs/DESIGN_SYSTEM.md`): charcoal, ivory, signal orange, muted emerald; accessible interaction states and reduced-motion support.
+- **KYVERA Pay** (`/pay`): resolve an identity, enforce ACTIVE/network/freshness policy, re-resolve before handoff, and generate a BIP21/QR payment for Paytaca, Selene, Cashonize or Electron Cash.
+- **WizardConnect adapter**: real `@wizardconnect` integration for wallet pairing and local address derivation. Not yet tested with a physical wallet.
+- **Glass design system**: translucent navigation/summary surfaces, warm-light theme, reduced-motion support, and a single dark/light token set.
+- **Identity Time Machine 3.0**: Compare mode separates historical proof validity from current authorization; proof inspection remains per-record.
+- **Security laboratory 3.0**: split view, transition strip, replay/reset controls, real verifier output.
+- **Editorial design system** (`docs/DESIGN_SYSTEM.md`): charcoal, ivory, signal orange, muted mint; accessible interaction states and reduced-motion support.
 - **Property-based and malformed-input testing** for canonical JSON and authorization-chain parsing.
 
 ## 3. Architecture
@@ -177,7 +182,7 @@ open demo/kyvera-standalone.html
 ## 8. Running tests
 
 ```bash
-pnpm test           # 94 tests across 10 files (unit, integration, security, property)
+pnpm test           # 105 tests across 11 files (unit, integration, security, property)
 pnpm typecheck      # strict TypeScript for every package
 pnpm build          # production build
 pnpm demo:lifecycle # executable lifecycle demo with assertions
@@ -264,8 +269,9 @@ For the full application:
 5. Publish. Open the identity dashboard and use the **Identity Time Machine** to inspect record digests, both proofs and relay observations.
 6. Rotate to a new wallet. Confirm the old address becomes `SUPERSEDED`.
 7. Verify the same npub in the public verifier and from the CLI.
-8. Revoke the identity. Confirm the verifier returns `REVOKED` and no payment address.
-9. Run `/lab` for the six adversarial scenarios, and `pnpm demo:lifecycle` for the terminal version.
+8. Open `/pay?npub=…` to resolve the current destination and prepare a BIP21 wallet handoff. It blocks revoked/conflicted/stale identities and never invents a receipt.
+9. Revoke the identity. Confirm the verifier returns `REVOKED` and no payment address.
+10. Run `/lab` for the six adversarial scenarios, and `pnpm demo:lifecycle` for the terminal version.
 
 Do not fund any demo address. Demo keys are throwaway material stored in browser localStorage.
 
@@ -289,6 +295,8 @@ See [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md) and [`docs/SECURITY_LIMITATIO
 - **Relays may prune history.** Addressable NIP-78 events are keyed per subject/sequence/digest, but relays are free to drop old events. A verifier then reports `STALE`, never an older active binding.
 - **P2PKH only.** v1 does not support multisig, P2SH, CashTokens or hardware-wallet signing flows.
 - **No live wallet test.** The signmessage format is implemented and cross-verified against an independent vector, but not yet exercised against a funded Electron Cash/Cashonize/Paytaca wallet in this workspace.
+- **Payment is a handoff.** KYVERA Pay produces a BIP21 URI/QR for a wallet to broadcast. It does not construct the transaction, observe the broadcast, or return a txid; no receipt is shown.
+- **WizardConnect is untested with a physical wallet.** The adapter and pairing dialog are integrated, but compatibility is not claimed.
 - **No security audit.** This is a hackathon prototype. Do not use it to secure real funds.
 - **Demo key storage.** The browser demo stores throwaway private keys in localStorage so rotation and revocation can be demonstrated; production clients should never do this.
 
@@ -315,7 +323,7 @@ Honest status as of 2026-11-18:
 - [x] Chain resolution with eight explicit result states
 - [x] Relay discovery, partial-sync and rollback-checkpoint handling
 - [x] Independent TypeScript SDK and CLI
-- [x] 94 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
+- [x] 105 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
 - [x] Responsive editorial web application, verified end-to-end in Chrome, mobile viewport, reduced motion and keyboard navigation
 - [x] Identity Time Machine with per-record proof and relay inspection
 - [x] Interactive security laboratory with six real scenarios
@@ -328,7 +336,7 @@ Honest status as of 2026-11-18:
 - [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review
 
-**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md)
+**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
 
 Deadline note: DoraHacks lists **22 November 2026, 14:00 UTC (19:30 IST)**. The BCH Blaze site footer still says 14–28 November; DoraHacks is authoritative. The Mainnet Track separately requires a live demo, WizardConnect/XO and at least one mainnet transaction; confirm with organizers whether those apply to a bounty-only entry.
 

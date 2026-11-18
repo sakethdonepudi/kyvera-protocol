@@ -58,7 +58,7 @@ Template: [`apps/web/.env.production.example`](../apps/web/.env.production.examp
 - `Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()`
 - In production only:
   - `Strict-Transport-Security: max-age=31536000; includeSubDomains`
-  - `Content-Security-Policy` with `default-src 'self'`, inline script/style (Next runtime), WebSocket `connect-src`, `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`.
+  - `Content-Security-Policy` with `default-src 'self'`, inline script/style (Next runtime), `'wasm-unsafe-eval'` (libauth), WebSocket `connect-src`, `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`.
 
 CSP is not applied in development to avoid breaking HMR. A future improvement is a nonce-based CSP; inline allowances are required by the current Next runtime.
 
@@ -94,6 +94,7 @@ Smoke-test:
 | `/lab` | Six scenarios execute locally |
 | `/verify` | Renders; a nonexistent npub returns `UNKNOWN`/`INVALID`, not a crash |
 | `/interop` | Wallet probe + independent vector verification |
+| `/pay` | Identity-based payment policy + BIP21 handoff; WizardConnect pairing opens |
 | `/developers` | SDK docs and vector download |
 | `/kyvera-standalone.html` | Single-file demo loads from the host |
 | `/vectors.json` | Deterministic vectors served |
@@ -141,5 +142,7 @@ Vercel keeps immutable deployments. Roll back by promoting the previous deployme
 - **Relay egress:** corporate or browser CSP restrictions can block WebSockets. Verify in the target browser.
 - **Build-time env:** `NEXT_PUBLIC_*` values are inlined; changing them requires a redeploy.
 - **`libauth` top-level await:** the build emits a warning; current Chrome is tested, older browsers are not claimed.
+- **WizardConnect:** pairing requires relay egress and a compatible wallet; it is untested with a physical wallet.
+- **KYVERA Pay:** the BIP21 handoff does not return a txid and does not construct/broadcast transactions in-app.
 - **No hosted demo yet:** this document prepares deployment but does not authorize it.
 - **Mainnet Track:** deployment alone does not satisfy WizardConnect or the mainnet-transaction requirement.

@@ -32,6 +32,9 @@ This is a self-audit by the implementation team, not an independent security rev
 | Relay | No relays → `STALE`/`UNSYNCED`, no address | Pass |
 | Relay | Malformed KYVERA event rejected, good state retained | Pass |
 | Checkpoint | `ROLLBACK_DETECTED`, `CHECKPOINT_MISMATCH` | Pass |
+| Payment policy | Only ACTIVE, correct network, non-UNSYNCED; re-resolve and change cancellation | Pass (`tests/pay.test.ts`) |
+| Payment handoff | No keys, no auto-broadcast, no fabricated txid | Pass; txid-aware payment not implemented |
+| WizardConnect | Supported library adapter; no seed/private-key request | Pairing dialog works; **untested with a physical wallet** |
 | Demo keys | Throwaway only, labelled, no funds | Pass with stated risk |
 | Client bundle | No `nsec1`/private-key blocks | Pass |
 | Client bundle | Production default relays are public | Pass |

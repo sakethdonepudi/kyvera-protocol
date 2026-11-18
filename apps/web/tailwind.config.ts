@@ -6,38 +6,38 @@ const config: Config = {
     extend: {
       colors: {
         charcoal: {
-          950: "#0A0A08",
-          900: "#0F0F0C",
-          850: "#14130F",
-          800: "#1A1914",
-          700: "#24221C",
+          950: "rgb(var(--c-950) / <alpha-value>)",
+          900: "rgb(var(--c-900) / <alpha-value>)",
+          850: "rgb(var(--c-850) / <alpha-value>)",
+          800: "rgb(var(--c-800) / <alpha-value>)",
+          700: "rgb(var(--c-700) / <alpha-value>)",
         },
         ivory: {
-          DEFAULT: "#F1ECDF",
-          dim: "#D8D1C2",
-          muted: "#8F8A7D",
+          DEFAULT: "rgb(var(--ivory) / <alpha-value>)",
+          dim: "rgb(var(--ivory-dim) / <alpha-value>)",
+          muted: "rgb(var(--ivory-muted) / <alpha-value>)",
         },
         signal: {
-          DEFAULT: "#F05A28",
-          bright: "#FF7040",
-          dim: "#B6431C",
+          DEFAULT: "rgb(var(--signal) / <alpha-value>)",
+          bright: "rgb(var(--signal-bright) / <alpha-value>)",
+          dim: "rgb(var(--signal-dim) / <alpha-value>)",
         },
         accent: {
-          DEFAULT: "#5E9C82",
-          bright: "#86BCA4",
-          dim: "#3C6E59",
-          soft: "rgba(94,156,130,0.12)",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          bright: "rgb(var(--accent-bright) / <alpha-value>)",
+          dim: "rgb(var(--accent-dim) / <alpha-value>)",
+          soft: "rgb(var(--accent) / 0.12)",
         },
         // Backward-compatible aliases used by earlier components.
         ink: {
-          950: "#0A0A08",
-          900: "#0F0F0C",
-          850: "#14130F",
-          800: "#1A1914",
-          700: "#24221C",
+          950: "rgb(var(--c-950) / <alpha-value>)",
+          900: "rgb(var(--c-900) / <alpha-value>)",
+          850: "rgb(var(--c-850) / <alpha-value>)",
+          800: "rgb(var(--c-800) / <alpha-value>)",
+          700: "rgb(var(--c-700) / <alpha-value>)",
         },
-        muted: "#8F8A7D",
-        danger: "#C25B4E",
+        muted: "rgb(var(--ivory-muted) / <alpha-value>)",
+        danger: "rgb(var(--danger) / <alpha-value>)",
       },
       fontFamily: {
         display: [
@@ -68,13 +68,13 @@ const config: Config = {
       },
       borderRadius: {
         none: "0",
-        sm: "2px",
-        DEFAULT: "2px",
-        md: "2px",
-        lg: "2px",
-        xl: "2px",
-        "2xl": "2px",
-        "3xl": "2px",
+        sm: "8px",
+        DEFAULT: "12px",
+        md: "14px",
+        lg: "18px",
+        xl: "22px",
+        "2xl": "26px",
+        "3xl": "32px",
       },
       letterSpacing: {
         tightest: "-0.035em",
@@ -83,11 +83,23 @@ const config: Config = {
       boxShadow: {
         hairline: "inset 0 0 0 1px rgba(241,236,223,0.06)",
         lift: "0 24px 80px -48px rgba(0,0,0,0.9)",
+        glass: "0 20px 70px -32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)",
+      },
+      backdropBlur: {
+        glass: "20px",
       },
       keyframes: {
         fade: {
-          from: { opacity: "0", transform: "translateY(3px)" },
+          from: { opacity: "0", transform: "translateY(4px)" },
           to: { opacity: "1", transform: "translateY(0)" },
+        },
+        rise: {
+          from: { opacity: "0", transform: "translateY(10px) scale(0.995)" },
+          to: { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
+        pulse: {
+          "0%, 100%": { opacity: "0.55" },
+          "50%": { opacity: "1" },
         },
         sweep: {
           from: { transform: "scaleX(0)", opacity: "0.4" },
@@ -95,7 +107,9 @@ const config: Config = {
         },
       },
       animation: {
-        fade: "fade 160ms ease-out both",
+        fade: "fade 180ms ease-out both",
+        rise: "rise 360ms cubic-bezier(0.22,1,0.36,1) both",
+        pulse: "pulse 2.4s ease-in-out infinite",
         sweep: "sweep 420ms ease-out both",
       },
     },

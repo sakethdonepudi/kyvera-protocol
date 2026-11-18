@@ -166,6 +166,12 @@ export default function IdentityPage() {
           >
             Test authentication
           </Link>
+          <Link
+            href={`/pay?npub=${encodeURIComponent(raw ?? subject)}`}
+            className="rounded-lg border border-signal/40 bg-signal/[0.06] px-3.5 py-2 text-[12.5px] text-signal-bright hover:bg-signal/[0.12]"
+          >
+            Pay identity
+          </Link>
         </div>
       </div>
 

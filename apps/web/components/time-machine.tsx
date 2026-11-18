@@ -7,10 +7,10 @@ import {
   type IdentityStatus,
 } from "@kyvera/core";
 import type { IdentityResolution } from "@kyvera/verifier";
-import { Badge, Button, Card, CopyButton, SectionLabel, StatusBadge, cn } from "./ui";
+import { Badge, Card, CopyButton, GlassPanel, SectionLabel, StatusBadge, cn } from "./ui";
 import { STATUS_LABEL, shortHex, timestamp } from "@/lib/format";
 
-type Mode = "plain" | "crypto";
+type Mode = "plain" | "compare" | "crypto";
 
 function stepStatus(resolution: IdentityResolution, index: number): IdentityStatus {
   if (index < resolution.history.length - 1) return "SUPERSEDED";
@@ -96,7 +96,7 @@ export function TimeMachine({
             </p>
           </div>
           <div className="flex rounded-[2px] border border-ivory/15 p-0.5" role="group" aria-label="Detail mode">
-            {(["plain", "crypto"] as const).map((value) => (
+            {(["plain", "compare", "crypto"] as const).map((value) => (
               <button
                 key={value}
                 onClick={() => setMode(value)}
@@ -106,7 +106,7 @@ export function TimeMachine({
                   mode === value ? "bg-ivory text-charcoal-950" : "text-ivory-muted hover:text-ivory",
                 )}
               >
-                {value === "plain" ? "Plain" : "Cryptographic"}
+                {value === "plain" ? "Plain" : value === "compare" ? "Compare" : "Cryptographic"}
               </button>
             ))}
           </div>
@@ -176,7 +176,7 @@ export function TimeMachine({
                 <li className="relative flex">
                   <div className="mt-[38px] h-px w-8 shrink-0 border-t border-dashed border-danger/60 sm:w-12" />
                   <div className="w-[180px] shrink-0 border border-danger/50 bg-danger/[0.05] px-3.5 py-3 sm:w-[210px]">
-                    <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-[#E5A49C]">
+                    <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-danger">
                       conflict
                     </div>
                     <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-ivory">
@@ -217,7 +217,7 @@ export function TimeMachine({
 
       {step && detail ? (
         <div className="grid min-w-0 gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-          <Card className="min-w-0 overflow-hidden p-5">
+          <GlassPanel className="min-w-0 overflow-hidden p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-ivory-muted">
@@ -279,6 +279,13 @@ export function TimeMachine({
                   newer record exists anywhere.
                 </p>
               </div>
+            ) : mode === "compare" ? (
+              <CompareView
+                resolution={resolution}
+                step={step}
+                index={activeIndex!}
+                status={stepStatus(resolution, activeIndex!)}
+              />
             ) : (
               <div className="mt-5 space-y-4 border-t border-ivory/[0.08] pt-4">
                 <Digest label="Record digest" value={step.recordId} />
@@ -302,7 +309,7 @@ export function TimeMachine({
                 </div>
               </div>
             )}
-          </Card>
+          </GlassPanel>
 
           <div className="min-w-0 space-y-4">
             <Card className="min-w-0 overflow-hidden p-5">
@@ -392,7 +399,7 @@ export function TimeMachine({
       {!compact && resolution.conflict ? (
         <Card className="border-danger/40 p-5">
           <SectionLabel>Equivocation evidence</SectionLabel>
-          <p className="text-[12px] leading-relaxed text-[#E5A49C]">
+          <p className="text-[12px] leading-relaxed text-danger">
             Sequence {resolution.conflict.sequence} contains {resolution.conflict.recordIds.length} competing
             valid records. A verifier must not pick a winner by timestamp or relay order.
           </p>
@@ -413,7 +420,7 @@ export function TimeMachine({
             {resolution.rejected.slice(0, 8).map((entry, index) => (
               <li key={`${entry.eventId}-${index}`} className="grid gap-1 border-b border-ivory/[0.06] pb-2 last:border-0 last:pb-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#E5A49C]">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-danger">
                     {entry.code}
                   </span>
                   {entry.sequence !== undefined ? (
@@ -428,6 +435,74 @@ export function TimeMachine({
           </ul>
         </Card>
       ) : null}
+    </div>
+  );
+}
+
+function CompareView({
+  resolution,
+  step,
+  index,
+  status,
+}: {
+  resolution: IdentityResolution;
+  step: ChainStep;
+  index: number;
+  status: IdentityStatus;
+}) {
+  const isHead = index === resolution.history.length - 1;
+  const current = resolution.activeBch?.address ?? null;
+  return (
+    <div className="mt-5 border-t border-ivory/[0.08] pt-4">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-lg border border-accent/30 bg-accent/[0.04] p-4">
+          <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-accent-bright">
+            Historical proof
+          </div>
+          <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.08em] text-ivory">
+            VALID
+          </div>
+          <ul className="mt-3 space-y-1.5 text-[10.5px] leading-relaxed text-ivory-dim">
+            <li>◆ Nostr Schnorr signature verified</li>
+            <li>◆ BCH proof recovers to the declared address</li>
+            <li>◆ Payload and record digests match</li>
+            <li>◆ Predecessor link matches the chain</li>
+          </ul>
+          <p className="mt-3 font-mono text-[9px] text-ivory-muted">
+            This remains true forever, even after rotation or revocation.
+          </p>
+        </div>
+        <div
+          className={cn(
+            "rounded-lg border p-4",
+            status === "ACTIVE"
+              ? "border-accent/30 bg-accent/[0.04]"
+              : "border-signal/35 bg-signal/[0.04]",
+          )}
+        >
+          <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+            Current authorization
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <StatusBadge status={status} />
+          </div>
+          <ul className="mt-3 space-y-1.5 text-[10.5px] leading-relaxed text-ivory-dim">
+            <li>◆ This record is {isHead ? "the chain head" : "not the chain head"}</li>
+            <li>◆ Current address: {current ?? "none asserted"}</li>
+            <li>◆ Relay assurance: {resolution.assurance}</li>
+            <li>◆ Sequence {step.record.payload.sequence} of {resolution.history.length - 1}</li>
+          </ul>
+          <p className="mt-3 font-mono text-[9px] text-ivory-muted">
+            {status === "ACTIVE"
+              ? "This record currently authorizes payment."
+              : "This record does not authorize payment now."}
+          </p>
+        </div>
+      </div>
+      <p className="mt-3 text-[10.5px] leading-relaxed text-ivory-muted">
+        Historical validity does not imply current authorization. Freshness describes what this verifier
+        could reach, not proof that no newer record exists.
+      </p>
     </div>
   );
 }

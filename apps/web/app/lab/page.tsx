@@ -18,7 +18,7 @@ function verdictClass(verdict: LabVerdict): string {
   if (verdict === "accepted") return "border-accent/50 bg-accent/[0.07] text-accent-bright";
   if (verdict === "revoked") return "border-ivory/25 bg-ivory/[0.03] text-ivory-dim";
   if (verdict === "stale") return "border-signal/45 bg-signal/[0.05] text-signal-bright";
-  return "border-danger/45 bg-danger/[0.05] text-[#E5A49C]";
+  return "border-danger/45 bg-danger/[0.05] text-danger";
 }
 
 export default function LabPage() {
@@ -98,7 +98,7 @@ export default function LabPage() {
       </div>
 
       {error ? (
-        <div className="mt-5 border border-danger/40 bg-danger/[0.05] p-4 text-[12px] text-[#E5A49C]">
+        <div className="mt-5 border border-danger/40 bg-danger/[0.05] p-4 text-[12px] text-danger">
           {error}
         </div>
       ) : null}
@@ -150,24 +150,29 @@ export default function LabPage() {
           </Card>
         </div>
 
-        <div>{selected ? <ScenarioDetail scenario={selected} advanced={advanced} /> : null}</div>
+        <div className="min-w-0">{selected ? <ScenarioDetail scenario={selected} advanced={advanced} onReplay={() => void execute()} /> : null}</div>
       </div>
     </div>
   );
 }
 
-function ScenarioDetail({ scenario, advanced }: { scenario: LabScenario; advanced: boolean }) {
+function ScenarioDetail({ scenario, advanced, onReplay }: { scenario: LabScenario; advanced: boolean; onReplay: () => void }) {
   return (
-    <div className="space-y-4 animate-fade">
-      <Card>
+    <div className="min-w-0 space-y-4 animate-fade">
+      <Card className="min-w-0 overflow-hidden">
         <div className="border-b border-ivory/[0.1] p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-ivory-muted">
               Scenario · {scenario.id}
             </div>
-            <span className={cn("border px-2 py-1 font-mono text-[9px] uppercase tracking-[0.14em]", verdictClass(scenario.verdict))}>
-              {VERDICT_LABEL[scenario.verdict]} · {scenario.status}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className={cn("border px-2 py-1 font-mono text-[9px] uppercase tracking-[0.14em]", verdictClass(scenario.verdict))}>
+                {VERDICT_LABEL[scenario.verdict]} · {scenario.status}
+              </span>
+              <Button variant="ghost" className="px-2 py-1 text-[10px]" onClick={onReplay}>
+                Replay
+              </Button>
+            </div>
           </div>
           <h2 className="mt-3 font-display text-[25px] leading-tight tracking-editorial text-ivory">
             {scenario.title}
@@ -175,6 +180,41 @@ function ScenarioDetail({ scenario, advanced }: { scenario: LabScenario; advance
           <p className="mt-2 text-[12.5px] text-ivory-dim">{scenario.question}</p>
           <div className="mt-4 border-l-2 border-signal/70 pl-3">
             <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-ivory">{scenario.headline}</div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-1.5">
+            {(scenario.resolution?.history ?? []).map((step, index) => (
+              <div key={step.recordId} className="flex items-center gap-1.5">
+                {index > 0 ? <span className="h-px w-3 bg-ivory/20" /> : null}
+                <span className="border border-ivory/15 px-2 py-1 font-mono text-[8.5px] uppercase tracking-[0.08em] text-ivory-dim">
+                  #{step.record.payload.sequence} {step.record.payload.type}
+                </span>
+              </div>
+            ))}
+            {scenario.resolution?.conflict ? (
+              <>
+                <span className="h-px w-3 bg-danger/50" />
+                <span className="border border-danger/45 px-2 py-1 font-mono text-[8.5px] uppercase tracking-[0.08em] text-danger">
+                  conflict · seq {scenario.resolution.conflict.sequence}
+                </span>
+              </>
+            ) : null}
+            {scenario.status === "STALE" ? (
+              <>
+                <span className="h-px w-3 bg-signal/50" />
+                <span className="border border-signal/45 px-2 py-1 font-mono text-[8.5px] uppercase tracking-[0.08em] text-signal-bright">
+                  stale · no fallback
+                </span>
+              </>
+            ) : null}
+            {scenario.status === "REVOKED" ? (
+              <>
+                <span className="h-px w-3 bg-ivory/20" />
+                <span className="border border-ivory/20 px-2 py-1 font-mono text-[8.5px] uppercase tracking-[0.08em] text-ivory-muted">
+                  terminal
+                </span>
+              </>
+            ) : null}
           </div>
         </div>
 
@@ -193,7 +233,7 @@ function ScenarioDetail({ scenario, advanced }: { scenario: LabScenario; advance
                         "mt-0.5 inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center border text-[8px]",
                         check.ok
                           ? "border-accent/50 text-accent-bright"
-                          : "border-danger/60 text-[#E5A49C]",
+                          : "border-danger/60 text-danger",
                       )}
                     >
                       {check.ok ? "✓" : "×"}
@@ -218,14 +258,14 @@ function ScenarioDetail({ scenario, advanced }: { scenario: LabScenario; advance
 
       {advanced ? (
         <>
-          <Card className="p-5">
+          <Card className="min-w-0 overflow-hidden p-5">
             <SectionLabel>Verifier result (actual return value)</SectionLabel>
             <pre className="scroll-pane max-h-[380px] overflow-auto border border-ivory/[0.1] bg-charcoal-950/70 p-4 font-mono text-[9.5px] leading-relaxed text-ivory-dim">
 {JSON.stringify(scenario.resolution ?? scenario.recordResult, null, 2)}
             </pre>
           </Card>
 
-          <details className="border border-ivory/[0.1] bg-charcoal-900/40">
+          <details className="min-w-0 overflow-hidden border border-ivory/[0.1] bg-charcoal-900/40">
             <summary className="cursor-pointer px-4 py-3 font-mono text-[9.5px] uppercase tracking-[0.14em] text-ivory-muted">
               Input events ({scenario.events.length}) — real signed fixtures
             </summary>

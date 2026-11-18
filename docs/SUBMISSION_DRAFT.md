@@ -40,6 +40,7 @@ Eight outcomes: `ACTIVE`, `SUPERSEDED`, `REVOKED`, `EXPIRED`, `CONFLICT`, `STALE
 - **Uncertainty as a result.** Per-relay `FULL`/`PARTIAL`/`UNSYNCED` assurance, equivocation evidence, optional checkpoint rollback detection.
 - **Reproducible adversarial lab.** Six scenarios run the real verifier in the browser; no mock verdicts.
 - **Independent SDK and CLI.** Third parties can verify without the app.
+- **KYVERA Pay.** Resolve an npub, enforce ACTIVE/network/freshness policy, re-resolve before handoff, and generate a BIP21/QR payment for a user-controlled wallet. It is a handoff, not a receipt.
 
 ## How to try it (90 seconds)
 
@@ -52,7 +53,7 @@ Eight outcomes: `ACTIVE`, `SUPERSEDED`, `REVOKED`, `EXPIRED`, `CONFLICT`, `STALE
 
 ```bash
 pnpm install
-pnpm test        # 94 tests
+pnpm test        # 105 tests
 pnpm build
 pnpm cli <npub> --relay wss://relay.damus.io
 ```
@@ -82,7 +83,7 @@ No API key or hosted verifier is used.
 - P2PKH only; no multisig, hardware-wallet PSBT or CashTokens.
 - No live wallet compatibility recorded yet.
 - No independent security audit.
-- **Not currently eligible for the Mainnet Track** without a live deployment, WizardConnect/XO and a mainnet transaction feature.
+- **Not currently eligible for the Mainnet Track** without a public deployment, a wallet-tested WizardConnect/XO integration and a confirmed in-app mainnet transaction flow. A WizardConnect adapter and BIP21 handoff exist but are not yet wallet-tested.
 - Demo keys are throwaway browser-local material.
 
 ## Team

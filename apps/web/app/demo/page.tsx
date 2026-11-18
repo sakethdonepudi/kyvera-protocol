@@ -312,7 +312,7 @@ function StepPanel({ step, state }: { step: number; state: DemoState }) {
           label="Current state unchanged"
           detail={`${state.rotation.status} · wallet A cannot be replaced without its signature`}
         />
-        <div className="mt-3 border border-danger/35 bg-danger/[0.04] p-3 font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#E5A49C]">
+        <div className="mt-3 border border-danger/35 bg-danger/[0.04] p-3 font-mono text-[9.5px] uppercase tracking-[0.1em] text-danger">
           {state.unauthorizedScenario.recordResult?.code} · forged record excluded
         </div>
       </div>
@@ -394,7 +394,7 @@ function CheckLine({ ok, label, detail }: { ok: boolean; label: string; detail: 
       <span
         className={cn(
           "mt-0.5 inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center border text-[8px]",
-          ok ? "border-accent/50 text-accent-bright" : "border-danger/60 text-[#E5A49C]",
+          ok ? "border-accent/50 text-accent-bright" : "border-danger/60 text-danger",
         )}
       >
         {ok ? "✓" : "×"}

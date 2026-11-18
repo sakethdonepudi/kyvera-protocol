@@ -211,7 +211,7 @@ Legend: ✅ confirmed, ◐ partial/claim only, ❌ absent.
 | Independent CLI verifier | ✅ | ❌ | ❌ | ❌ | ◐ local script |
 | Interactive lifecycle/proof inspector | ✅ Time Machine | ❌ | ◐ DID/badge | ◐ details list | ❌ |
 | Executable adversarial lab in browser | ✅ | ❌ | ❌ | ◐ auth replay test | ◐ 8-case script |
-| Automated protocol tests | ✅ 94 tests (incl. property/fuzz) | ◐ statement tests | ◐ protocol/live tests | ◐ 2 files | ◐ 8 checks |
+| Automated protocol tests | ✅ 105 tests (incl. property/fuzz) | ◐ statement tests | ◐ protocol/live tests | ◐ 2 files | ◐ 8 checks |
 | Live hosted demo | ❌ (build verified locally) | ✅ | ✅ | ✅ | ❌ |
 | Mainnet transaction | ❌ | ❌ (chipnet) | ✅ claim | ❌ | ❌ |
 

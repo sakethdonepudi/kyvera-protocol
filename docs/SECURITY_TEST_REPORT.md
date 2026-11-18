@@ -11,11 +11,11 @@
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **94 / 94 tests pass** across 10 files |
+| `pnpm test` | **105 / 105 tests pass** across 11 files |
 | `pnpm typecheck` | **pass** for core, bch, nostr, verifier and web |
 | `pnpm build` | **pass** (Next.js production build; one third-party top-level-await warning) |
 | `pnpm demo:lifecycle` | **all assertions pass** (6 lifecycle scenarios) |
-| Browser end-to-end | **pass** (28/28 checks: create → rotate → time machine → verify → auth → revoke, mobile, reduced motion, keyboard; 0 console errors) |
+| Browser end-to-end | **pass** (34/34 checks: create → pay handoff → rotate → time machine → verify → auth → revoke, WizardConnect dialog, mobile, reduced motion, warm light, keyboard; 0 console errors) |
 | Deterministic vectors | **byte-identical on regeneration** (`sha256 074af1d4…`) |
 | Independent BCH interop vector | **pass** (signature from `nostr-bch-bind v1`) |
 | CLI end-to-end against local relay | **pass** (exit code 0 for ACTIVE and SUPERSEDED) |
@@ -36,10 +36,11 @@ $ pnpm test
  ✓ tests/rotation.test.ts (15 tests)
  ✓ tests/interop.test.ts (2 tests)
  ✓ tests/property.test.ts (12 tests)
+ ✓ tests/pay.test.ts (11 tests)
  ✓ tests/smoke.test.ts (1 test)
  ✓ tests/relay.test.ts (13 tests)
- Test Files  10 passed (10)
-      Tests  94 passed (94)
+ Test Files  11 passed (11)
+      Tests  105 passed (105)
    Duration  ~2.7s
 ```
 
@@ -242,7 +243,7 @@ Fast-check seeds are randomized per run; failures print a reproducible counterex
 
 ## 5. Browser end-to-end evidence
 
-Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **28/28 checks passed, 0 console/page errors.**
+Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **34/34 checks passed, 0 console/page errors.**
 
 Flow:
 
@@ -251,17 +252,19 @@ Flow:
 3. `/lab` executes all six scenarios; equivocation returns `CONFLICT`, withheld history returns `STALE`; advanced mode exposes the signed input events.
 4. `/interop` verifies the independent BCH vector.
 5. Create page generates real keys, displays the proof/event preview, publishes, and stores a local demo identity.
-6. Dashboard renders the Time Machine; selecting the genesis record and switching to cryptographic mode exposes the payload digest and exact BCH proof message.
-7. Rotation publishes sequence 1; the historical record reports `SUPERSEDED`.
-8. Public verifier resolves the identity and renders the Time Machine.
-9. Address lookup for the old address returns `SUPERSEDED`.
-10. Challenge-response authentication succeeds with the demo key.
-11. Revocation publishes sequence 2 and the verifier returns `REVOKED`.
-12. Mobile viewport (390×844): landing, demo, lab and create have no horizontal overflow.
-13. Reduced motion: transitions collapse to ~0ms.
-14. Keyboard: Tab reaches navigation links with a visible focus target.
+6. Dashboard renders the Time Machine; selecting the genesis record and switching to cryptographic mode exposes the payload digest and exact BCH proof message; Compare mode shows historical validity beside current authorization.
+7. KYVERA Pay resolves an active identity, enforces payment policy, accepts an amount/confirmation and produces a BIP21 handoff; WizardConnect opens a pairing dialog.
+8. Rotation publishes sequence 1; the historical record reports `SUPERSEDED`.
+9. Public verifier resolves the identity and renders the Time Machine.
+10. Address lookup for the old address returns `SUPERSEDED`.
+11. Challenge-response authentication succeeds with the demo key.
+12. Revocation publishes sequence 2 and the verifier returns `REVOKED`; Pay blocks the revoked identity.
+13. Mobile viewport (390×844): landing, demo, lab, create and pay have no horizontal overflow.
+14. Reduced motion: transitions collapse to ~0ms.
+15. Warm-light theme toggles via `data-theme`.
+16. Keyboard: Tab reaches navigation links with a visible focus target.
 
-Screenshots: `.context/screens/qa/01-landing.png` … `12-verify-revoked.png` (gitignored, local evidence).
+Screenshots: `.context/screens/qa/01-landing.png` … `13-pay-revoked.png` (gitignored, local evidence).
 
 The standalone `demo/kyvera-standalone.html` was also loaded from `file://`, executed all six scenarios and exposed advanced input events with zero console errors.
 

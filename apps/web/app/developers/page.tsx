@@ -205,6 +205,8 @@ export default function DevelopersPage() {
               ["Threat model", `${REPO}/blob/main/docs/THREAT_MODEL.md`],
               ["Security limitations", `${REPO}/blob/main/docs/SECURITY_LIMITATIONS.md`],
               ["Competitive audit 2026", `${REPO}/blob/main/docs/COMPETITIVE_AUDIT_2026.md`],
+              ["KYVERA 3.0 competitive analysis", `${REPO}/blob/main/docs/KYVERA_3_COMPETITIVE_ANALYSIS.md`],
+              ["KYVERA Pay", `${REPO}/blob/main/docs/KYVERA_PAY.md`],
               ["Design system", `${REPO}/blob/main/docs/DESIGN_SYSTEM.md`],
               ["Security test report", `${REPO}/blob/main/docs/SECURITY_TEST_REPORT.md`],
             ].map(([label, href]) => (
