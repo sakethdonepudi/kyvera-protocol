@@ -81,7 +81,7 @@ New tests in `tests/security-challenge.test.ts`:
 - `rejects an external-wallet bind that reuses the Nostr key`
 - `rejects an uncompressed BCH proof that reuses the Nostr key`
 
-Both failed before the fix and pass now (part of 134/134).
+Both regression tests exercise the previously accepted cases and pass with the fix (part of 134/134).
 
 **Fix**
 
@@ -156,7 +156,7 @@ historical, understating the risk.
 
 New relay-backed test in `tests/relay.test.ts`:
 `reports a revoked address that appeared earlier as REVOKED, not SUPERSEDED`.
-It fails against the old `.find()` behavior and passes with the fix.
+The test exercises the A→B→A→revoke path; the old `.find()` logic would have selected the first A entry, while the latest-entry fix returns REVOKED.
 
 **Fix**
 
