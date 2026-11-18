@@ -320,11 +320,29 @@ function StepPanel({ step, state }: { step: number; state: DemoState }) {
   }
 
   if (step === 6) {
-    const command = `pnpm cli ${f.npub} --relay ws://127.0.0.1:7777`;
+    const command = `pnpm cli ${f.npub} --relay <your-relay>`;
     return (
       <div className="mt-5 space-y-3">
+        <div>
+          <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+            SDK call (the same function the UI uses)
+          </div>
+          <pre className="overflow-auto border border-ivory/[0.12] bg-charcoal-950/80 p-4 font-mono text-[10px] leading-relaxed text-ivory-dim">
+{`import { resolveIdentity } from "@kyvera/verifier";
+
+const result = await resolveIdentity({
+  subject: "${f.subject}",
+  relays: ["<relay-url>"],
+});
+
+// result.status    → "${state.rotation.status}"
+// result.activeBch → "${f.walletB.identity.address}"`}
+          </pre>
+        </div>
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">terminal</span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+            terminal
+          </span>
           <CopyButton value={command} />
         </div>
         <pre className="overflow-auto border border-ivory/[0.12] bg-charcoal-950/80 p-4 font-mono text-[10px] leading-relaxed text-ivory-dim">

@@ -524,7 +524,7 @@ export default function CreatePage() {
                   Open the identity dashboard →
                 </Link>
                 <p className="break-all rounded-lg border border-ivory/[0.07] bg-ink-950/60 p-2.5 font-mono text-[9.5px] leading-relaxed text-ivory-muted">
-                  pnpm cli {npub} --relay ws://127.0.0.1:7777
+                  pnpm cli {npub} --relay {relays[0] ?? "wss://relay.damus.io"}
                 </p>
               </div>
             ) : (

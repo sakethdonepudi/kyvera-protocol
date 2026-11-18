@@ -58,6 +58,23 @@ export default function LandingPage() {
                 </Link>
               </div>
 
+              <div className="mt-4 flex flex-wrap items-center gap-4">
+                <a
+                  href="/kyvera-standalone.html"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-ivory-muted underline decoration-ivory/20 underline-offset-4 hover:text-signal"
+                >
+                  No-install standalone demo ↗
+                </a>
+                <Link
+                  href="/lab"
+                  className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-ivory-muted hover:text-signal"
+                >
+                  Security lab →
+                </Link>
+              </div>
+
               <div className="mt-10 grid max-w-lg grid-cols-3 gap-px bg-ivory/[0.1]">
                 {[
                   ["82", "automated tests"],

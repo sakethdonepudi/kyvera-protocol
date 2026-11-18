@@ -155,5 +155,7 @@ const html = `<!doctype html>
 </html>`;
 
 const out = `${root}demo/kyvera-standalone.html`;
+const publicOut = `${root}apps/web/public/kyvera-standalone.html`;
 writeFileSync(out, html);
-console.log(`wrote ${out} (${(html.length / 1024).toFixed(0)} KB)`);
+writeFileSync(publicOut, html);
+console.log(`wrote ${out} and ${publicOut} (${(html.length / 1024).toFixed(0)} KB)`);

@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import {
   decodeP2pkhAddress,
+  hashBitcoinMessage,
   verifyBitcoinMessageSignature,
   type SignatureCheck,
 } from "@kyvera/bch";
+import { binToHex } from "@bitauth/libauth";
 import { Alert, Badge, Button, Card, CopyButton, Field, Input, SectionLabel, Textarea, cn } from "@/components/ui";
 import { timestamp } from "@/lib/format";
 
@@ -144,6 +146,13 @@ export default function InteropPage() {
             <CopyButton value={PROBE_MESSAGE} />
           </div>
 
+          <div className="mt-2 flex items-center gap-2">
+            <span className="break-all font-mono text-[9px] text-ivory-muted">
+              hash {binToHex(hashBitcoinMessage(PROBE_MESSAGE))}
+            </span>
+            <CopyButton value={binToHex(hashBitcoinMessage(PROBE_MESSAGE))} />
+          </div>
+
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <Field label="Wallet name">
               <Input value={wallet} onChange={(event) => setWallet(event.target.value)} placeholder="Electron Cash" />
@@ -206,6 +215,20 @@ export default function InteropPage() {
             <Button variant="secondary" onClick={verifyReference}>
               Verify independent reference vector
             </Button>
+          </div>
+
+          <div className="mt-4 border border-ivory/[0.1] p-3">
+            <div className="mb-1 flex items-center justify-between">
+              <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+                Or verify from the terminal
+              </span>
+              <CopyButton
+                value={`pnpm wallet:verify ${address || "<cashaddr>"} ${signature || "<base64-signature>"}`}
+              />
+            </div>
+            <code className="break-all font-mono text-[10px] text-ivory-dim">
+              pnpm wallet:verify {address || "<cashaddr>"} {signature || "<base64-signature>"}
+            </code>
           </div>
 
           {result ? (

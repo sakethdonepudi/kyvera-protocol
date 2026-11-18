@@ -242,6 +242,14 @@ export default function DevelopersPage() {
           >
             Download vectors.json
           </a>
+          <a
+            href="/kyvera-standalone.html"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 block text-[11px] text-signal hover:text-signal-bright"
+          >
+            Open the no-install standalone demo ↗
+          </a>
           <p className="mt-3 text-[10.5px] leading-relaxed text-ivory-muted">
             All keys in the vectors are unspendable, derived from labels. Never fund their addresses.
           </p>

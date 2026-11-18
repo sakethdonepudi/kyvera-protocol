@@ -1,7 +1,7 @@
 # Wallet Interoperability
 
 **Date:** 2026-11-18
-**Status:** format implemented and independently cross-verified; **no live wallet test has been completed**.
+**Status:** format implemented and independently cross-verified; **no live wallet test has been completed**. No Paytaca, Electron Cash or Cashonize installation was available in the release environment, so this task pauses at the manual wallet step.
 
 KYVERA proves BCH address control with the standard wallet `signmessage` format (compact recoverable ECDSA, 65 bytes, base64). The web app exposes an external-wallet path and a probe page so a real signature can be tested without sharing keys.
 
@@ -55,6 +55,18 @@ hash160(recoveredKey) == P2PKH payload of the declared address
 ```
 
 A header byte of 31–34 means a compressed key; 27–30 means uncompressed. Both are accepted, and the recovered key form must hash to the address.
+
+**Probe message hash (for independent checking):**
+
+```text
+42a17d5314963eb4e515c98a06680771a2dadf091a7f19cd07cd3e96c0e1c1bb
+```
+
+Verify a pasted signature without the browser:
+
+```bash
+pnpm wallet:verify <cashaddr> <base64-signature>
+```
 
 ---
 

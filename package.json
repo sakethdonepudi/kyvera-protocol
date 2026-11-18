@@ -9,6 +9,11 @@
   "engines": {
     "node": ">=20"
   },
+  "pnpm": {
+    "overrides": {
+      "postcss": "8.5.33"
+    }
+  },
   "scripts": {
     "predev": "pnpm -r --filter \"./packages/*\" build",
     "build": "pnpm -r --if-present build",
@@ -22,6 +27,7 @@
     "demo:lifecycle": "pnpm -r --filter \"./packages/*\" build && tsx examples/identity-lifecycle/run.ts",
     "demo:standalone": "pnpm -r --filter \"./packages/*\" build && node scripts/build-standalone-demo.mjs",
     "qa:browser": "node scripts/qa-browser.mjs",
+    "wallet:verify": "node scripts/verify-wallet-signature.mjs",
     "cli": "pnpm -r --filter \"./packages/*\" build && node packages/verifier/dist/cli.js"
   },
   "devDependencies": {

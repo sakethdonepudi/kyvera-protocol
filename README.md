@@ -322,12 +322,15 @@ Honest status as of 2026-11-18:
 - [x] Single-file standalone browser demonstration (no install)
 - [x] Wallet interoperability probe and manual test instructions
 - [x] Competitive audit of Kola Link, CashLink ID, BCH Identity Bridge and prior art
+- [x] Submission eligibility analysis, deployment guide, release checklist, judge script and submission draft
 - [ ] Live wallet interoperability test (Electron Cash / Cashonize / Paytaca)
 - [ ] Public GitHub push, deployment, demo video, bounty submission
 - [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review
 
-Deadline note: DoraHacks lists **22 November 2026, 14:00 UTC (19:30 IST)**. The BCH Blaze site footer still says 14–28 November; DoraHacks is authoritative. The Mainnet Track separately requires a live demo, WizardConnect and at least one mainnet transaction; confirm with organizers whether those apply to a bounty-only entry.
+**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md)
+
+Deadline note: DoraHacks lists **22 November 2026, 14:00 UTC (19:30 IST)**. The BCH Blaze site footer still says 14–28 November; DoraHacks is authoritative. The Mainnet Track separately requires a live demo, WizardConnect/XO and at least one mainnet transaction; confirm with organizers whether those apply to a bounty-only entry.
 
 ## 16. Future development
 

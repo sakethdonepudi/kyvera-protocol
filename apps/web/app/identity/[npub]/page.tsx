@@ -384,10 +384,10 @@ export default function IdentityPage() {
             <SectionLabel>Independent check</SectionLabel>
             <pre className="scroll-pane overflow-auto whitespace-pre-wrap break-all rounded-lg border border-ivory/[0.07] bg-ink-950/60 p-3 font-mono text-[10px] leading-relaxed text-ivory-muted">
 {`pnpm cli ${raw ?? ""} \\
-  --relay ${relays[0] ?? "ws://127.0.0.1:7777"}`}
+  --relay ${relays[0] ?? "wss://relay.damus.io"}`}
             </pre>
             <CopyButton
-              value={`pnpm cli ${raw ?? ""} --relay ${relays[0] ?? "ws://127.0.0.1:7777"}`}
+              value={`pnpm cli ${raw ?? ""} --relay ${relays[0] ?? "wss://relay.damus.io"}`}
               label="Copy command"
             />
           </Card>

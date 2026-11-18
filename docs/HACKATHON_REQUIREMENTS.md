@@ -37,6 +37,8 @@ These are separate from the Paytaca bounty requirements and are a **submission r
 
 The Paytaca bounty page also says: "A focused proof of concept covering binding, discovery, verification and authentication is sufficient." That may govern bounty judging, but it does **not** waive the track-level requirements. Confirm with the organizers which requirements apply to a bounty-only entry.
 
+**Important platform finding:** the DoraHacks "Bounties" tab says **"No Bounties — There are no Bounties for this hackathon."** The Paytaca bounty is listed on bchblaze.cash, not DoraHacks. There is therefore no confirmed bounty-only submission path on DoraHacks. This is a critical ambiguity; see [`SUBMISSION_ELIGIBILITY.md`](SUBMISSION_ELIGIBILITY.md).
+
 **Action required before submission:** confirm the deadline, eligibility, and submission fields on DoraHacks, and resolve whether the Mainnet Track's live demo, WizardConnect and mainnet-transaction requirements apply to this bounty entry.
 
 **Action required before submission:** confirm the exact deadline, eligibility, and submission fields on DoraHacks. The discrepancy above is recorded rather than resolved by assumption.

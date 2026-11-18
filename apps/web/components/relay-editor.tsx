@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { Button, Input, cn } from "./ui";
 
-const PRESETS = ["ws://127.0.0.1:7777", "wss://relay.damus.io", "wss://nos.lol"];
+const PRESETS =
+  process.env.NODE_ENV === "production"
+    ? ["wss://relay.damus.io", "wss://nos.lol"]
+    : ["ws://127.0.0.1:7777", "wss://relay.damus.io", "wss://nos.lol"];
 
 export function RelayEditor({
   relays,
