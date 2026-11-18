@@ -134,7 +134,7 @@ export default function IdentityPage() {
           <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
             Identity dashboard
           </div>
-          <h1 className="mt-2 break-all font-mono text-[18px] text-white sm:text-[22px]">{toNpub(subject)}</h1>
+          <h1 className="mt-2 break-all font-mono text-[14px] leading-relaxed text-white sm:text-[17px]">{toNpub(subject)}</h1>
           <p className="mt-1 break-all font-mono text-[10px] text-slate-500">{subject}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <CopyButton value={raw ?? subject} label="Copy npub" />
