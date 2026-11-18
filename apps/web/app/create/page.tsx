@@ -7,6 +7,7 @@ import { buildBchProofMessage } from "@kyvera/core";
 import {
   decodeP2pkhAddress,
   generateBchKeyPair,
+  verifyBitcoinMessageSignature,
   type BchKeyPair,
 } from "@kyvera/bch";
 import {
@@ -18,6 +19,7 @@ import {
 } from "@kyvera/nostr";
 import { createBindRecord, type CreatedRecord } from "@kyvera/verifier";
 import { binToHex } from "@bitauth/libauth";
+import { useWizardConnect, WizardConnectQRDialog } from "@wizardconnect/react";
 import {
   completeExternalBind,
   prepareExternalBind,
@@ -25,6 +27,7 @@ import {
   type BindDraft,
 } from "@/lib/identity";
 import { getNip07Provider, nip07Signer } from "@/lib/nip07";
+import { deriveWalletAddress } from "@/lib/wallet";
 import { saveIdentity, type StoredIdentity } from "@/lib/store";
 import { DEFAULT_RELAYS, NETWORK } from "@/lib/config";
 import { shortAddress, shortHex } from "@/lib/format";
@@ -44,7 +47,7 @@ import {
 import { RelayEditor } from "@/components/relay-editor";
 
 type NostrMode = "demo" | "nip07";
-type BchMode = "demo" | "external";
+type BchMode = "wallet" | "demo" | "external";
 type Phase = "idle" | "publishing" | "published";
 
 export default function CreatePage() {
@@ -55,12 +58,17 @@ export default function CreatePage() {
   const [subject, setSubject] = useState("");
   const [nostrError, setNostrError] = useState("");
 
-  const [bchMode, setBchMode] = useState<BchMode>("demo");
+  const [bchMode, setBchMode] = useState<BchMode>("wallet");
   const [demoBch, setDemoBch] = useState<BchKeyPair | null>(null);
   const [externalAddress, setExternalAddress] = useState("");
   const [signature, setSignature] = useState("");
   const [draft, setDraft] = useState<BindDraft | null>(null);
   const [draftError, setDraftError] = useState("");
+  const [signatureCheck, setSignatureCheck] = useState<{ ok: boolean; message: string } | null>(null);
+  const wallet = useWizardConnect({
+    dappName: "KYVERA",
+    sessionKey: "kyvera-create-wallet",
+  });
 
   const [preview, setPreview] = useState<CreatedRecord | null>(null);
   const [previewError, setPreviewError] = useState("");
@@ -70,10 +78,32 @@ export default function CreatePage() {
   const [reports, setReports] = useState<RelayPublishReport[] | null>(null);
   const [publishedEvent, setPublishedEvent] = useState<KyveraEvent | null>(null);
 
+  const walletAddress = useMemo(
+    () => (wallet.state === "connected" ? deriveWalletAddress(wallet.manager, network) : null),
+    [wallet.state, wallet.manager, network],
+  );
+
   const npub = useMemo(() => (subject ? toNpub(subject) : ""), [subject]);
   const address = bchMode === "demo" ? demoBch?.identity.address ?? "" : externalAddress.trim().toLowerCase();
   const addressCheck = address ? decodeP2pkhAddress(address) : null;
   const addressValid = addressCheck !== null && typeof addressCheck !== "string" && addressCheck.network === network;
+
+  useEffect(() => {
+    if (bchMode !== "wallet") return;
+    setDraft(null);
+    setSignature("");
+    setSignatureCheck(null);
+    if (walletAddress) setExternalAddress(walletAddress);
+    else setExternalAddress("");
+  }, [bchMode, walletAddress]);
+
+  useEffect(() => {
+    if (bchMode !== "wallet" || !subject || !walletAddress || !addressValid) return;
+    if (draft && draft.payload.bch && draft.payload.bch.address === walletAddress) return;
+    prepareMessage();
+    // prepareMessage is stable for these inputs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bchMode, subject, walletAddress, addressValid, address, network]);
 
   useEffect(() => {
     let cancelled = false;
@@ -135,10 +165,20 @@ export default function CreatePage() {
       if (!addressCheck || addressCheck.network !== network) {
         throw new Error(`address must be a ${network} P2PKH CashAddr`);
       }
+      setSignatureCheck(null);
       setDraft(prepareExternalBind({ subject, address, network }));
     } catch (error) {
       setDraftError(error instanceof Error ? error.message : String(error));
     }
+  }
+
+  function verifySignature() {
+    if (!draft) return;
+    const result = verifyBitcoinMessageSignature(address, draft.message, signature.trim());
+    setSignatureCheck({
+      ok: result.ok,
+      message: result.ok ? "Signature recovers to this address." : result.message,
+    });
   }
 
   async function onPublish() {
@@ -193,7 +233,9 @@ export default function CreatePage() {
     Boolean(signer) &&
     Boolean(subject) &&
     addressValid &&
-    (bchMode === "demo" ? Boolean(preview) : Boolean(draft) && Boolean(signature.trim()));
+    (bchMode === "demo"
+      ? Boolean(preview)
+      : Boolean(draft) && Boolean(signature.trim()) && signatureCheck?.ok === true);
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-12">
@@ -211,7 +253,7 @@ export default function CreatePage() {
       </div>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[1fr_340px]">
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-5">
           <Card className="p-5">
             <div className="flex items-center justify-between">
               <SectionLabel>01 · Nostr identity</SectionLabel>
@@ -265,30 +307,36 @@ export default function CreatePage() {
           </Card>
 
           <Card className="p-5">
-            <div className="flex items-center justify-between">
-              <SectionLabel>02 · Bitcoin Cash identity</SectionLabel>
-              <div className="flex rounded-lg border border-ivory/10 p-0.5">
-                {(["demo", "external"] as const).map((mode) => (
+            <div className="flex items-center justify-between gap-3">
+              <SectionLabel>02 · BCH identity</SectionLabel>
+              <div className="flex rounded-full border border-ivory/10 p-0.5">
+                {([
+                  ["wallet", "Connect"],
+                  ["demo", "Demo"],
+                  ["external", "Paste"],
+                ] as const).map(([mode, label]) => (
                   <button
                     key={mode}
                     onClick={() => {
                       setBchMode(mode);
                       setDraft(null);
+                      setSignature("");
+                      setSignatureCheck(null);
                       setDraftError("");
                     }}
                     className={cn(
-                      "rounded-md px-2.5 py-1 text-[11px] transition-colors",
-                      bchMode === mode ? "bg-ivory/10 text-ivory" : "text-ivory-muted hover:text-ivory",
+                      "rounded-full px-2.5 py-1 text-[10.5px] transition-colors",
+                      bchMode === mode ? "bg-ivory text-charcoal-950" : "text-ivory-muted hover:text-ivory",
                     )}
                   >
-                    {mode === "demo" ? "Generate wallet" : "External wallet"}
+                    {label}
                   </button>
                 ))}
               </div>
             </div>
 
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="text-[11px] text-muted">Network</span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-muted">Network</span>
               {(["mainnet", "chipnet"] as const).map((value) => (
                 <button
                   key={value}
@@ -296,12 +344,13 @@ export default function CreatePage() {
                     setNetwork(value);
                     setDemoBch(null);
                     setDraft(null);
+                    setSignatureCheck(null);
                   }}
                   className={cn(
-                    "rounded-full border px-2.5 py-1 font-mono text-[10.5px]",
+                    "rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em]",
                     network === value
-                      ? "border-accent/40 bg-accent/10 text-accent-bright"
-                      : "border-ivory/10 text-ivory-muted hover:text-ivory",
+                      ? "border-accent/45 bg-accent/10 text-accent-bright"
+                      : "border-ivory/12 text-ivory-muted hover:text-ivory",
                   )}
                 >
                   {value}
@@ -309,26 +358,100 @@ export default function CreatePage() {
               ))}
             </div>
 
-            {bchMode === "demo" ? (
-              <div className="mt-3 space-y-3">
+            {bchMode === "wallet" ? (
+              <div className="mt-4 space-y-3">
+                {walletAddress ? (
+                  <>
+                    <div className="rounded-xl border border-accent/30 bg-accent/[0.04] p-3.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+                          {wallet.walletName ?? "Connected wallet"}
+                        </span>
+                        <Badge tone="neutral">address connected</Badge>
+                      </div>
+                      <div className="mt-1 break-all font-mono text-[12px] text-ivory">{walletAddress}</div>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <CopyButton value={walletAddress} />
+                        <Button variant="ghost" className="px-2 py-1 text-[10px]" onClick={() => void wallet.disconnect()}>
+                          Disconnect
+                        </Button>
+                      </div>
+                    </div>
+                    <details>
+                      <summary className="cursor-pointer text-[10.5px] text-ivory-muted hover:text-ivory-dim">
+                        Why sign in your wallet?
+                      </summary>
+                      <p className="mt-1.5 text-[10.5px] leading-relaxed text-ivory-muted">
+                        WizardConnect reads the address but does not expose message signing. Use the
+                        wallet&apos;s Sign Message feature on the text below, then paste the signature.
+                      </p>
+                    </details>
+                    {draft ? (
+                      <SignatureStep
+                        draft={draft}
+                        signature={signature}
+                        check={signatureCheck}
+                        onSignature={(value) => {
+                          setSignature(value);
+                          setSignatureCheck(null);
+                        }}
+                        onVerify={verifySignature}
+                      />
+                    ) : (
+                      <p className="text-[11.5px] text-ivory-muted">
+                        Generate a Nostr key to prepare the proof message.
+                      </p>
+                    )}
+                    {draftError ? <Alert tone="danger">{draftError}</Alert> : null}
+                  </>
+                ) : (
+                  <>
+                    <Button onClick={() => wallet.connect()} disabled={wallet.state === "connecting"}>
+                      {wallet.state === "connecting" ? <Spinner /> : null} Connect Wallet
+                    </Button>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-muted">
+                      Paytaca · Selene · Cashonize
+                    </p>
+                  </>
+                )}
+                {wallet.error ? <Alert tone="danger">{wallet.error}</Alert> : null}
+                {wallet.uri && wallet.qrUri ? (
+                  <WizardConnectQRDialog
+                    show={wallet.state === "connecting"}
+                    onClose={() => void wallet.disconnect()}
+                    uri={wallet.uri}
+                    qrUri={wallet.qrUri}
+                    title="KYVERA"
+                    subtitle="Scan with Paytaca, Selene or Cashonize"
+                  />
+                ) : null}
+                {draft ? (
+                  <SignatureStep
+                    draft={draft}
+                    signature={signature}
+                    check={signatureCheck}
+                    onSignature={(value) => {
+                      setSignature(value);
+                      setSignatureCheck(null);
+                    }}
+                    onVerify={verifySignature}
+                  />
+                ) : null}
+              </div>
+            ) : bchMode === "demo" ? (
+              <div className="mt-4 space-y-3">
                 {demoBch ? (
-                  <div className="rounded-lg border border-ivory/[0.07] bg-ink-900/60 p-3.5">
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted">Demo wallet</div>
-                    <div className="mt-1 break-all font-mono text-[12.5px] text-ivory">
-                      {demoBch.identity.address}
-                    </div>
-                    <div className="mt-1 break-all font-mono text-[10px] text-ivory-muted/70">
-                      pubkey {demoBch.publicKey}
-                    </div>
+                  <div className="rounded-xl border border-ivory/[0.1] bg-charcoal-950/40 p-3.5">
+                    <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">Demo wallet</div>
+                    <div className="mt-1 break-all font-mono text-[12px] text-ivory">{demoBch.identity.address}</div>
                     <div className="mt-2 flex items-center gap-2">
                       <Badge tone="warn">unfunded</Badge>
                       <CopyButton value={demoBch.identity.address} label="Copy address" />
                     </div>
                   </div>
                 ) : (
-                  <p className="text-[12.5px] text-ivory-muted">
-                    A fresh P2PKH keypair is generated locally. It is used only to demonstrate the
-                    proof and lifecycle; the address should stay unfunded.
+                  <p className="text-[11.5px] leading-relaxed text-ivory-muted">
+                    A throwaway local keypair for the demo. Never fund it.
                   </p>
                 )}
                 <Button
@@ -336,63 +459,47 @@ export default function CreatePage() {
                   onClick={() => {
                     setDemoBch(generateBchKeyPair(network));
                     setDraft(null);
+                    setSignatureCheck(null);
                   }}
                 >
-                  {demoBch ? "Generate a different wallet" : "Generate demo wallet"}
+                  {demoBch ? "New demo wallet" : "Generate demo wallet"}
                 </Button>
               </div>
             ) : (
-              <div className="mt-3 space-y-3">
-                <Field
-                  label="BCH CashAddr (P2PKH)"
-                  hint={`Must be a ${network} address. P2SH and token-aware addresses are rejected in v1 because signmessage proves a single key.`}
-                >
-                  <Input
-                    value={externalAddress}
-                    onChange={(event) => {
-                      setExternalAddress(event.target.value);
-                      setDraft(null);
-                    }}
-                    placeholder={network === "mainnet" ? "bitcoincash:q…" : "bchtest:q…"}
-                    spellCheck={false}
-                  />
-                </Field>
+              <div className="mt-4 space-y-3">
+                <Input
+                  value={externalAddress}
+                  onChange={(event) => {
+                    setExternalAddress(event.target.value);
+                    setDraft(null);
+                    setSignature("");
+                    setSignatureCheck(null);
+                  }}
+                  placeholder={network === "mainnet" ? "bitcoincash:q…" : "bchtest:q…"}
+                  spellCheck={false}
+                  className="font-mono text-[11px]"
+                />
                 {externalAddress && !addressValid ? (
                   <Alert tone="danger">
                     {typeof addressCheck === "string"
                       ? addressCheck
-                      : `This address is not a valid ${network} P2PKH CashAddr.`}
+                      : `Not a valid ${network} P2PKH address.`}
                   </Alert>
                 ) : null}
                 <Button variant="secondary" onClick={prepareMessage} disabled={!subject || !addressValid}>
-                  Prepare the message to sign
+                  Continue
                 </Button>
                 {draft ? (
-                  <div className="space-y-3">
-                    <div className="rounded-lg border border-ivory/[0.07] bg-ink-900/70 p-3.5">
-                      <div className="mb-2 flex items-center justify-between">
-                        <span className="text-[10px] uppercase tracking-[0.14em] text-muted">
-                          Sign this exact message in your wallet
-                        </span>
-                        <CopyButton value={draft.message} />
-                      </div>
-                      <pre className="scroll-pane whitespace-pre-wrap break-all font-mono text-[11px] leading-relaxed text-accent-bright/90">
-{draft.message}
-                      </pre>
-                    </div>
-                    <Field
-                      label="Wallet signature"
-                      hint="Cashonize, Electron Cash and Paytaca produce this base64 compact signature from their Sign Message feature."
-                    >
-                      <Textarea
-                        rows={3}
-                        value={signature}
-                        onChange={(event) => setSignature(event.target.value)}
-                        placeholder="Base64 signature (65 bytes)"
-                        spellCheck={false}
-                      />
-                    </Field>
-                  </div>
+                  <SignatureStep
+                    draft={draft}
+                    signature={signature}
+                    check={signatureCheck}
+                    onSignature={(value) => {
+                      setSignature(value);
+                      setSignatureCheck(null);
+                    }}
+                    onVerify={verifySignature}
+                  />
                 ) : null}
                 {draftError ? <Alert tone="danger">{draftError}</Alert> : null}
               </div>
@@ -440,7 +547,7 @@ export default function CreatePage() {
                   </div>
                 </div>
               </div>
-            ) : bchMode === "external" && draft ? (
+            ) : bchMode !== "demo" && draft ? (
               <div className="space-y-2">
                 <p className="text-[12px] leading-relaxed text-ivory-muted">
                   The record commits to this digest. Your BCH signature covers the domain-separated
@@ -536,6 +643,45 @@ export default function CreatePage() {
           </Card>
         </div>
       </div>
+    </div>
+  );
+}
+
+function SignatureStep({
+  draft,
+  signature,
+  check,
+  onSignature,
+  onVerify,
+}: {
+  draft: BindDraft;
+  signature: string;
+  check: { ok: boolean; message: string } | null;
+  onSignature: (value: string) => void;
+  onVerify: () => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <div className="rounded-xl border border-ivory/[0.1] bg-charcoal-950/40 p-3.5">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">Sign this message</span>
+          <CopyButton value={draft.message} />
+        </div>
+        <pre className="scroll-pane max-h-36 overflow-auto whitespace-pre-wrap break-all font-mono text-[10.5px] leading-relaxed text-accent-bright">
+{draft.message}
+        </pre>
+      </div>
+      <Textarea
+        rows={3}
+        value={signature}
+        onChange={(event) => onSignature(event.target.value)}
+        placeholder="Base64 wallet signature"
+        spellCheck={false}
+      />
+      <Button variant="secondary" onClick={onVerify} disabled={!signature.trim()}>
+        Verify ownership
+      </Button>
+      {check ? <Alert tone={check.ok ? "success" : "danger"}>{check.ok ? "Verified" : check.message}</Alert> : null}
     </div>
   );
 }

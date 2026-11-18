@@ -74,6 +74,11 @@ async function desktopFlow() {
 
   await page.goto(`${BASE}/create`, { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Generate key" }).click();
+  await page.getByRole("button", { name: "Connect Wallet" }).click();
+  await page.getByText(/Scan with Paytaca/).waitFor({ timeout: 20_000 });
+  record("create page opens the wallet pairing dialog", true);
+  await page.getByRole("button", { name: "Close" }).click();
+  await page.getByRole("button", { name: "Demo", exact: true }).click();
   await page.getByRole("button", { name: "Generate demo wallet" }).click();
   await page.getByText("BCH proof message").waitFor({ timeout: 15_000 });
   record("create page renders proof preview", true);
@@ -86,6 +91,18 @@ async function desktopFlow() {
   if (!identity) throw new Error("no stored identity after publish");
   record("create page publishes a binding", true, identity.npub);
   await shot(page, "05-create-published");
+
+  await page.goto(`${BASE}/create`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Generate key" }).click();
+  await page.getByRole("button", { name: "Paste", exact: true }).click();
+  await page.getByPlaceholder(/bitcoincash:q/).fill(identity.bchKeys[0].address);
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.getByPlaceholder("Base64 wallet signature").fill("not-a-real-signature");
+  await page.getByRole("button", { name: "Verify ownership" }).click();
+  await page.getByText(/signature/i).last().waitFor({ timeout: 10_000 });
+  const lockedBeforeProof = await page.getByRole("button", { name: "Sign and publish binding" }).isDisabled();
+  record("create page rejects an invalid wallet signature", true);
+  record("publish stays locked until ownership is verified", lockedBeforeProof);
 
   await page.goto(`${BASE}/pay?npub=${encodeURIComponent(identity.npub)}`, { waitUntil: "networkidle" });
   await page.getByText("Destination is currently authorized").waitFor({ timeout: 20_000 });

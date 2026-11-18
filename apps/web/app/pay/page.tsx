@@ -4,11 +4,12 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import QRCode from "qrcode";
-import { publicKeyToP2pkhCashAddress } from "@bitauth/libauth";
+
 import { normalizeNostrPublicKey, toNpub } from "@kyvera/nostr";
 import type { IdentityResolution } from "@kyvera/verifier";
 import { useWizardConnect, WizardConnectQRDialog } from "@wizardconnect/react";
 import { DEFAULT_RELAYS, NETWORK } from "@/lib/config";
+import { deriveWalletAddress } from "@/lib/wallet";
 import { refreshIdentity } from "@/lib/identity";
 import {
   buildBip21Uri,
@@ -112,20 +113,10 @@ function PayInner() {
     };
   }, [uri]);
 
-  const walletAddress = useMemo(() => {
-    if (wallet.state !== "connected" || !wallet.manager) return null;
-    try {
-      const pubkey = wallet.manager.getPubkey(0, 0n);
-      if (!pubkey) return null;
-      return publicKeyToP2pkhCashAddress({
-        publicKey: pubkey,
-        prefix: NETWORK === "mainnet" ? "bitcoincash" : "bchtest",
-        tokenSupport: false,
-      }).address;
-    } catch {
-      return null;
-    }
-  }, [wallet.state, wallet.manager]);
+  const walletAddress = useMemo(
+    () => (wallet.state === "connected" ? deriveWalletAddress(wallet.manager, NETWORK) : null),
+    [wallet.state, wallet.manager],
+  );
 
   async function resolve(target = input) {
     setError("");

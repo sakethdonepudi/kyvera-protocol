@@ -57,7 +57,7 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 - **Wallet probe** (`/interop`): test a real Electron Cash / Cashonize / Paytaca `signmessage` signature and record the actual result. No compatibility is claimed until a real row exists.
 - **KYVERA Pay** (`/pay`): resolve an identity, enforce ACTIVE/network/freshness policy, re-resolve before handoff, and generate a BIP21/QR payment for Paytaca, Selene, Cashonize or Electron Cash.
 - **Independent relying-party auth** (`/auth-demo`): origin/session/identity/address-bound single-use challenges, short-lived sessions, replay/expiry rejection, logout and revocation/rotation invalidation.
-- **WizardConnect adapter**: real `@wizardconnect` integration for wallet pairing and local address derivation. Not yet tested with a physical wallet.
+- **Automatic wallet connection** (`/create`): Create Identity defaults to Connect Wallet. WizardConnect retrieves the BCH address automatically; the wallet then signs the proof message and KYVERA verifies the pasted signature before publishing. WizardConnect does not expose arbitrary message signing, so this remains an explicit two-step proof. Not yet tested with a physical wallet.
 - **Glass design system**: translucent navigation/summary surfaces, warm-light theme, reduced-motion support, and a single dark/light token set.
 - **Identity Time Machine 3.0**: Compare mode separates historical proof validity from current authorization; proof inspection remains per-record.
 - **Security laboratory 3.0**: split view, transition strip, replay/reset controls, real verifier output.
@@ -133,7 +133,7 @@ Full byte-level rules, tag layout and state-transition algorithm: [`docs/PROTOCO
 | Nostr | Local demo key in the browser | Implemented, clearly labelled demo-only |
 | Nostr | NIP-42-shaped kind `22242` challenge authentication | Implemented and tested |
 | BCH | Wallet `signmessage` compact recoverable ECDSA (65 bytes, base64) | Implemented and tested |
-| BCH | External wallet: copy the proof message, paste the signature | Implemented in the create flow |
+| BCH | WizardConnect wallet: address retrieved automatically; `signmessage` pasted and independently verified | Implemented in the create flow |
 | BCH | In-browser demo wallet | Implemented, clearly labelled demo-only |
 | BCH | Multisig, P2SH, hardware-wallet PSBT flows | Not supported in v1 |
 

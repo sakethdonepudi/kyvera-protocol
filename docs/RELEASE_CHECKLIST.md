@@ -15,7 +15,7 @@
 | Unit/integration/security tests | `pnpm test` | **117/117 pass**, 12 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 14 routes |
-| Browser QA | `pnpm qa:browser` | **40/40**, 0 console/page errors |
+| Browser QA | `pnpm qa:browser` | **43/43**, 0 console/page errors |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |
 | Dependency audit | `pnpm audit --prod` | **0 known vulnerabilities** |
@@ -118,7 +118,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (11) |
 | WizardConnect pairing | ✅ dialog opens; ❌ untested with a physical wallet |
 | Theme / glass system | ✅ dark + warm light, reduced motion, mobile |
-| Browser QA | ✅ **40/40**, pay/theme/auth-demo included |
+| Browser QA | ✅ **43/43**, pay/theme/auth-demo included |
 | CSP + WASM | ✅ fixed and smoke-tested |
 | No secrets in client bundle | ✅ scanned |
 | Demo/lab/standalone work without relay | ✅ |

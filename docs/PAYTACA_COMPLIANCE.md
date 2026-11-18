@@ -15,7 +15,7 @@ This matrix records evidence for the full user journey, not merely the existence
 
 | Evidence | Location |
 | --- | --- |
-| Create browser-local keys or NIP-07 signing; external BCH wallet path | `/create`, `apps/web/lib/identity.ts` |
+| Create browser-local keys or NIP-07 signing; automatic WizardConnect address retrieval plus verified `signmessage`; manual paste fallback | `/create`, `apps/web/lib/identity.ts` |
 | Binding, rotation, revocation construction | `packages/verifier/src/create.ts` |
 | No KYVERA account/backend; no private key transmission | UI copy, architecture docs, bundle scan |
 | Automated | `tests/binding.test.ts`, `tests/rotation.test.ts`, `tests/revocation.test.ts` |
@@ -92,7 +92,7 @@ The compliance gate is implemented at `/auth-demo` and `packages/verifier/src/au
 ### 4.2 Authentication evidence
 
 - Automated: `tests/auth-request.test.ts` — 12 tests, including replay, expiry, origin/session/identity/address mismatch, revoked/stale, session rotation/revocation/logout, unauthorized rotation.
-- Browser: `/auth-demo` session issuance, replay rejection, unauthorized-rotation check, session invalidation after rotation, logout, revoked-identity block (40/40 browser checks overall).
+- Browser: `/auth-demo` session issuance, replay rejection, unauthorized-rotation check, session invalidation after rotation, logout, revoked-identity block (43/43 browser checks overall).
 - The relying party is separate from the identity dashboard and has its own origin/session state.
 - NIP-07 signing path is implemented; demo local signer is exercised; physical wallet signing is not yet recorded.
 

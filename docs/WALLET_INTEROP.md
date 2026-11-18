@@ -15,7 +15,7 @@ KYVERA proves BCH address control with the standard wallet `signmessage` format 
 | Electron Cash | — | — | — | — | **Not tested** | — |
 | Cashonize | — | — | — | — | **Not tested** | — |
 | `nostr-bch-bind` reference implementation | published vector | `signmessage` | P2PKH mainnet | base64 compact recoverable | **Verified** | `tests/interop.test.ts` |
-| WizardConnect (Paytaca / Selene / Cashonize) | — | pairing + address derivation | — | QR pairing | **Pairing dialog verified; no physical wallet test** | `/pay`, `@wizardconnect/react` |
+| WizardConnect (Paytaca / Selene / Cashonize) | — | pairing + address derivation | P2PKH | QR pairing; no message-signing API | **Pairing dialog verified; no physical wallet test** | `/create`, `/pay`, `@wizardconnect/react` |
 
 The independent vector proves the format is not merely self-consistent. It does **not** prove that a specific wallet version produces compatible signatures. Do not claim wallet compatibility until the table has a real row.
 
@@ -105,14 +105,17 @@ The `/interop` page stores probe results in browser localStorage and shows them 
 
 ---
 
-## 5. Identity creation with an external wallet
+## 5. Identity creation with a connected wallet
 
-The create flow supports a two-step external-wallet bind:
+Create Identity defaults to **Connect Wallet**:
 
-1. Enter the BCH CashAddr.
-2. KYVERA fixes the payload (address, network, nonce, issuedAt) and displays the exact proof message.
-3. Sign it in the wallet and paste the base64 signature.
-4. KYVERA verifies the signature, recovers the key, and signs the Nostr event.
+1. Pair Paytaca, Selene or Cashonize through WizardConnect.
+2. KYVERA derives the P2PKH CashAddr from the wallet public key. No address is pasted.
+3. KYVERA fixes the payload (address, network, nonce, issuedAt) and displays the exact proof message.
+4. Sign that message with the wallet's **Sign Message** feature and paste the base64 signature.
+5. KYVERA verifies the signature, recovers the key, and only then enables publishing.
+
+WizardConnect exposes transaction signing and address derivation, not arbitrary message signing. The app therefore labels the wallet as **address connected**, not verified, until the signature check passes. The **Paste** tab remains as a manual fallback.
 
 No private key touches the browser. The public key field in the record may be `null` for external wallets; the verifier recovers it from the proof.
 

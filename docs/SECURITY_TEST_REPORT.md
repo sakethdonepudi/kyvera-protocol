@@ -15,7 +15,7 @@
 | `pnpm typecheck` | **pass** for core, bch, nostr, verifier and web |
 | `pnpm build` | **pass** (Next.js production build; one third-party top-level-await warning) |
 | `pnpm demo:lifecycle` | **all assertions pass** (6 lifecycle scenarios) |
-| Browser end-to-end | **pass** (40/40 checks: create → pay handoff → auth-demo session → time machine → verify → auth → revoke, WizardConnect dialog, mobile, reduced motion, warm light, keyboard; 0 console errors) |
+| Browser end-to-end | **pass** (43/43 checks: create → pay handoff → auth-demo session → time machine → verify → auth → revoke, WizardConnect dialog, mobile, reduced motion, warm light, keyboard; 0 console errors) |
 | Deterministic vectors | **byte-identical on regeneration** (`sha256 074af1d4…`) |
 | Independent BCH interop vector | **pass** (signature from `nostr-bch-bind v1`) |
 | CLI end-to-end against local relay | **pass** (exit code 0 for ACTIVE and SUPERSEDED) |
@@ -246,7 +246,7 @@ Fast-check seeds are randomized per run; failures print a reproducible counterex
 
 ## 5. Browser end-to-end evidence
 
-Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **40/40 checks passed, 0 console/page errors.**
+Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **43/43 checks passed, 0 console/page errors.**
 
 Flow:
 
@@ -254,7 +254,7 @@ Flow:
 2. Guided `/demo` resolves deterministic fixtures, shows rotation, unauthorized rejection and revocation.
 3. `/lab` executes all six scenarios; equivocation returns `CONFLICT`, withheld history returns `STALE`; advanced mode exposes the signed input events.
 4. `/interop` verifies the independent BCH vector.
-5. Create page generates real keys, displays the proof/event preview, publishes, and stores a local demo identity.
+5. Create page opens the WizardConnect pairing dialog, defaults to Connect Wallet, and the Demo tab still generates real keys, displays the proof/event preview, publishes, and stores a local demo identity. The Paste path rejects an invalid signature and keeps publishing locked until ownership verifies.
 6. Dashboard renders the Time Machine; selecting the genesis record and switching to cryptographic mode exposes the payload digest and exact BCH proof message; Compare mode shows historical validity beside current authorization.
 7. KYVERA Pay resolves an active identity, enforces payment policy, accepts an amount/confirmation and produces a BIP21 handoff; WizardConnect opens a pairing dialog.
 8. `/auth-demo` resolves an identity, issues an origin/session/identity-bound request, signs with the local demo key, issues a session, rejects replay, invalidates the session after rotation and after logout, and blocks a revoked identity.

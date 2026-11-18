@@ -71,7 +71,7 @@ Full evidence: [`docs/COMPETITIVE_AUDIT_2026.md`](COMPETITIVE_AUDIT_2026.md).
 | `pnpm typecheck` | pass, all 5 projects |
 | `pnpm build` | pass (14 routes; third-party `libauth` top-level-await warning) |
 | `pnpm demo:lifecycle` | all assertions pass |
-| Browser QA (`scripts/qa-browser.mjs`) | **40/40 checks**, 0 console/page errors |
+| Browser QA (`scripts/qa-browser.mjs`) | **43/43 checks**, 0 console/page errors |
 | Standalone file demo | six scenarios, advanced inputs, 0 errors |
 | Deterministic vectors | byte-identical regeneration |
 | Independent BCH vector | verified |
