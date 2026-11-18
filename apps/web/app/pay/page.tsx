@@ -346,8 +346,8 @@ function PayInner() {
               <Badge tone={wallet.state === "connected" ? "accent" : "neutral"}>{wallet.state}</Badge>
             </div>
             <p className="text-[11.5px] leading-relaxed text-ivory-dim">
-              Connect Paytaca, Selene or Cashonize through WizardConnect. The connection is used to
-              verify the wallet network and address; the payment itself is handed to the wallet as BIP21.
+              Pair Paytaca or Cashonize to read the connected address. The payment itself is
+              handed to the wallet as BIP21.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Button
@@ -385,7 +385,7 @@ function PayInner() {
                 uri={wallet.uri}
                 qrUri={wallet.qrUri}
                 title="KYVERA Pay"
-                subtitle="Scan with Paytaca, Selene or Cashonize"
+                subtitle="Scan with Paytaca or Cashonize"
               />
             ) : null}
             <p className="mt-3 text-[10px] leading-relaxed text-ivory-muted">

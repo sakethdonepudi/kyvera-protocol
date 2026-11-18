@@ -1,5 +1,8 @@
 import { chromium } from "playwright";
 import { mkdirSync, writeFileSync } from "node:fs";
+import { signBitcoinMessage } from "@kyvera/bch";
+
+const hexToBytes = (hex) => Uint8Array.from(hex.match(/.{2}/g) ?? [], (byte) => parseInt(byte, 16));
 
 const BASE = process.env.BASE ?? "http://localhost:3000";
 const OUT = ".context/screens/qa";
@@ -73,6 +76,13 @@ async function desktopFlow() {
   await shot(page, "04-interop");
 
   await page.goto(`${BASE}/create`, { waitUntil: "networkidle" });
+  const progress = page.getByRole("group", { name: "Wallet progress" });
+  await progress.waitFor({ timeout: 10_000 });
+  const progressText = await progress.textContent();
+  for (const step of ["Connect", "Sign", "Verified", "Publish"]) {
+    if (!progressText.includes(step)) throw new Error(`wallet state missing: ${step}`);
+  }
+  record("create page shows connect/sign/verified/publish states", true);
   await page.getByRole("button", { name: "Generate key" }).click();
   await page.getByRole("button", { name: "Connect Wallet" }).click();
   await page.getByText(/Scan with Paytaca/).waitFor({ timeout: 20_000 });
@@ -97,12 +107,23 @@ async function desktopFlow() {
   await page.getByRole("button", { name: "Paste", exact: true }).click();
   await page.getByPlaceholder(/bitcoincash:q/).fill(identity.bchKeys[0].address);
   await page.getByRole("button", { name: "Continue" }).click();
-  await page.getByPlaceholder("Base64 wallet signature").fill("not-a-real-signature");
-  await page.getByRole("button", { name: "Verify ownership" }).click();
-  await page.getByText(/signature/i).last().waitFor({ timeout: 10_000 });
+  await page.getByPlaceholder("Paste base64 signature").fill("A".repeat(88));
+  await page.getByTestId("signature-error").waitFor({ timeout: 10_000 });
   const lockedBeforeProof = await page.getByRole("button", { name: "Publish identity" }).isDisabled();
   record("create page rejects an invalid wallet signature", true);
   record("publish stays locked until ownership is verified", lockedBeforeProof);
+
+  const proof = page.locator("pre").filter({ hasText: "KYVERA/v1/bch-proof" }).first();
+  const message = (await proof.textContent()).trim();
+  const signature = signBitcoinMessage(hexToBytes(identity.bchKeys[0].privateKey), message);
+  await page.getByPlaceholder("Paste base64 signature").fill(signature);
+  await page.getByTestId("signature-ok").waitFor({ timeout: 10_000 });
+  record("create page verifies a wallet-style signature", true);
+  const unlocked = await page.getByRole("button", { name: "Publish identity" }).isEnabled();
+  record("verified ownership unlocks publishing", unlocked);
+  await page.getByRole("button", { name: "Publish identity" }).click();
+  await page.getByText("Binding published").waitFor({ timeout: 20_000 });
+  record("verified paste flow publishes a binding", true);
 
   await page.goto(`${BASE}/pay?npub=${encodeURIComponent(identity.npub)}`, { waitUntil: "networkidle" });
   await page.getByText("Destination is currently authorized").waitFor({ timeout: 20_000 });
@@ -118,7 +139,11 @@ async function desktopFlow() {
   await shot(page, "06-pay");
 
   await page.goto(`${BASE}/auth-demo`, { waitUntil: "networkidle" });
-  await page.locator("button").filter({ hasText: /npub1/ }).first().click();
+  await page
+    .locator("button")
+    .filter({ hasText: identity.npub.slice(0, 10) })
+    .first()
+    .click();
   await page.getByRole("button", { name: "Create sign-in request" }).click();
   await page.getByRole("button", { name: /Sign with/ }).click();
   await page.getByText("Welcome back.").waitFor({ timeout: 20_000 });

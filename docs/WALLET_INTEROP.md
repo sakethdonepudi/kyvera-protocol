@@ -15,7 +15,8 @@ KYVERA proves BCH address control with the standard wallet `signmessage` format 
 | Electron Cash | — | — | — | — | **Not tested** | — |
 | Cashonize | — | — | — | — | **Not tested** | — |
 | `nostr-bch-bind` reference implementation | published vector | `signmessage` | P2PKH mainnet | base64 compact recoverable | **Verified** | `tests/interop.test.ts` |
-| WizardConnect (Paytaca / Selene / Cashonize) | — | pairing + address derivation | P2PKH | QR pairing; no message-signing API | **Pairing dialog verified; no physical wallet test** | `/create`, `/pay`, `@wizardconnect/react` |
+| WizardConnect (Paytaca / Cashonize) | — | pairing + address derivation | P2PKH | QR pairing; no message-signing API | **Pairing dialog verified; no physical wallet test** | `/create`, `/pay`, `@wizardconnect/react` |
+| Selene | — | BIP21 handoff only | — | — | **No WizardConnect integration found in the public source** | `/pay` BIP21 output |
 
 The independent vector proves the format is not merely self-consistent. It does **not** prove that a specific wallet version produces compatible signatures. Do not claim wallet compatibility until the table has a real row.
 
@@ -109,7 +110,7 @@ The `/interop` page stores probe results in browser localStorage and shows them 
 
 Create Identity defaults to **Connect Wallet**:
 
-1. Pair Paytaca, Selene or Cashonize through WizardConnect.
+1. Pair Paytaca or Cashonize through WizardConnect.
 2. KYVERA derives the P2PKH CashAddr from the wallet public key. No address is pasted.
 3. KYVERA fixes the payload (address, network, nonce, issuedAt) and displays the exact proof message.
 4. Sign that message with the wallet's **Sign Message** feature and paste the base64 signature.
@@ -133,7 +134,7 @@ Rotation with an external wallet requires signatures for both the current and ne
 - no seed phrase or private key is requested;
 - the connection is used to verify the wallet/network context, while payment is a BIP21 handoff.
 
-This is a real library integration, but **no physical Paytaca/Selene/Cashonize wallet was available for the pairing test**. Do not claim wallet compatibility until a connection and a payment are recorded.
+This is a real library integration, but **no physical Paytaca/Cashonize wallet was available for the pairing test**. Do not claim wallet compatibility until a connection and a payment are recorded. Selene is not claimed as WizardConnect-compatible.
 
 ## 7. Known limitations
 

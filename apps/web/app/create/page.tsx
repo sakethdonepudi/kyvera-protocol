@@ -49,6 +49,7 @@ import { RelayEditor } from "@/components/relay-editor";
 type NostrMode = "demo" | "nip07";
 type BchMode = "wallet" | "demo" | "external";
 type Phase = "idle" | "publishing" | "published";
+type WalletStage = "connect" | "sign" | "verified" | "publish";
 
 export default function CreatePage() {
   const [network, setNetwork] = useState<BchNetwork>(NETWORK);
@@ -93,6 +94,9 @@ export default function CreatePage() {
     setDraft(null);
     setSignature("");
     setSignatureCheck(null);
+    setPhase("idle");
+    setPublishedEvent(null);
+    setReports(null);
     if (walletAddress) setExternalAddress(walletAddress);
     else setExternalAddress("");
   }, [bchMode, walletAddress]);
@@ -172,14 +176,30 @@ export default function CreatePage() {
     }
   }
 
-  function verifySignature() {
+  useEffect(() => {
     if (!draft) return;
-    const result = verifyBitcoinMessageSignature(address, draft.message, signature.trim());
+    const trimmed = signature.trim();
+    // 65-byte compact signatures are 88 base64 characters. Wait until the
+    // value is plausibly complete so typing does not flash errors.
+    if (trimmed.length < 80) {
+      setSignatureCheck(null);
+      return;
+    }
+    const result = verifyBitcoinMessageSignature(address, draft.message, trimmed);
     setSignatureCheck({
       ok: result.ok,
       message: result.ok ? "Signature recovers to this address." : result.message,
     });
-  }
+  }, [signature, draft, address]);
+
+  const walletVerified = signatureCheck?.ok === true;
+  const walletStage: WalletStage = !walletAddress
+    ? "connect"
+    : phase === "published"
+      ? "publish"
+      : walletVerified
+        ? "verified"
+        : "sign";
 
   async function onPublish() {
     setPublishError("");
@@ -322,6 +342,9 @@ export default function CreatePage() {
                       setSignature("");
                       setSignatureCheck(null);
                       setDraftError("");
+                      setPhase("idle");
+                      setPublishedEvent(null);
+                      setReports(null);
                     }}
                     className={cn(
                       "rounded-full px-2.5 py-1 text-[10.5px] transition-colors",
@@ -343,7 +366,11 @@ export default function CreatePage() {
                     setNetwork(value);
                     setDemoBch(null);
                     setDraft(null);
+                    setSignature("");
                     setSignatureCheck(null);
+                    setPhase("idle");
+                    setPublishedEvent(null);
+                    setReports(null);
                   }}
                   className={cn(
                     "rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em]",
@@ -358,66 +385,106 @@ export default function CreatePage() {
             </div>
 
             {bchMode === "wallet" ? (
-              <div className="mt-4 space-y-3">
-                {walletAddress ? (
-                  <>
-                    <div className="rounded-xl border border-accent/30 bg-accent/[0.04] p-3.5">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
-                          {wallet.walletName ?? "Connected wallet"}
-                        </span>
-                        <Badge tone={signatureCheck?.ok ? "accent" : "neutral"}>
-                          {signatureCheck?.ok ? "verified" : "address connected"}
-                        </Badge>
-                      </div>
-                      <div className="mt-1 font-mono text-[14px] text-ivory" title={walletAddress}>
-                        {shortAddress(walletAddress)}
-                      </div>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        <CopyButton value={walletAddress} />
-                        <Button variant="ghost" className="px-2 py-1 text-[10px]" onClick={() => void wallet.disconnect()}>
-                          Disconnect
-                        </Button>
-                      </div>
-                    </div>
-                    <details>
-                      <summary className="cursor-pointer text-[10.5px] text-ivory-muted hover:text-ivory-dim">
-                        Why sign in your wallet?
-                      </summary>
-                      <p className="mt-1.5 text-[10.5px] leading-relaxed text-ivory-muted">
-                        WizardConnect reads the address but does not expose message signing. Use the
-                        wallet&apos;s Sign Message feature on the text below, then paste the signature.
-                      </p>
-                    </details>
-                    {draft ? (
-                      <SignatureStep
-                        draft={draft}
-                        signature={signature}
-                        check={signatureCheck}
-                        onSignature={(value) => {
-                          setSignature(value);
-                          setSignatureCheck(null);
-                        }}
-                        onVerify={verifySignature}
-                      />
-                    ) : (
-                      <p className="text-[11.5px] text-ivory-muted">
-                        Generate a Nostr key to prepare the proof message.
-                      </p>
-                    )}
-                    {draftError ? <Alert tone="danger">{draftError}</Alert> : null}
-                  </>
-                ) : (
-                  <>
+              <div className="mt-4 space-y-4">
+                <WizardSteps stage={walletStage} />
+
+                {wallet.error ? <Alert tone="danger">{wallet.error}</Alert> : null}
+
+                {walletStage === "connect" ? (
+                  <div className="space-y-2">
                     <Button onClick={() => wallet.connect()} disabled={wallet.state === "connecting"}>
                       {wallet.state === "connecting" ? <Spinner /> : null} Connect Wallet
                     </Button>
                     <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-muted">
-                      Paytaca · Selene · Cashonize
+                      Paytaca · Cashonize
                     </p>
-                  </>
-                )}
-                {wallet.error ? <Alert tone="danger">{wallet.error}</Alert> : null}
+                  </div>
+                ) : null}
+
+                {walletAddress ? (
+                  <div
+                    className={cn(
+                      "rounded-xl border p-3.5 transition-colors",
+                      walletVerified
+                        ? "border-accent/40 bg-accent/[0.05]"
+                        : "border-ivory/[0.12] bg-charcoal-950/40",
+                    )}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+                        {wallet.walletName ?? "Connected wallet"}
+                      </span>
+                      <Badge tone={walletVerified ? "accent" : "neutral"}>
+                        {walletVerified ? "verified" : "address connected"}
+                      </Badge>
+                    </div>
+                    <div className="mt-1 font-mono text-[14px] text-ivory" title={walletAddress}>
+                      {shortAddress(walletAddress)}
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <CopyButton value={walletAddress} label="Copy address" />
+                      <Button
+                        variant="ghost"
+                        className="px-2 py-1 text-[10px]"
+                        onClick={() => void wallet.disconnect()}
+                      >
+                        Disconnect
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
+
+                {walletStage === "sign" ? (
+                  <div className="space-y-2.5">
+                    {draft ? (
+                      <>
+                        <p className="text-[11px] leading-relaxed text-ivory-dim">
+                          In {wallet.walletName ?? "your wallet"}, choose{" "}
+                          <span className="text-ivory">Sign Message</span>, then paste the signature.
+                        </p>
+                        <SignatureStep
+                          draft={draft}
+                          signature={signature}
+                          check={signatureCheck}
+                          onSignature={(value) => {
+                            setSignature(value);
+                            setSignatureCheck(null);
+                          }}
+                        />
+                        <details>
+                          <summary className="cursor-pointer text-[10px] text-ivory-muted hover:text-ivory-dim">
+                            Why paste?
+                          </summary>
+                          <p className="mt-1.5 text-[10px] leading-relaxed text-ivory-muted">
+                            WizardConnect reads the address but does not expose message signing.
+                          </p>
+                        </details>
+                      </>
+                    ) : (
+                      <p className="text-[11px] text-ivory-muted">
+                        Generate a Nostr key to prepare the proof message.
+                      </p>
+                    )}
+                    {draftError ? <Alert tone="danger">{draftError}</Alert> : null}
+                  </div>
+                ) : null}
+
+                {walletStage === "verified" ? (
+                  <div className="rounded-xl border border-accent/35 bg-accent/[0.05] px-3.5 py-3">
+                    <div className="text-[12px] font-medium text-ivory">Ownership verified</div>
+                    <div className="mt-0.5 text-[10.5px] text-ivory-muted">Ready to publish.</div>
+                  </div>
+                ) : null}
+
+                {walletStage === "publish" ? (
+                  <div className="rounded-xl border border-accent/35 bg-accent/[0.05] px-3.5 py-3">
+                    <div className="text-[12px] font-medium text-ivory">Identity published</div>
+                    <div className="mt-0.5 text-[10.5px] text-ivory-muted">
+                      Relay results are shown below.
+                    </div>
+                  </div>
+                ) : null}
+
                 {wallet.uri && wallet.qrUri ? (
                   <WizardConnectQRDialog
                     show={wallet.state === "connecting"}
@@ -425,19 +492,7 @@ export default function CreatePage() {
                     uri={wallet.uri}
                     qrUri={wallet.qrUri}
                     title="KYVERA"
-                    subtitle="Scan with Paytaca, Selene or Cashonize"
-                  />
-                ) : null}
-                {draft ? (
-                  <SignatureStep
-                    draft={draft}
-                    signature={signature}
-                    check={signatureCheck}
-                    onSignature={(value) => {
-                      setSignature(value);
-                      setSignatureCheck(null);
-                    }}
-                    onVerify={verifySignature}
+                    subtitle="Scan with Paytaca or Cashonize"
                   />
                 ) : null}
               </div>
@@ -477,6 +532,9 @@ export default function CreatePage() {
                     setDraft(null);
                     setSignature("");
                     setSignatureCheck(null);
+                    setPhase("idle");
+                    setPublishedEvent(null);
+                    setReports(null);
                   }}
                   placeholder={network === "mainnet" ? "bitcoincash:q…" : "bchtest:q…"}
                   spellCheck={false}
@@ -501,7 +559,6 @@ export default function CreatePage() {
                       setSignature(value);
                       setSignatureCheck(null);
                     }}
-                    onVerify={verifySignature}
                   />
                 ) : null}
                 {draftError ? <Alert tone="danger">{draftError}</Alert> : null}
@@ -551,16 +608,21 @@ export default function CreatePage() {
                 </div>
               </div>
             ) : bchMode !== "demo" && draft ? (
-              <div className="space-y-2">
-                <p className="text-[12px] leading-relaxed text-ivory-muted">
-                  The BCH signature covers the proof message. The Nostr event covers the canonical
-                  record containing both proofs.
-                </p>
-                <pre className="scroll-pane max-h-64 overflow-auto rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-ivory-dim">
+              <details>
+                <summary className="cursor-pointer text-[11px] text-ivory-muted hover:text-ivory-dim">
+                  Inspect signed payload
+                </summary>
+                <div className="mt-3 space-y-2">
+                  <p className="text-[12px] leading-relaxed text-ivory-muted">
+                    The BCH signature covers the proof message. The Nostr event covers the canonical
+                    record containing both proofs.
+                  </p>
+                  <pre className="scroll-pane max-h-64 overflow-auto rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-ivory-dim">
 {JSON.stringify(draft.payload, null, 2)}
-                </pre>
-                <div className="font-mono text-[10px] text-ivory-muted/70">payload digest {draft.digest}</div>
-              </div>
+                  </pre>
+                  <div className="font-mono text-[10px] text-ivory-muted/70">payload digest {draft.digest}</div>
+                </div>
+              </details>
             ) : (
               <p className="text-[12.5px] text-ivory-muted">
                 Configure both keys to preview the signed payload.
@@ -595,7 +657,7 @@ export default function CreatePage() {
             <Button
               className="mt-4 w-full"
               onClick={onPublish}
-              disabled={!canPublish || phase === "publishing"}
+              disabled={!canPublish || phase === "publishing" || phase === "published"}
             >
               {phase === "publishing" ? (
                 <>
@@ -654,36 +716,89 @@ function SignatureStep({
   signature,
   check,
   onSignature,
-  onVerify,
 }: {
   draft: BindDraft;
   signature: string;
   check: { ok: boolean; message: string } | null;
   onSignature: (value: string) => void;
-  onVerify: () => void;
 }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       <div className="rounded-xl border border-ivory/[0.1] bg-charcoal-950/40 p-3.5">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">Sign this message</span>
-          <CopyButton value={draft.message} />
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+            Proof message
+          </span>
+          <CopyButton value={draft.message} label="Copy message" />
         </div>
-        <pre className="scroll-pane max-h-36 overflow-auto whitespace-pre-wrap break-all font-mono text-[10.5px] leading-relaxed text-accent-bright">
+        <pre className="scroll-pane max-h-32 overflow-auto whitespace-pre-wrap break-all font-mono text-[10.5px] leading-relaxed text-accent-bright">
 {draft.message}
         </pre>
       </div>
       <Textarea
-        rows={3}
+        rows={2}
         value={signature}
         onChange={(event) => onSignature(event.target.value)}
-        placeholder="Base64 wallet signature"
+        placeholder="Paste base64 signature"
         spellCheck={false}
+        className="min-h-[54px] font-mono text-[11px]"
       />
-      <Button variant="secondary" onClick={onVerify} disabled={!signature.trim()}>
-        Verify ownership
-      </Button>
-      {check ? <Alert tone={check.ok ? "success" : "danger"}>{check.ok ? "Verified" : check.message}</Alert> : null}
+      {check ? (
+        check.ok ? (
+          <p data-testid="signature-ok" className="text-[10.5px] leading-relaxed text-accent-bright">
+            Ownership verified.
+          </p>
+        ) : (
+          <p data-testid="signature-error" className="text-[10.5px] leading-relaxed text-danger">
+            {check.message}
+          </p>
+        )
+      ) : (
+        <p className="text-[10px] text-ivory-muted">Verifies automatically.</p>
+      )}
+    </div>
+  );
+}
+
+function WizardSteps({ stage }: { stage: WalletStage }) {
+  const steps = ["Connect", "Sign", "Verified", "Publish"] as const;
+  const active = steps.indexOf(stage === "publish" ? "Publish" : stage === "verified" ? "Verified" : stage === "sign" ? "Sign" : "Connect");
+  return (
+    <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Wallet progress">
+      {steps.map((label, index) => (
+        <div key={label} className="flex items-center gap-1.5">
+          {index > 0 ? (
+            <span
+              className={cn("h-px w-3", index <= active ? "bg-accent/50" : "bg-ivory/12")}
+              aria-hidden="true"
+            />
+          ) : null}
+          <span
+            className={cn(
+              "flex items-center gap-1 font-mono text-[8.5px] uppercase tracking-[0.1em]",
+              index < active
+                ? "text-ivory-muted"
+                : index === active
+                  ? "text-signal-bright"
+                  : "text-ivory-muted/55",
+            )}
+          >
+            <span
+              className={cn(
+                "flex h-3.5 w-3.5 items-center justify-center rounded-full border text-[7px]",
+                index < active
+                  ? "border-accent/40 bg-accent/15 text-accent-bright"
+                  : index === active
+                    ? "border-signal bg-signal text-charcoal-950"
+                    : "border-ivory/15 text-ivory-muted/60",
+              )}
+            >
+              {index < active ? "✓" : index + 1}
+            </span>
+            {label}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }

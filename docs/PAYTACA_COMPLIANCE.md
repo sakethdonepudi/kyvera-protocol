@@ -92,7 +92,7 @@ The compliance gate is implemented at `/auth-demo` and `packages/verifier/src/au
 ### 4.2 Authentication evidence
 
 - Automated: `tests/auth-request.test.ts` — 12 tests, including replay, expiry, origin/session/identity/address mismatch, revoked/stale, session rotation/revocation/logout, unauthorized rotation.
-- Browser: `/auth-demo` session issuance, replay rejection, unauthorized-rotation check, session invalidation after rotation, logout, revoked-identity block (43/43 browser checks overall).
+- Browser: `/auth-demo` session issuance, replay rejection, unauthorized-rotation check, session invalidation after rotation, logout, revoked-identity block (47/47 browser checks overall).
 - The relying party is separate from the identity dashboard and has its own origin/session state.
 - NIP-07 signing path is implemented; demo local signer is exercised; physical wallet signing is not yet recorded.
 

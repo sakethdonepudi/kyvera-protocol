@@ -15,7 +15,7 @@
 | Unit/integration/security tests | `pnpm test` | **117/117 pass**, 12 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 14 routes |
-| Browser QA | `pnpm qa:browser` | **43/43**, 0 console/page errors |
+| Browser QA | `pnpm qa:browser` | **47/47**, 0 console/page errors |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |
 | Dependency audit | `pnpm audit --prod` | **0 known vulnerabilities** |
@@ -94,10 +94,13 @@ See [`WALLET_INTEROP.md`](WALLET_INTEROP.md).
 
 | Wallet | Status |
 | --- | --- |
-| Paytaca | **Not tested** (no installation available) |
-| Electron Cash | **Not tested** (not installed) |
-| Cashonize | **Not tested** (no installation available) |
+| Paytaca | **Not tested** (no installation available); WizardConnect integration in wallet source |
+| Cashonize | **Not tested** (no installation available); WizardConnect, transaction signing only |
+| Selene | **No WizardConnect integration found**; BIP21 handoff only |
+| Electron Cash | **Not tested** (not installed); manual `signmessage` probe |
 | Independent `nostr-bch-bind` vector | Verified |
+
+Message signing is not exposed by WizardConnect. `/create` uses the wallet's own Sign Message UI and verifies the pasted signature before publishing. See [`WALLET_UX_AUDIT.md`](WALLET_UX_AUDIT.md) and [`WALLET_DEVICE_TEST.md`](WALLET_DEVICE_TEST.md).
 
 Manual action: install a wallet, open `/interop`, sign the fixed probe message, paste the result, and record wallet/version. Terminal alternative: `pnpm wallet:verify <address> <signature>`.
 
@@ -118,7 +121,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (11) |
 | WizardConnect pairing | ✅ dialog opens; ❌ untested with a physical wallet |
 | Theme / glass system | ✅ dark + warm light, reduced motion, mobile |
-| Browser QA | ✅ **43/43**, pay/theme/auth-demo included |
+| Browser QA | ✅ **47/47**, pay/theme/auth-demo included |
 | CSP + WASM | ✅ fixed and smoke-tested |
 | No secrets in client bundle | ✅ scanned |
 | Demo/lab/standalone work without relay | ✅ |
@@ -145,7 +148,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 1. **Confirm eligibility:** message Paytaca/BLAZE: "For the Decentralized Identity bounty, is a DoraHacks Mainnet Track submission required, and do the live-demo/WizardConnect/mainnet-transaction rules apply?" Record the answer in `SUBMISSION_ELIGIBILITY.md`.
 2. **Make the repository public** (or grant judges access) after reviewing history for secrets. Current visibility is private.
 3. **Deploy** to Vercel using `vercel.json` and the production env; verify headers/routes with `DEPLOYMENT.md` §4.
-4. **Test one wallet:** install Electron Cash or Cashonize, open `/interop`, sign the fixed message, record a real signature/version in `WALLET_INTEROP.md`.
+4. **Test one wallet end to end:** install Paytaca or Cashonize, pair at `/create`, derive the address, sign the exact proof message, verify the badge changes only after the signature check, publish, and record the result using `WALLET_DEVICE_TEST.md`.
 5. **Decide on Mainnet Track:** if required, add WizardConnect (or XO) and one clearly usable mainnet BCH transaction feature; do not spend BCH without authorization.
 6. **Prepare deck/banner:** Widget Factory template, repo link, live demo link, EMBER2026 CashTokens address (if available).
 7. **Record video:** follow `JUDGE_DEMO_SCRIPT.md`.

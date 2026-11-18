@@ -110,7 +110,7 @@ Open `demo/kyvera-standalone.html` directly. It contains the same six scenarios 
 - Eight explicit statuses, including `SUPERSEDED`, `CONFLICT`, `STALE`.
 - BCH + Nostr dual-key binding, rotation, revocation.
 - Independent SDK and CLI.
-- Browser E2E 43/43, mobile and reduced motion tested.
+- Browser E2E 47/47, mobile and reduced motion tested.
 
 ## Claims to avoid until completed
 

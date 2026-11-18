@@ -289,7 +289,7 @@ export default function LandingPage() {
             </h2>
             <p className="mt-4 max-w-md text-[12.5px] leading-relaxed text-ivory-dim">
               Resolve an npub, verify the current BCH authorization chain, then hand a BIP21 payment to
-              Paytaca, Selene or Cashonize through WizardConnect. No key, no custody, no fabricated receipt.
+              Paytaca, Selene, Cashonize or Electron Cash. No key, no custody, no fabricated receipt.
             </p>
             <Link
               href="/pay"
@@ -301,7 +301,7 @@ export default function LandingPage() {
 
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              ["WizardConnect", "Connect Paytaca, Selene or Cashonize and derive the wallet address locally."],
+              ["WizardConnect", "Pair Paytaca or Cashonize and derive the wallet address locally."],
               ["BIP21 handoff", "The wallet previews and broadcasts the payment. KYVERA never auto-broadcasts."],
               ["Honest receipt", "This handoff does not return a txid, so no receipt is invented. A txid-aware adapter is future work."],
             ].map(([title, body], index) => (

@@ -49,7 +49,7 @@ Implemented:
 - explicit idle / connecting / connected / error states;
 - no seed phrase or private key request.
 
-**Not yet tested with a physical wallet.** No Paytaca/Selene/Cashonize installation was available in this environment. The connection is a real library integration, but compatibility is not claimed until tested.
+**Not yet tested with a physical wallet.** No Paytaca/Cashonize installation was available in this environment. The connection is a real library integration, but compatibility is not claimed until tested. Selene has no documented WizardConnect integration; it can still open the BIP21 handoff.
 
 WizardConnect is **not** used to sign or broadcast in KYVERA Pay yet. Doing so requires UTXO discovery, transaction construction, fee policy, signed-transaction validation and broadcast. That is a larger integration and is documented as future work.
 
@@ -87,4 +87,6 @@ WizardConnect is **not** used to sign or broadcast in KYVERA Pay yet. Doing so r
 - `apps/web/lib/pay.ts` — pure policy/amount/BIP21 helpers
 - `tests/pay.test.ts` — payment policy tests
 - `docs/WALLET_INTEROP.md` — wallet testing status
+- `docs/WALLET_UX_AUDIT.md` — WizardConnect API audit and signing limitation
+- `docs/WALLET_DEVICE_TEST.md` — Paytaca / Cashonize / Selene device procedure
 - `docs/SUBMISSION_ELIGIBILITY.md` — Mainnet Track payment requirement (still unmet)
