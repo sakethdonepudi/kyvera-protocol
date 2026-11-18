@@ -366,7 +366,9 @@ export default function CreatePage() {
                         <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
                           {wallet.walletName ?? "Connected wallet"}
                         </span>
-                        <Badge tone="neutral">address connected</Badge>
+                        <Badge tone={signatureCheck?.ok ? "accent" : "neutral"}>
+                          {signatureCheck?.ok ? "verified" : "address connected"}
+                        </Badge>
                       </div>
                       <div className="mt-1 font-mono text-[14px] text-ivory" title={walletAddress}>
                         {shortAddress(walletAddress)}
