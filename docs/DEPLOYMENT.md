@@ -95,6 +95,7 @@ Smoke-test:
 | `/verify` | Renders; a nonexistent npub returns `UNKNOWN`/`INVALID`, not a crash |
 | `/interop` | Wallet probe + independent vector verification |
 | `/pay` | Identity-based payment policy + BIP21 handoff; WizardConnect pairing opens |
+| `/auth-demo` | Independent relying-party sign-in, session issuance, replay/logout/revocation states |
 | `/developers` | SDK docs and vector download |
 | `/kyvera-standalone.html` | Single-file demo loads from the host |
 | `/vectors.json` | Deterministic vectors served |

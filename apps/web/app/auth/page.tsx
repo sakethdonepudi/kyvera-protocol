@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { KyveraEvent } from "@kyvera/core";
 import { normalizeNostrPublicKey, signerFromSecretKey } from "@kyvera/nostr";
@@ -135,6 +136,12 @@ function AuthInner() {
           Nostr key, and the application checks the signature against the currently authorized state — no
           account, session server or KYVERA backend.
         </p>
+        <Link
+          href="/auth-demo"
+          className="mt-4 inline-flex items-center gap-2 rounded-full border border-signal/35 bg-signal/[0.05] px-4 py-2 font-mono text-[9.5px] uppercase tracking-[0.12em] text-signal-bright hover:bg-signal/[0.1]"
+        >
+          Open the independent relying-party demo →
+        </Link>
       </div>
 
       <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_1fr]">

@@ -56,6 +56,7 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 - **Standalone HTML demo** (`demo/kyvera-standalone.html`): the real verifier bundled into one file for judges who cannot install dependencies.
 - **Wallet probe** (`/interop`): test a real Electron Cash / Cashonize / Paytaca `signmessage` signature and record the actual result. No compatibility is claimed until a real row exists.
 - **KYVERA Pay** (`/pay`): resolve an identity, enforce ACTIVE/network/freshness policy, re-resolve before handoff, and generate a BIP21/QR payment for Paytaca, Selene, Cashonize or Electron Cash.
+- **Independent relying-party auth** (`/auth-demo`): origin/session/identity/address-bound single-use challenges, short-lived sessions, replay/expiry rejection, logout and revocation/rotation invalidation.
 - **WizardConnect adapter**: real `@wizardconnect` integration for wallet pairing and local address derivation. Not yet tested with a physical wallet.
 - **Glass design system**: translucent navigation/summary surfaces, warm-light theme, reduced-motion support, and a single dark/light token set.
 - **Identity Time Machine 3.0**: Compare mode separates historical proof validity from current authorization; proof inspection remains per-record.
@@ -182,7 +183,7 @@ open demo/kyvera-standalone.html
 ## 8. Running tests
 
 ```bash
-pnpm test           # 105 tests across 11 files (unit, integration, security, property)
+pnpm test           # 117 tests across 12 files (unit, integration, security, property)
 pnpm typecheck      # strict TypeScript for every package
 pnpm build          # production build
 pnpm demo:lifecycle # executable lifecycle demo with assertions
@@ -323,7 +324,7 @@ Honest status as of 2026-11-18:
 - [x] Chain resolution with eight explicit result states
 - [x] Relay discovery, partial-sync and rollback-checkpoint handling
 - [x] Independent TypeScript SDK and CLI
-- [x] 105 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
+- [x] 117 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
 - [x] Responsive editorial web application, verified end-to-end in Chrome, mobile viewport, reduced motion and keyboard navigation
 - [x] Identity Time Machine with per-record proof and relay inspection
 - [x] Interactive security laboratory with six real scenarios
@@ -336,7 +337,7 @@ Honest status as of 2026-11-18:
 - [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review
 
-**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
+**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`PAYTACA_COMPLIANCE.md`](docs/PAYTACA_COMPLIANCE.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
 
 Deadline note: DoraHacks lists **22 November 2026, 14:00 UTC (19:30 IST)**. The BCH Blaze site footer still says 14–28 November; DoraHacks is authoritative. The Mainnet Track separately requires a live demo, WizardConnect/XO and at least one mainnet transaction; confirm with organizers whether those apply to a bounty-only entry.
 

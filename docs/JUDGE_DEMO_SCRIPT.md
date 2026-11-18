@@ -83,6 +83,10 @@
 
 ---
 
+## Optional 10-second auth-demo hook
+
+Open `/auth-demo`, select the demo identity, create a sign-in request and sign. Show the issued session, replay rejection, logout, and the rotation/revocation session invalidation. Say: "An independent relying party verifies the signature and resolves the chain itself; it never asks KYVERA for a login decision."
+
 ## Optional 10-second Pay hook
 
 Open `/pay?npub=<demo npub>`, show the ACTIVE destination and policy, enter an amount, confirm, and show the BIP21/QR handoff. Say: "The wallet verifies and broadcasts; KYVERA does not fabricate a receipt." Do not claim a wallet transaction unless one was actually performed.
@@ -101,12 +105,12 @@ Open `demo/kyvera-standalone.html` directly. It contains the same six scenarios 
 
 ## Claims that are safe
 
-- 105 automated tests, including property/fuzz tests.
+- 117 automated tests, including property/fuzz tests.
 - Independent BCH `signmessage` vector verified.
 - Eight explicit statuses, including `SUPERSEDED`, `CONFLICT`, `STALE`.
 - BCH + Nostr dual-key binding, rotation, revocation.
 - Independent SDK and CLI.
-- Browser E2E 34/34, mobile and reduced motion tested.
+- Browser E2E 40/40, mobile and reduced motion tested.
 
 ## Claims to avoid until completed
 

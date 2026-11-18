@@ -156,7 +156,7 @@ Legend: ✅ confirmed implemented, ◐ partial/claim only, ❌ absent.
 | Stale / partial sync result | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Challenge-response authentication | ✅ | ❌ | ✅ (OAuth tokens) | ❌ | ❌ |
 | Independent verifier without vendor backend | ✅ SDK + CLI | ✅ reference script | ❌ server required | n/a | n/a |
-| Published negative test vectors | ✅ 105 tests + vectors | ✅ 10 vectors | ◐ README claims | ❌ | ❌ |
+| Published negative test vectors | ✅ 117 tests + vectors | ✅ 10 vectors | ◐ README claims | ❌ | ❌ |
 | On-chain commitment | ❌ v1 | ✅ wc-tx proof | ❌ | ❌ | ❌ |
 | Live wallet interoperability evidence | ◐ format + independent vector | ✅ README claims formats checked | ✅ own client | n/a | n/a |
 

@@ -108,7 +108,7 @@ Status values: **Implemented** (code + automated evidence), **Partial** (works b
 | R1 | Self-custodial identity creation and management | Implemented | `apps/web/app/create/page.tsx`, `apps/web/lib/identity.ts`, `packages/verifier/src/create.ts` | Browser E2E create flow; `tests/binding.test.ts` | Demo keys live in browser localStorage; explicitly labelled, not production custody |
 | R2 | Dual-key binding, distinct keys, no private-key exposure | Implemented | `packages/bch/src/signmessage.ts`, `packages/core/src/schema.ts`, `packages/verifier/src/record.ts` | `tests/binding.test.ts` (17 tests), `tests/interop.test.ts` (independent BCH vector) | Live wallet test outstanding |
 | R3 | Decentralized discovery with enough data to verify | Implemented | `packages/nostr/src/event.ts`, `packages/nostr/src/relay.ts`, `packages/verifier/src/discovery.ts` | `tests/relay.test.ts` (13 tests), `pnpm demo:lifecycle` | Relays may prune history; documented as `STALE` |
-| R4 | Independent verification and challenge-response auth | Implemented | `packages/verifier/src/record.ts`, `.../discovery.ts`, `.../auth.ts`, `packages/verifier/src/cli.ts` | `tests/auth.test.ts` (11), `tests/chain.test.ts` (9), CLI E2E | Challenge store is in-memory; production persistence documented |
+| R4 | Independent verification and challenge-response auth | Implemented | `packages/verifier/src/record.ts`, `.../discovery.ts`, `.../auth.ts`, `apps/web/app/auth-demo/page.tsx`, `packages/verifier/src/cli.ts` | `tests/auth.test.ts` (11), `tests/auth-request.test.ts` (12), `/auth-demo` browser journey, `docs/PAYTACA_COMPLIANCE.md` | Physical wallet signer untested; challenge/session state is local demo state |
 | R5 | Working demo + source + setup + architecture/verification docs | Implemented | `apps/web`, `scripts/local-relay.mjs`, `scripts/seed-demo.ts`, `docs/` | Browser E2E (11 screens), `pnpm demo:lifecycle`, build | Deployment, public repo push and video not done |
 | S1 | Key rotation and recovery with independently verifiable authorization | Rotation implemented; recovery explicitly not claimed | `createRotateRecord`, `resolveChain`, dashboard controls | `tests/rotation.test.ts` (15), lifecycle demo | Recovery policy is future work; docs state no recovery |
 | S2 | Reusable libraries / protocol spec | Implemented | `packages/core`, `bch`, `nostr`, `verifier`; `docs/PROTOCOL.md`; CLI | Build, tests, `pnpm cli` | Not yet published to npm |
@@ -150,13 +150,14 @@ Status values: **Implemented** (code + automated evidence), **Partial** (works b
 | `tests/revocation.test.ts` | 9 | S1: valid/unauthorized revocation, Nostr-only revocation, replayed binding, post-rotation revocation, wrong chain key, expiry, competing revocations, historical address |
 | `tests/chain.test.ts` | 9 | R3: unknown/invalid, genesis conflict, missing genesis, order independence, subject isolation, orphan handling, record-vs-state |
 | `tests/auth.test.ts` | 11 | R4: valid, replay, expiry, wrong domain/challenge, unrelated key, revoked, stale, address binding, tamper, window |
+| `tests/auth-request.test.ts` | 12 | R4 relying party: origin/session/identity/address binding, replay, expiry, revoked/stale, session rotation/revocation/logout, unauthorized rotation |
 | `tests/relay.test.ts` | 13 | R3: publish/query, dedupe, partial sync, unreachable, no relays, rollback checkpoint, conflicting chains, hostile event, no EOSE, address resolution, multi-identity address, invalid address |
 | `tests/vectors.test.ts` | 5 | Published vectors: canonical, BCH message, record ids, chain outcomes |
 | `tests/interop.test.ts` | 2 | Independent BCH `signmessage` vector |
 | `tests/property.test.ts` | 12 | Property/fuzz: canonical idempotence, key order, NFC, numeric edges, duplicate keys, depth limits; chain subsets/mutations; malformed event metadata |
 | `tests/pay.test.ts` | 11 | Payment amount parsing, BIP21 encoding, ACTIVE/network/assurance policy, destination-change cancellation |
 | `tests/smoke.test.ts` | 1 | End-to-end creation |
-| **Total** | **105** | |
+| **Total** | **117** | |
 
 ---
 

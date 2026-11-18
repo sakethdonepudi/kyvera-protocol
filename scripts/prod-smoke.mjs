@@ -8,6 +8,7 @@ for (const [name,url,waitFor] of [
  ["lab","/lab","scenarios executed"],
  ["interop","/interop","Verify wallet signature"],
  ["pay","/pay","Pay the person"],
+ ["auth-demo","/auth-demo","Sign in with an identity"],
  ["developers","/developers","Verification is a library call"],
 ]){
  await p.goto("http://127.0.0.1:3100"+url,{waitUntil:"networkidle"});

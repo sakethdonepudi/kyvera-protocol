@@ -12,10 +12,10 @@
 | Check | Command | Result |
 | --- | --- | --- |
 | Repository commit | `git rev-parse HEAD` | `82a3e1b…` (3.0 working tree) |
-| Unit/integration/security tests | `pnpm test` | **105/105 pass**, 11 files, ~3s |
+| Unit/integration/security tests | `pnpm test` | **117/117 pass**, 12 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
-| Production build | `pnpm build` | pass, 13 routes |
-| Browser QA | `pnpm qa:browser` | **34/34**, 0 console/page errors |
+| Production build | `pnpm build` | pass, 14 routes |
+| Browser QA | `pnpm qa:browser` | **40/40**, 0 console/page errors |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |
 | Dependency audit | `pnpm audit --prod` | **0 known vulnerabilities** |
@@ -60,7 +60,9 @@ Every important claim links to a source, test or running demonstration.
 | Payment destination policy | `apps/web/lib/pay.ts` | `tests/pay.test.ts` (11), browser QA |
 | WizardConnect pairing | `apps/web/app/pay/page.tsx` | browser QA dialog; physical wallet untested |
 | Warm light theme | `globals.css`, `tailwind.config.ts`, toggle | browser QA theme check |
-| 105-test suite | `tests/` | `pnpm test` |
+| 117-test suite | `tests/` | `pnpm test` |
+| Relying-party authentication | `apps/web/app/auth-demo/page.tsx`, `packages/verifier/src/auth.ts` | `tests/auth-request.test.ts` (12), browser QA |
+| Paytaca compliance matrix | `docs/PAYTACA_COMPLIANCE.md` | requirement-to-evidence mapping |
 | Lab runs real verifier functions | `apps/web/lib/lab.ts`, `app/lab` | browser QA, standalone |
 | Mobile/reduced motion/keyboard | design system/global CSS | browser QA checks 12–14 |
 | Production CSP permits WASM | `apps/web/next.config.mjs` | `scripts/prod-smoke.mjs` |
@@ -112,11 +114,11 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | Production relay fallback (no localhost) | ✅ `wss://relay.damus.io,wss://nos.lol` |
 | Security headers | ✅ verified on `next start` |
 | Static assets (`/vectors.json`, standalone, icon) | ✅ 200 |
-| Routes | ✅ 13 routes build and render (`/pay` included) |
+| Routes | ✅ 14 routes build and render (`/pay` included) |
 | KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (11) |
 | WizardConnect pairing | ✅ dialog opens; ❌ untested with a physical wallet |
 | Theme / glass system | ✅ dark + warm light, reduced motion, mobile |
-| Browser QA | ✅ **34/34**, pay and theme included |
+| Browser QA | ✅ **40/40**, pay/theme/auth-demo included |
 | CSP + WASM | ✅ fixed and smoke-tested |
 | No secrets in client bundle | ✅ scanned |
 | Demo/lab/standalone work without relay | ✅ |

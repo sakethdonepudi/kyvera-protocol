@@ -133,6 +133,9 @@ export function Footer() {
           <Link href="/interop" className="hover:text-ivory">
             Wallet probe
           </Link>
+          <Link href="/auth-demo" className="hover:text-ivory">
+            Auth demo
+          </Link>
           <a
             href="https://github.com/sakethdonepudi/kyvera-protocol"
             className="hover:text-ivory"

@@ -84,7 +84,7 @@ KYVERA Pay integrates WizardConnect and opens a real pairing dialog, but no phys
 
 A related prior-art observation: Paytaca's extension reportedly mis-encoded message lengths above 252 bytes (paytaca/paytaca-app#831, fixed in #832). KYVERA keeps proof messages short (~150 bytes) but has not independently re-tested that wallet build.
 
-### 2.3 Demo key storage
+### 2.3 Demo key and session storage
 
 The browser demo stores throwaway Nostr and BCH private keys in `localStorage` so rotation and revocation can be demonstrated in one tab. This is **not** a secure keystore:
 
@@ -95,9 +95,11 @@ The browser demo stores throwaway Nostr and BCH private keys in `localStorage` s
 
 NIP-07 and external-wallet modes avoid storage; the demo mode is clearly labelled in the UI and README.
 
+`/auth-demo` is an independent relying-party demonstration. Its pending challenges and sessions are held in memory for the page lifecycle; a production relying party must persist used challenge IDs and sessions for the TTL, bind them to a server-side session, and protect them from theft. The cryptographic verification itself is real; the session store is demo infrastructure.
+
 ### 2.4 No audit
 
-No independent security review, formal verification or external fuzzing campaign has been performed. The chain state machine has 105 automated tests, including property-based canonicalization/chain fuzzing and adversarial cases, but tests cannot prove the absence of bugs.
+No independent security review, formal verification or external fuzzing campaign has been performed. The chain state machine has 117 automated tests, including property-based canonicalization/chain fuzzing and adversarial cases, but tests cannot prove the absence of bugs.
 
 ### 2.5 Dependency risk
 

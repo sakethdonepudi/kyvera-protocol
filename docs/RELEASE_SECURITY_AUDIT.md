@@ -33,6 +33,8 @@ This is a self-audit by the implementation team, not an independent security rev
 | Relay | Malformed KYVERA event rejected, good state retained | Pass |
 | Checkpoint | `ROLLBACK_DETECTED`, `CHECKPOINT_MISMATCH` | Pass |
 | Payment policy | Only ACTIVE, correct network, non-UNSYNCED; re-resolve and change cancellation | Pass (`tests/pay.test.ts`) |
+| Relying-party auth | Origin/session/identity/address/protocol binding, single-use challenge, session issuance/logout | Pass (`tests/auth-request.test.ts`, `/auth-demo`) |
+| Session invalidation | Rotation, revocation, expiry, logout | Pass (tests + browser) |
 | Payment handoff | No keys, no auto-broadcast, no fabricated txid | Pass; txid-aware payment not implemented |
 | WizardConnect | Supported library adapter; no seed/private-key request | Pairing dialog works; **untested with a physical wallet** |
 | Demo keys | Throwaway only, labelled, no funds | Pass with stated risk |

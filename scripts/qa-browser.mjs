@@ -100,6 +100,33 @@ async function desktopFlow() {
   record("KYVERA Pay prepares a verified BIP21 handoff", true);
   await shot(page, "06-pay");
 
+  await page.goto(`${BASE}/auth-demo`, { waitUntil: "networkidle" });
+  await page.locator("button").filter({ hasText: /npub1/ }).first().click();
+  await page.getByRole("button", { name: "Create sign-in request" }).click();
+  await page.getByRole("button", { name: /Sign with/ }).click();
+  await page.getByText("Welcome back.").waitFor({ timeout: 20_000 });
+  record("auth-demo issues a relying-party session", true);
+  await shot(page, "07-auth-demo");
+
+  await page.getByRole("button", { name: "Unauthorized rotation" }).click();
+  await page.getByText(/ADDRESS_MISMATCH/).waitFor({ timeout: 15_000 });
+  record("auth-demo rejects the unauthorized-rotation fixture", true);
+
+  await page.getByRole("button", { name: "Replay last challenge" }).click();
+  await page.getByText("UNKNOWN_CHALLENGE").waitFor({ timeout: 10_000 });
+  record("auth-demo rejects a replayed challenge", true);
+
+  await page.getByRole("button", { name: "Rotate wallet" }).click();
+  await page.getByText(/SESSION_ADDRESS_CHANGED/).waitFor({ timeout: 25_000 });
+  record("auth-demo invalidates the session after rotation", true);
+
+  await page.getByRole("button", { name: "Create sign-in request" }).click();
+  await page.getByRole("button", { name: /Sign with/ }).click();
+  await page.getByText("Welcome back.").waitFor({ timeout: 20_000 });
+  await page.getByRole("button", { name: "Log out" }).click();
+  await page.getByText("signed out").waitFor({ timeout: 10_000 });
+  record("auth-demo logout invalidates the session", true);
+
   await page.goto(`${BASE}/identity/${identity.npub}`, { waitUntil: "networkidle" });
   await page.getByText("Identity time machine").waitFor({ timeout: 20_000 });
   record("dashboard renders time machine", true);
@@ -157,6 +184,10 @@ async function desktopFlow() {
   await page.getByText("Revoked", { exact: true }).first().waitFor({ timeout: 20_000 });
   record("verifier refuses the revoked identity", true);
   await shot(page, "12-verify-revoked");
+
+  await page.goto(`${BASE}/auth-demo?npub=${encodeURIComponent(identity.npub)}`, { waitUntil: "networkidle" });
+  await page.getByText("Sign-in unavailable").waitFor({ timeout: 20_000 });
+  record("auth-demo blocks a revoked identity", true);
 
   await page.goto(`${BASE}/pay?npub=${encodeURIComponent(identity.npub)}`, { waitUntil: "networkidle" });
   await page.getByText("Payment blocked").first().waitFor({ timeout: 20_000 });
