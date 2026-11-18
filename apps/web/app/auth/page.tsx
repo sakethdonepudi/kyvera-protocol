@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { KyveraEvent } from "@kyvera/core";
 import { normalizeNostrPublicKey, signerFromSecretKey } from "@kyvera/nostr";
@@ -32,7 +32,7 @@ import {
 
 export default function AuthPage() {
   return (
-    <Suspense fallback={<div className="mx-auto max-w-4xl px-5 py-16 text-slate-500">Loading…</div>}>
+    <Suspense fallback={<div className="mx-auto max-w-4xl px-5 py-16 text-ivory-muted">Loading…</div>}>
       <AuthInner />
     </Suspense>
   );
@@ -55,7 +55,13 @@ function AuthInner() {
     service.current = new ChallengeService({ domain: AUTH_DOMAIN, ttlSeconds: 300 });
   }
 
-  async function resolve() {
+  useEffect(() => {
+    if (search.get("npub")) void resolve(input);
+    // Deep link only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function resolve(target: string = input) {
     setError("");
     setResolution(null);
     setChallenge(null);
@@ -63,7 +69,7 @@ function AuthInner() {
     setCheck(null);
     setLoading(true);
     try {
-      const subject = normalizeNostrPublicKey(input.trim());
+      const subject = normalizeNostrPublicKey(target.trim());
       if (!subject) throw new Error("Not a valid npub or hex public key.");
       setResolution(await refreshIdentity(subject, relays, NETWORK));
     } catch (cause) {
@@ -121,10 +127,10 @@ function AuthInner() {
         <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
           Authentication
         </div>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
+        <h1 className="mt-3 font-display text-[38px] leading-[1.05] tracking-editorial text-ivory">
           Prove the key is live. Not just that it exists.
         </h1>
-        <p className="mt-3 text-[13.5px] leading-relaxed text-slate-400">
+        <p className="mt-3 text-[13.5px] leading-relaxed text-ivory-muted">
           A relying application issues a short-lived challenge. The user signs it with the identity&apos;s
           Nostr key, and the application checks the signature against the currently authorized state — no
           account, session server or KYVERA backend.
@@ -143,7 +149,7 @@ function AuthInner() {
                 spellCheck={false}
                 className="font-mono text-[12px]"
               />
-              <Button onClick={resolve} disabled={loading} className="shrink-0">
+              <Button onClick={() => void resolve()} disabled={loading} className="shrink-0">
                 {loading ? <Spinner /> : null} Resolve
               </Button>
             </div>
@@ -157,21 +163,21 @@ function AuthInner() {
             ) : null}
 
             {resolution ? (
-              <div className="mt-4 space-y-2 rounded-lg border border-white/[0.07] bg-ink-900/60 p-3.5 text-[11.5px]">
+              <div className="mt-4 space-y-2 rounded-lg border border-ivory/[0.07] bg-ink-900/60 p-3.5 text-[11.5px]">
                 <div className="flex items-center gap-2">
                   <Badge tone={resolution.status === "ACTIVE" ? "accent" : "danger"}>
                     {resolution.status}
                   </Badge>
                   <span className="text-muted">{resolution.assurance} sync</span>
                 </div>
-                <div className="break-all font-mono text-[10.5px] text-slate-400">{resolution.subject}</div>
-                <div className="text-slate-400">
+                <div className="break-all font-mono text-[10.5px] text-ivory-muted">{resolution.subject}</div>
+                <div className="text-ivory-muted">
                   current BCH:{" "}
-                  <span className="font-mono text-slate-200">
+                  <span className="font-mono text-ivory-dim">
                     {resolution.activeBch?.address ?? "none"}
                   </span>
                 </div>
-                <div className="text-[10.5px] text-slate-500">
+                <div className="text-[10.5px] text-ivory-muted">
                   Only ACTIVE identities may authenticate. Revoked, expired, stale and conflicting states
                   are rejected before any token is issued.
                 </div>
@@ -181,7 +187,7 @@ function AuthInner() {
 
           <Card className="p-5">
             <SectionLabel>02 · Issue a challenge</SectionLabel>
-            <div className="flex flex-wrap items-center gap-2 text-[11.5px] text-slate-400">
+            <div className="flex flex-wrap items-center gap-2 text-[11.5px] text-ivory-muted">
               Domain <span className="font-mono text-accent">{AUTH_DOMAIN}</span> · TTL 300s · kind 22242
             </div>
             <Button
@@ -198,15 +204,15 @@ function AuthInner() {
                   <span className="text-[10px] uppercase tracking-[0.14em] text-muted">Challenge</span>
                   <CopyButton value={challenge.challenge} />
                 </div>
-                <div className="break-all rounded-lg border border-white/[0.07] bg-ink-950/70 p-3 font-mono text-[10.5px] text-accent-bright/90">
+                <div className="break-all rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3 font-mono text-[10.5px] text-accent-bright/90">
                   {challenge.challenge}
                 </div>
-                <div className="text-[10.5px] text-slate-500">
+                <div className="text-[10.5px] text-ivory-muted">
                   issued {timestamp(challenge.issuedAt)} · expires {timestamp(challenge.expiresAt)}
                 </div>
 
                 <div className="pt-2">
-                  <label className="mb-1 block text-[11px] text-slate-400">
+                  <label className="mb-1 block text-[11px] text-ivory-muted">
                     Optional: require the current payment address
                   </label>
                   <Input
@@ -239,24 +245,24 @@ function AuthInner() {
                   "rounded-lg border p-4",
                   check.authenticated
                     ? "border-accent/30 bg-accent/[0.06]"
-                    : "border-rose-400/30 bg-rose-400/[0.05]",
+                    : "border-danger/30 bg-danger/[0.05]",
                 )}
               >
                 <div className="flex items-center gap-2">
                   <Badge tone={check.authenticated ? "accent" : "danger"}>
                     {check.authenticated ? "Authenticated" : "Rejected"}
                   </Badge>
-                  <span className="font-mono text-[10.5px] text-slate-400">{check.code}</span>
+                  <span className="font-mono text-[10.5px] text-ivory-muted">{check.code}</span>
                 </div>
-                <p className="mt-2 text-[12.5px] leading-relaxed text-slate-300">{check.message}</p>
+                <p className="mt-2 text-[12.5px] leading-relaxed text-ivory-dim">{check.message}</p>
                 {check.bchAddress ? (
-                  <div className="mt-2 break-all font-mono text-[10.5px] text-slate-400">
+                  <div className="mt-2 break-all font-mono text-[10.5px] text-ivory-muted">
                     BCH {check.bchAddress}
                   </div>
                 ) : null}
               </div>
             ) : (
-              <p className="text-[12.5px] leading-relaxed text-slate-500">
+              <p className="text-[12.5px] leading-relaxed text-ivory-muted">
                 No authentication attempt yet. A successful result means: valid Schnorr signature, exact
                 challenge, correct domain, inside the time window, ACTIVE identity, and — if requested —
                 the expected payment address.
@@ -271,7 +277,7 @@ function AuthInner() {
                   </span>
                   <CopyButton value={JSON.stringify(event, null, 2)} />
                 </div>
-                <pre className="scroll-pane max-h-72 overflow-auto rounded-lg border border-white/[0.07] bg-ink-950/70 p-3 font-mono text-[10px] leading-relaxed text-slate-400">
+                <pre className="scroll-pane max-h-72 overflow-auto rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3 font-mono text-[10px] leading-relaxed text-ivory-muted">
 {JSON.stringify(event, null, 2)}
                 </pre>
               </div>
@@ -280,13 +286,13 @@ function AuthInner() {
 
           <Card className="p-5">
             <SectionLabel>What this proves</SectionLabel>
-            <ul className="space-y-2 text-[11.5px] leading-relaxed text-slate-400">
+            <ul className="space-y-2 text-[11.5px] leading-relaxed text-ivory-muted">
               <li>◆ The signer controls the Nostr key that authored the latest authorized record.</li>
               <li>◆ The identity is currently ACTIVE — not revoked, expired or ambiguous.</li>
               <li>◆ The challenge was issued for this domain and used inside its window.</li>
               <li>◆ Optionally, the identity still points at the BCH address the app expects.</li>
             </ul>
-            <p className="mt-3 text-[10.5px] leading-relaxed text-slate-500">
+            <p className="mt-3 text-[10.5px] leading-relaxed text-ivory-muted">
               Replay protection is stateful by design: the relying app must store used challenges for the
               TTL. The SDK ships an in-memory registry for examples; production apps should persist it.
             </p>

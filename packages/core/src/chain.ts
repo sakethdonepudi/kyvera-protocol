@@ -17,6 +17,7 @@ function toStep(record: VerifiedRecord): ChainStep {
     recordId: record.recordId,
     payloadDigest: record.payloadDigest,
     eventId: record.eventId,
+    event: record.event,
   };
 }
 

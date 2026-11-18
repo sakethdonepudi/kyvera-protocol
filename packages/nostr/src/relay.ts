@@ -139,6 +139,8 @@ export async function queryRelay(
 export interface QueryAggregate {
   reports: RelayQueryReport[];
   events: KyveraEvent[];
+  /** event id → relay URLs that returned it */
+  sources: Record<string, string[]>;
 }
 
 /** Queries every relay independently so partial synchronization is visible. */
@@ -149,12 +151,15 @@ export async function queryRelays(
 ): Promise<QueryAggregate> {
   const reports = await Promise.all(urls.map((url) => queryRelay(url, filters, options)));
   const byId = new Map<string, KyveraEvent>();
+  const sources: Record<string, string[]> = {};
   for (const report of reports) {
     for (const event of report.events) {
       if (!byId.has(event.id)) byId.set(event.id, event);
+      const list = sources[event.id] ?? (sources[event.id] = []);
+      if (!list.includes(report.url)) list.push(report.url);
     }
   }
-  return { reports, events: [...byId.values()] };
+  return { reports, events: [...byId.values()], sources };
 }
 
 export async function publishToRelay(

@@ -15,6 +15,11 @@ This is the reproducible demo promised in the bounty submission. Everything belo
 7. A stale relay cannot roll the state back when a checkpoint is supplied.
 8. Equivocation produces `CONFLICT`, not a silent winner.
 
+Two entry points:
+
+- **No install:** open `demo/kyvera-standalone.html` in a browser. Real verifier, deterministic fixtures, six scenarios.
+- **Full app:** run the three terminals below, then open `/demo` for the guided eight-step experience.
+
 ---
 
 ## 2. Setup
@@ -148,20 +153,21 @@ Expected: `All checks passed.` This runs an in-process relay and asserts:
 
 ---
 
-## 5. Suggested demo video script (3–4 minutes)
+## 5. Suggested demo video script (90 seconds)
 
 | Time | Shot | Narration |
 | --- | --- | --- |
-| 0:00–0:25 | Landing page | "A signature proves what happened. It doesn't prove what is authorized now." |
-| 0:25–0:55 | Create page | "Two independent keys. Here is the exact BCH message and the exact Nostr content each one signs." |
-| 0:55–1:15 | Publish + dashboard | "The binding resolves as ACTIVE from signed events. No KYVERA server." |
-| 1:15–1:45 | Rotation | "The old wallet explicitly authorizes the new one. The old address is now SUPERSEDED." |
-| 1:45–2:10 | Old address verifier | "Same signature, same historical validity — different current authorization." |
-| 2:10–2:35 | CLI | "The standalone CLI reaches the same result. Exit code zero." |
-| 2:35–2:55 | Revocation | "Signed by the current wallet and the identity key. No fallback." |
-| 2:55–3:15 | Auth | "A relying app checks the live key against the active state. Single-use challenge." |
-| 3:15–3:40 | `pnpm demo:lifecycle` | "Unauthorized rotation, rollback and equivocation are executable tests, not claims." |
-| 3:40–4:00 | Limitations slide | "No recovery, no absolute rollback protection, no production audit. The protocol says so." |
+| 0:00–0:10 | Landing hero + live lifecycle instrument | "Keys change. Trust shouldn't disappear. This is KYVERA, the identity continuity protocol." |
+| 0:10–0:25 | `/demo` step 1–2 | "Two independent keys. The BCH wallet and the Nostr key sign one canonical record." |
+| 0:25–0:35 | Time Machine on the bind record | "Every digest, both proofs and the relay observations are inspectable." |
+| 0:35–0:50 | `/demo` step 4 | "Rotation needs three signatures: old wallet, new wallet, identity key." |
+| 0:50–1:05 | `/demo` step 5 + old-address verifier | "The old proof is still valid forever. It is no longer the current destination." |
+| 1:05–1:20 | `/demo` step 6 + `/lab` unauthorized | "A thief with the Nostr key cannot rotate; the current wallet signature is missing." |
+| 1:20–1:30 | `/lab` conflict/stale | "Equivocation and withheld history are explicit results, not silent fallbacks." |
+| 1:30–1:35 | CLI | "The same SDK and CLI reach the same conclusion." |
+| 1:35–1:45 | `/lab` revocation + limitations | "Revocation ends the chain. No recovery, no absolute rollback protection, no audit claim." |
+
+For a 3–4 minute version, expand the Time Machine and lab sections and show the real create → publish flow.
 
 Do not claim a live wallet test in the video unless one is actually performed on camera.
 
@@ -170,7 +176,7 @@ Do not claim a live wallet test in the video unless one is actually performed on
 ## 6. Evidence to capture for submission
 
 - Screenshots: create preview, dashboard ACTIVE, dashboard after rotation, verifier SUPERSEDED, auth success, dashboard REVOKED.
-- Terminal: `pnpm test` summary (82 tests), `pnpm demo:lifecycle` (all checks).
+- Terminal: `pnpm test` summary (94 tests), `pnpm demo:lifecycle` (all checks).
 - CLI output for ACTIVE and SUPERSEDED.
 - A short screen recording following the script above.
 

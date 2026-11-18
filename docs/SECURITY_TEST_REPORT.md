@@ -11,11 +11,11 @@
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **82 / 82 tests pass** across 9 files |
+| `pnpm test` | **94 / 94 tests pass** across 10 files |
 | `pnpm typecheck` | **pass** for core, bch, nostr, verifier and web |
 | `pnpm build` | **pass** (Next.js production build; one third-party top-level-await warning) |
 | `pnpm demo:lifecycle` | **all assertions pass** (6 lifecycle scenarios) |
-| Browser end-to-end | **pass** (create → rotate → verify → authenticate → revoke, 11 screenshots, no console errors) |
+| Browser end-to-end | **pass** (28/28 checks: create → rotate → time machine → verify → auth → revoke, mobile, reduced motion, keyboard; 0 console errors) |
 | Deterministic vectors | **byte-identical on regeneration** (`sha256 074af1d4…`) |
 | Independent BCH interop vector | **pass** (signature from `nostr-bch-bind v1`) |
 | CLI end-to-end against local relay | **pass** (exit code 0 for ACTIVE and SUPERSEDED) |
@@ -35,11 +35,12 @@ $ pnpm test
  ✓ tests/revocation.test.ts (9 tests)
  ✓ tests/rotation.test.ts (15 tests)
  ✓ tests/interop.test.ts (2 tests)
+ ✓ tests/property.test.ts (12 tests)
  ✓ tests/smoke.test.ts (1 test)
  ✓ tests/relay.test.ts (13 tests)
- Test Files  9 passed (9)
-      Tests  82 passed (82)
-   Duration  2.64s
+ Test Files  10 passed (10)
+      Tests  94 passed (94)
+   Duration  ~2.7s
 ```
 
 ```text
@@ -180,6 +181,25 @@ All checks passed.
 - `tests/vectors.test.ts` (5): canonical encodings, wallet message hash, record ids/digests, six chain outcomes.
 - `tests/interop.test.ts` (2): verifies a BCH `signmessage` signature published by the independent `nostr-bch-bind v1` implementation; rejects the same signature over a different message.
 
+### 3.7 Property-based and malformed-input tests (`tests/property.test.ts` — 12)
+
+| Property | Runs | Assertion |
+| --- | --- | --- |
+| Canonical JSON idempotence | 150 | `canonicalize(parse(canonicalize(v))) === canonicalize(v)` and `isCanonicalJson` accepts it |
+| Insertion-order independence | 100 | Reversing object key insertion order produces identical bytes |
+| Unicode NFC | 100 | A string and its NFC form canonicalize identically |
+| Float/non-finite rejection | 50 + edges | Floats, `NaN`, `Infinity`, unsafe integers and `undefined` throw |
+| Numeric edges | edge | `-0` normalizes to `0`; safe integer bounds accepted; overflow rejected |
+| Duplicate keys / whitespace | edge | `{"a":1,"a":2}` and non-minified JSON are rejected |
+| Depth/size bounds | edge | 40-deep nesting throws; 200KB string remains bounded |
+| Chain subset fuzz | 60 | Any subset/order of real events never throws; status is in the enum |
+| Active-address invariant | 70 | `activeBch` is non-null only for `ACTIVE`/`EXPIRED`; conflict/stale/invalid/revoked are null |
+| Chain integrity | 50 | Every accepted history has sequence 0..n, correct `previous`, and individually verifiable events |
+| Malformed event metadata | 100 | Arbitrary id/pubkey/tags/content/sig never throws in parser or verifier |
+| Oversized content | edge | A correctly signed 20KB content is rejected with `CONTENT_LENGTH` |
+
+Fast-check seeds are randomized per run; failures print a reproducible counterexample. Runs are bounded to keep the suite under a few seconds.
+
 ---
 
 ## 4. Adversarial coverage matrix (bounty brief categories)
@@ -222,23 +242,28 @@ All checks passed.
 
 ## 5. Browser end-to-end evidence
 
-Executed with Playwright against `localhost:3000` and the local relay `ws://127.0.0.1:7788`.
+Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **28/28 checks passed, 0 console/page errors.**
 
-Flow and result:
+Flow:
 
-1. Landing page renders.
-2. Create page generates a real Nostr key and BCH keypair.
-3. The exact BCH proof message and canonical event content are displayed.
-4. Publish returns OK from the relay.
-5. Dashboard resolves `ACTIVE`, sequence 0.
-6. Rotate publishes sequence 1; old address becomes `SUPERSEDED`.
-7. Public verifier resolves `ACTIVE` from the npub.
-8. Address lookup for the old address returns `SUPERSEDED`.
-9. Authentication page resolves, issues a challenge, signs with the stored demo key, returns `Authenticated`.
-10. Revoke publishes sequence 2; dashboard and verifier return `REVOKED`.
-11. No console errors or page errors were recorded in the final run.
+1. Landing renders; the embedded lifecycle instrument runs the real resolver and switches between bind/rotate/revoke.
+2. Guided `/demo` resolves deterministic fixtures, shows rotation, unauthorized rejection and revocation.
+3. `/lab` executes all six scenarios; equivocation returns `CONFLICT`, withheld history returns `STALE`; advanced mode exposes the signed input events.
+4. `/interop` verifies the independent BCH vector.
+5. Create page generates real keys, displays the proof/event preview, publishes, and stores a local demo identity.
+6. Dashboard renders the Time Machine; selecting the genesis record and switching to cryptographic mode exposes the payload digest and exact BCH proof message.
+7. Rotation publishes sequence 1; the historical record reports `SUPERSEDED`.
+8. Public verifier resolves the identity and renders the Time Machine.
+9. Address lookup for the old address returns `SUPERSEDED`.
+10. Challenge-response authentication succeeds with the demo key.
+11. Revocation publishes sequence 2 and the verifier returns `REVOKED`.
+12. Mobile viewport (390×844): landing, demo, lab and create have no horizontal overflow.
+13. Reduced motion: transitions collapse to ~0ms.
+14. Keyboard: Tab reaches navigation links with a visible focus target.
 
-Screenshots: `.context/screens/01-landing.png` … `11-verify-revoked.png` (gitignored, local evidence).
+Screenshots: `.context/screens/qa/01-landing.png` … `12-verify-revoked.png` (gitignored, local evidence).
+
+The standalone `demo/kyvera-standalone.html` was also loaded from `file://`, executed all six scenarios and exposed advanced input events with zero console errors.
 
 ---
 

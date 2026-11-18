@@ -201,10 +201,10 @@ export default function CreatePage() {
         <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
           Create identity
         </div>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
+        <h1 className="mt-3 font-display text-[38px] leading-[1.05] tracking-editorial text-ivory">
           Bind a Nostr identity to a BCH wallet.
         </h1>
-        <p className="mt-3 text-[13.5px] leading-relaxed text-slate-400">
+        <p className="mt-3 text-[13.5px] leading-relaxed text-ivory-muted">
           Two independent keys, one canonical record. You will see the exact bytes each key signs
           before anything is published. Private keys never leave your browser or extension.
         </p>
@@ -215,14 +215,14 @@ export default function CreatePage() {
           <Card className="p-5">
             <div className="flex items-center justify-between">
               <SectionLabel>01 · Nostr identity</SectionLabel>
-              <div className="flex rounded-lg border border-white/10 p-0.5">
+              <div className="flex rounded-lg border border-ivory/10 p-0.5">
                 {(["demo", "nip07"] as const).map((mode) => (
                   <button
                     key={mode}
                     onClick={() => connectNostr(mode)}
                     className={cn(
                       "rounded-md px-2.5 py-1 text-[11px] transition-colors",
-                      nostrMode === mode ? "bg-white/10 text-white" : "text-slate-400 hover:text-white",
+                      nostrMode === mode ? "bg-ivory/10 text-ivory" : "text-ivory-muted hover:text-ivory",
                     )}
                   >
                     {mode === "demo" ? "Generate key" : "NIP-07"}
@@ -233,10 +233,10 @@ export default function CreatePage() {
 
             {subject ? (
               <div className="mt-3 space-y-3">
-                <div className="rounded-lg border border-white/[0.07] bg-ink-900/60 p-3.5">
+                <div className="rounded-lg border border-ivory/[0.07] bg-ink-900/60 p-3.5">
                   <div className="text-[10px] uppercase tracking-[0.14em] text-muted">Public identity</div>
-                  <div className="mt-1 break-all font-mono text-[12px] text-slate-200">{npub}</div>
-                  <div className="mt-1 break-all font-mono text-[10px] text-slate-600">{subject}</div>
+                  <div className="mt-1 break-all font-mono text-[12px] text-ivory-dim">{npub}</div>
+                  <div className="mt-1 break-all font-mono text-[10px] text-ivory-muted/70">{subject}</div>
                   <div className="mt-2 flex items-center gap-2">
                     <Badge tone={nostrSecret ? "warn" : "accent"}>
                       {nostrSecret ? "demo signer" : "NIP-07 signer"}
@@ -252,7 +252,7 @@ export default function CreatePage() {
                 ) : null}
               </div>
             ) : (
-              <p className="mt-3 text-[12.5px] leading-relaxed text-slate-400">
+              <p className="mt-3 text-[12.5px] leading-relaxed text-ivory-muted">
                 Generate a throwaway Nostr key for the demo, or connect a NIP-07 browser extension to
                 sign with a key you already control.
               </p>
@@ -267,7 +267,7 @@ export default function CreatePage() {
           <Card className="p-5">
             <div className="flex items-center justify-between">
               <SectionLabel>02 · Bitcoin Cash identity</SectionLabel>
-              <div className="flex rounded-lg border border-white/10 p-0.5">
+              <div className="flex rounded-lg border border-ivory/10 p-0.5">
                 {(["demo", "external"] as const).map((mode) => (
                   <button
                     key={mode}
@@ -278,7 +278,7 @@ export default function CreatePage() {
                     }}
                     className={cn(
                       "rounded-md px-2.5 py-1 text-[11px] transition-colors",
-                      bchMode === mode ? "bg-white/10 text-white" : "text-slate-400 hover:text-white",
+                      bchMode === mode ? "bg-ivory/10 text-ivory" : "text-ivory-muted hover:text-ivory",
                     )}
                   >
                     {mode === "demo" ? "Generate wallet" : "External wallet"}
@@ -301,7 +301,7 @@ export default function CreatePage() {
                     "rounded-full border px-2.5 py-1 font-mono text-[10.5px]",
                     network === value
                       ? "border-accent/40 bg-accent/10 text-accent-bright"
-                      : "border-white/10 text-slate-400 hover:text-white",
+                      : "border-ivory/10 text-ivory-muted hover:text-ivory",
                   )}
                 >
                   {value}
@@ -312,12 +312,12 @@ export default function CreatePage() {
             {bchMode === "demo" ? (
               <div className="mt-3 space-y-3">
                 {demoBch ? (
-                  <div className="rounded-lg border border-white/[0.07] bg-ink-900/60 p-3.5">
+                  <div className="rounded-lg border border-ivory/[0.07] bg-ink-900/60 p-3.5">
                     <div className="text-[10px] uppercase tracking-[0.14em] text-muted">Demo wallet</div>
-                    <div className="mt-1 break-all font-mono text-[12.5px] text-white">
+                    <div className="mt-1 break-all font-mono text-[12.5px] text-ivory">
                       {demoBch.identity.address}
                     </div>
-                    <div className="mt-1 break-all font-mono text-[10px] text-slate-600">
+                    <div className="mt-1 break-all font-mono text-[10px] text-ivory-muted/70">
                       pubkey {demoBch.publicKey}
                     </div>
                     <div className="mt-2 flex items-center gap-2">
@@ -326,7 +326,7 @@ export default function CreatePage() {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-[12.5px] text-slate-400">
+                  <p className="text-[12.5px] text-ivory-muted">
                     A fresh P2PKH keypair is generated locally. It is used only to demonstrate the
                     proof and lifecycle; the address should stay unfunded.
                   </p>
@@ -369,7 +369,7 @@ export default function CreatePage() {
                 </Button>
                 {draft ? (
                   <div className="space-y-3">
-                    <div className="rounded-lg border border-white/[0.07] bg-ink-900/70 p-3.5">
+                    <div className="rounded-lg border border-ivory/[0.07] bg-ink-900/70 p-3.5">
                       <div className="mb-2 flex items-center justify-between">
                         <span className="text-[10px] uppercase tracking-[0.14em] text-muted">
                           Sign this exact message in your wallet
@@ -405,7 +405,7 @@ export default function CreatePage() {
               <div className="space-y-4">
                 <div>
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="text-[11px] text-slate-300">BCH proof message</span>
+                    <span className="text-[11px] text-ivory-dim">BCH proof message</span>
                     <CopyButton
                       value={buildBchProofMessage(
                         "new",
@@ -414,27 +414,27 @@ export default function CreatePage() {
                       )}
                     />
                   </div>
-                  <pre className="scroll-pane max-h-40 overflow-auto whitespace-pre-wrap break-all rounded-lg border border-white/[0.07] bg-ink-950/70 p-3.5 font-mono text-[11px] leading-relaxed text-accent-bright/90">
+                  <pre className="scroll-pane max-h-40 overflow-auto whitespace-pre-wrap break-all rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3.5 font-mono text-[11px] leading-relaxed text-accent-bright/90">
 {buildBchProofMessage("new", preview.record.payload.bch.address, preview.payloadDigest)}
                   </pre>
                   <details className="mt-2">
-                    <summary className="cursor-pointer text-[10.5px] text-slate-500 hover:text-slate-300">
+                    <summary className="cursor-pointer text-[10.5px] text-ivory-muted hover:text-ivory-dim">
                       Show signed payload fields
                     </summary>
-                    <pre className="scroll-pane mt-2 max-h-52 overflow-auto rounded-lg border border-white/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-slate-400">
+                    <pre className="scroll-pane mt-2 max-h-52 overflow-auto rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-ivory-muted">
 {JSON.stringify(preview.record.payload, null, 2)}
                     </pre>
                   </details>
                 </div>
                 <div>
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="text-[11px] text-slate-300">Nostr event content (canonical record)</span>
+                    <span className="text-[11px] text-ivory-dim">Nostr event content (canonical record)</span>
                     <CopyButton value={preview.event.content} />
                   </div>
-                  <pre className="scroll-pane max-h-52 overflow-auto rounded-lg border border-white/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-slate-400">
+                  <pre className="scroll-pane max-h-52 overflow-auto rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-ivory-muted">
 {preview.event.content}
                   </pre>
-                  <div className="mt-2 font-mono text-[10px] text-slate-600">
+                  <div className="mt-2 font-mono text-[10px] text-ivory-muted/70">
                     kind {preview.event.kind} · created_at {preview.event.created_at} · id{" "}
                     {shortHex(preview.event.id, 12, 8)}
                   </div>
@@ -442,17 +442,17 @@ export default function CreatePage() {
               </div>
             ) : bchMode === "external" && draft ? (
               <div className="space-y-2">
-                <p className="text-[12px] leading-relaxed text-slate-400">
+                <p className="text-[12px] leading-relaxed text-ivory-muted">
                   The record commits to this digest. Your BCH signature covers the domain-separated
                   message, and the Nostr event covers the canonical record containing both proofs.
                 </p>
-                <pre className="scroll-pane max-h-64 overflow-auto rounded-lg border border-white/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-slate-300">
+                <pre className="scroll-pane max-h-64 overflow-auto rounded-lg border border-ivory/[0.07] bg-ink-950/70 p-3.5 font-mono text-[10.5px] leading-relaxed text-ivory-dim">
 {JSON.stringify(draft.payload, null, 2)}
                 </pre>
-                <div className="font-mono text-[10px] text-slate-600">payload digest {draft.digest}</div>
+                <div className="font-mono text-[10px] text-ivory-muted/70">payload digest {draft.digest}</div>
               </div>
             ) : (
-              <p className="text-[12.5px] text-slate-500">
+              <p className="text-[12.5px] text-ivory-muted">
                 Configure both keys to preview the signed payload. Nothing is published yet.
               </p>
             )}
@@ -507,23 +507,23 @@ export default function CreatePage() {
                       <span
                         className={cn(
                           "h-1.5 w-1.5 rounded-full",
-                          report.ok ? "bg-accent" : "bg-rose-400",
+                          report.ok ? "bg-accent" : "bg-danger",
                         )}
                       />
-                      <span className="truncate font-mono text-slate-400">
+                      <span className="truncate font-mono text-ivory-muted">
                         {report.url.replace(/^wss?:\/\//, "")}
                       </span>
-                      <span className="ml-auto text-slate-600">{report.ok ? `${report.latencyMs}ms` : "failed"}</span>
+                      <span className="ml-auto text-ivory-muted/70">{report.ok ? `${report.latencyMs}ms` : "failed"}</span>
                     </div>
                   ))}
                 </div>
                 <Link
                   href={`/identity/${npub}`}
-                  className="block rounded-lg bg-accent px-4 py-2.5 text-center text-[13px] font-semibold text-ink-950 hover:bg-accent-bright"
+                  className="block rounded-[2px] bg-signal px-4 py-2.5 text-center text-[13px] font-semibold text-charcoal-950 hover:bg-signal-bright"
                 >
                   Open the identity dashboard →
                 </Link>
-                <p className="break-all rounded-lg border border-white/[0.07] bg-ink-950/60 p-2.5 font-mono text-[9.5px] leading-relaxed text-slate-500">
+                <p className="break-all rounded-lg border border-ivory/[0.07] bg-ink-950/60 p-2.5 font-mono text-[9.5px] leading-relaxed text-ivory-muted">
                   pnpm cli {npub} --relay ws://127.0.0.1:7777
                 </p>
               </div>
@@ -544,7 +544,7 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-3">
       <span className="text-muted">{label}</span>
-      <span className="truncate font-mono text-[11px] text-slate-300">{value}</span>
+      <span className="truncate font-mono text-[11px] text-ivory-dim">{value}</span>
     </div>
   );
 }

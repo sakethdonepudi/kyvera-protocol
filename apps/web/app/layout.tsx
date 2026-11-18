@@ -3,13 +3,13 @@ import "./globals.css";
 import { Footer, Header } from "@/components/chrome";
 
 export const metadata: Metadata = {
-  title: "KYVERA — Identity. Proven.",
+  title: "KYVERA — Identity continuity protocol",
   description:
-    "Cryptographically verifiable identity lifecycle for Bitcoin Cash and Nostr. Distinguishes a valid historical proof from the currently authorized payment identity.",
+    "Keys change. Trust shouldn't disappear. KYVERA makes Bitcoin Cash and Nostr identity transitions independently verifiable — binding, rotation, revocation and conflict detection.",
   openGraph: {
-    title: "KYVERA — Identity. Proven.",
+    title: "KYVERA — Identity continuity protocol",
     description:
-      "BCH + Nostr identity binding with rotation, revocation and independent verification.",
+      "Verifiable BCH + Nostr identity lifecycle: rotation, revocation, stale-state and equivocation detection without a central authority.",
     type: "website",
   },
 };
@@ -17,8 +17,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-ink-950 font-sans antialiased">
-        <div className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_at_top,rgba(61,220,151,0.10),transparent_62%)]" />
+      <body className="min-h-screen bg-charcoal-950 font-sans antialiased">
+        <div className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(240,90,40,0.07),transparent_58%)]" />
+        <div className="pointer-events-none fixed inset-0 -z-20 opacity-[0.35] grid-surface [mask-image:linear-gradient(to_bottom,black,transparent_55%)]" />
         <Header />
         <main>{children}</main>
         <Footer />

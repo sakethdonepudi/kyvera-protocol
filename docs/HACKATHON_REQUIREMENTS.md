@@ -15,13 +15,29 @@ The Google Doc was not read directly (access/link may require a browser session)
 
 | Item | Official/public text | Status |
 | --- | --- | --- |
-| Hackathon dates | Site footer: **BLAZE 2026 Nov 14 – 28**; other search results mention Nov 14–22 | Conflicting public signals; confirm on DoraHacks |
-| Workspace brief | **22 November 2026, 19:30 IST** | Used as the internal planning deadline |
-| Registration | "Register on DoraHacks"; registration reportedly closes Nov 13 | Not performed in this workspace |
-| Eligibility | Not stated in the bounty excerpt; governed by BCH Blaze rules | Not independently verified |
-| Submission platform | DoraHacks BUIDL | Not submitted |
+| Hackathon dates | DoraHacks event timeline: **deadline 2026/11/22 14:00 UTC** (= 19:30 IST). Site footer still says "Nov 14 – 28". | DoraHacks is authoritative; **22 Nov 2026, 19:30 IST confirmed** |
+| Workspace brief | 22 November 2026, 19:30 IST | Matches DoraHacks |
+| Registration | "Register on DoraHacks"; pre-registration 2026/10/10, submission opens 2026/11/13 | Not performed in this workspace |
+| Eligibility | Mainnet Track: developers worldwide, individuals or teams of 2–4; must register and submit a valid project | Not independently verified for this entry |
+| Submission platform | DoraHacks BUIDL; organizer is currently reviewing Builds | Not submitted |
 | Licensing/IP | Bounty page does not state additional terms | Repository is MIT |
-| Network | Bounty does not mandate mainnet for this identity proof of concept | Demo uses mainnet-format addresses, unfunded; no mainnet transactions |
+| Network | Identity bounty does not mandate mainnet; the Mainnet Track does require at least one BCH mainnet transaction | Demo uses mainnet-format unfunded addresses; no mainnet transaction performed |
+
+### 1.1 Mainnet Track requirements (from the DoraHacks Tracks page)
+
+These are separate from the Paytaca bounty requirements and are a **submission risk** if KYVERA is entered in the Mainnet Track:
+
+- short presentation based on the BCH Blaze "Widget Factory" template;
+- original or significantly improved during the hackathon;
+- **at least one feature involving sending a BCH mainnet transaction**;
+- **live, usable demo** reachable by a website link;
+- **WizardConnect integration** for BCH wallet connection;
+- at least one representative attended a BLAZE preparation stream;
+- confirmation in the BCH BLAZE Telegram channel.
+
+The Paytaca bounty page also says: "A focused proof of concept covering binding, discovery, verification and authentication is sufficient." That may govern bounty judging, but it does **not** waive the track-level requirements. Confirm with the organizers which requirements apply to a bounty-only entry.
+
+**Action required before submission:** confirm the deadline, eligibility, and submission fields on DoraHacks, and resolve whether the Mainnet Track's live demo, WizardConnect and mainnet-transaction requirements apply to this bounty entry.
 
 **Action required before submission:** confirm the exact deadline, eligibility, and submission fields on DoraHacks. The discrepancy above is recorded rather than resolved by assumption.
 
@@ -135,8 +151,9 @@ Status values: **Implemented** (code + automated evidence), **Partial** (works b
 | `tests/relay.test.ts` | 13 | R3: publish/query, dedupe, partial sync, unreachable, no relays, rollback checkpoint, conflicting chains, hostile event, no EOSE, address resolution, multi-identity address, invalid address |
 | `tests/vectors.test.ts` | 5 | Published vectors: canonical, BCH message, record ids, chain outcomes |
 | `tests/interop.test.ts` | 2 | Independent BCH `signmessage` vector |
+| `tests/property.test.ts` | 12 | Property/fuzz: canonical idempotence, key order, NFC, numeric edges, duplicate keys, depth limits; chain subsets/mutations; malformed event metadata |
 | `tests/smoke.test.ts` | 1 | End-to-end creation |
-| **Total** | **82** | |
+| **Total** | **94** | |
 
 ---
 
@@ -146,7 +163,12 @@ Status values: **Implemented** (code + automated evidence), **Partial** (works b
 | --- | --- | --- |
 | Public GitHub repository | **Not done** | Local git repository only; pushing requires authorization |
 | Live application URL | **Not done** | Build verified locally; no deployment performed |
-| Working demonstration | **Done locally** | Browser E2E + terminal lifecycle demo pass |
+| Working demonstration | **Done locally** | Browser E2E + terminal lifecycle demo pass; single-file demo in `demo/kyvera-standalone.html` |
+| Identity Time Machine | **Done** | `/demo`, `/verify`, dashboard and `/identity/[npub]/time-machine` |
+| Security laboratory | **Done** | `/lab`, six real scenarios, simple/advanced modes |
+| Competitive audit | **Done** | `docs/COMPETITIVE_AUDIT_2026.md` |
+| Design system | **Done** | `docs/DESIGN_SYSTEM.md` |
+| Wallet probe | **Done** | `/interop` + `docs/WALLET_INTEROP.md`; live wallet rows still empty |
 | Verification SDK | **Done** | `@kyvera/verifier` + CLI |
 | Documentation | **Done** | Protocol, threat model, architecture, security, competitor, requirements |
 | Security test report | **Done** | `docs/SECURITY_TEST_REPORT.md` |

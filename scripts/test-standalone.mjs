@@ -1,0 +1,13 @@
+import { chromium } from "playwright";
+const b=await chromium.launch({channel:"chrome",headless:true});
+const p=await b.newPage({viewport:{width:1440,height:1000},deviceScaleFactor:2});
+const errors=[];p.on('console',m=>{if(m.type()==='error')errors.push(m.text())});p.on('pageerror',e=>errors.push(e.message));
+await p.goto("file://"+process.cwd()+"/demo/kyvera-standalone.html",{waitUntil:"load"});
+await p.getByText(/scenarios ·/).first().waitFor({timeout:20000});
+await p.screenshot({path:".context/screens/standalone.png",fullPage:true});
+await p.getByRole("button",{name:/Equivocation/}).click();
+await p.getByText("CONFLICT · no payment address asserted").waitFor();
+await p.getByRole("button",{name:"Advanced mode"}).click();
+await p.getByText("Signed input events").waitFor();
+console.log("ok", await p.locator("#status").innerText(), "errors", errors);
+await b.close();

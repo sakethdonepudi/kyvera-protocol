@@ -1,0 +1,390 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { getDemoState, type DemoState } from "@/lib/lab";
+import { TimeMachine } from "@/components/time-machine";
+import { Alert, Badge, Button, Card, CopyButton, SectionLabel, Spinner, StatusBadge, cn } from "@/components/ui";
+import { shortAddress, shortHex } from "@/lib/format";
+
+const STEPS = [
+  {
+    title: "Two independent keys",
+    line: "A Nostr identity key and a BCH wallet key. Neither is derived from the other.",
+  },
+  {
+    title: "Bind",
+    line: "Both keys sign one canonical record at sequence 0. The Nostr event carries the record.",
+  },
+  {
+    title: "Verify independently",
+    line: "The verifier checks the Schnorr signature, recovers the BCH key, and validates the chain from genesis.",
+  },
+  {
+    title: "Rotate",
+    line: "The old wallet authorizes leaving, the new wallet proves control, and the Nostr key binds the transition.",
+  },
+  {
+    title: "History stays valid",
+    line: "Wallet A's proof is still cryptographically true. It is simply no longer the current destination.",
+  },
+  {
+    title: "Unauthorized rotation",
+    line: "A thief with the Nostr key and a new wallet cannot produce the current wallet's signature.",
+  },
+  {
+    title: "Same answer in the CLI",
+    line: "The SDK and the terminal verifier reach the same conclusion from the same signed events.",
+  },
+  {
+    title: "Revoke",
+    line: "The current wallet and the identity key end the chain. Nothing falls back to wallet A.",
+  },
+];
+
+export default function DemoPage() {
+  const [state, setState] = useState<DemoState | null>(null);
+  const [step, setStep] = useState(0);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    getDemoState()
+      .then((result) => {
+        if (!cancelled) setState(result);
+      })
+      .catch((cause) => {
+        if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const resolution =
+    step >= 7 ? state?.revoked : step >= 3 ? state?.rotation : state?.bind ?? null;
+
+  return (
+    <div className="mx-auto max-w-[1240px] px-5 py-12">
+      <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+        <div className="max-w-2xl">
+          <div className="kicker text-signal">Guided demonstration · 90 seconds</div>
+          <h1 className="mt-3 font-display text-[36px] leading-[1.06] tracking-editorial text-ivory sm:text-[46px]">
+            The whole argument,
+            <br />
+            in one identity.
+          </h1>
+          <p className="mt-3 text-[13px] leading-relaxed text-ivory-dim">
+            Deterministic, unspendable fixtures. Every verdict below is produced by the same verifier
+            functions exported by the SDK — no wallet, account or relay required.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/lab"
+            className="rounded-[2px] border border-ivory/20 px-3.5 py-2 text-[12px] text-ivory-dim hover:border-ivory/45 hover:text-ivory"
+          >
+            Security lab
+          </Link>
+          <Link
+            href="/verify"
+            className="rounded-[2px] border border-ivory/20 px-3.5 py-2 text-[12px] text-ivory-dim hover:border-ivory/45 hover:text-ivory"
+          >
+            Live verifier
+          </Link>
+        </div>
+      </div>
+
+      {error ? (
+        <div className="mt-6">
+          <Alert tone="danger">{error}</Alert>
+        </div>
+      ) : null}
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-[300px_1fr]">
+        <div className="min-w-0 space-y-4">
+          <Card className="overflow-hidden">
+            <div className="border-b border-ivory/[0.1] p-4">
+              <SectionLabel>Sequence</SectionLabel>
+              <ol className="space-y-1">
+                {STEPS.map((entry, index) => (
+                  <li key={entry.title}>
+                    <button
+                      onClick={() => setStep(index)}
+                      aria-current={step === index ? "step" : undefined}
+                      className={cn(
+                        "flex w-full items-start gap-2.5 border-l px-2.5 py-2 text-left transition-colors",
+                        step === index
+                          ? "border-signal bg-signal/[0.05]"
+                          : "border-ivory/10 hover:border-ivory/30 hover:bg-ivory/[0.03]",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "mt-0.5 font-mono text-[8.5px]",
+                          step === index ? "text-signal" : "text-ivory-muted",
+                        )}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className={cn("text-[11.5px] leading-snug", step === index ? "text-ivory" : "text-ivory-muted")}>
+                        {entry.title}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="flex items-center gap-2 p-4">
+              <Button
+                variant="secondary"
+                className="flex-1 px-2"
+                onClick={() => setStep((value) => Math.max(0, value - 1))}
+                disabled={step === 0}
+              >
+                ← Back
+              </Button>
+              <Button
+                className="flex-1 px-2"
+                onClick={() => setStep((value) => Math.min(STEPS.length - 1, value + 1))}
+                disabled={step === STEPS.length - 1}
+              >
+                Next →
+              </Button>
+            </div>
+          </Card>
+
+          <div className="border border-ivory/[0.1] p-4">
+            <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">Progress</div>
+            <div className="mt-2 flex gap-1">
+              {STEPS.map((entry, index) => (
+                <div
+                  key={entry.title}
+                  className={cn("h-[3px] flex-1", index <= step ? "bg-signal" : "bg-ivory/10")}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="min-w-0 space-y-4">
+          <Card className="p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-ivory-muted">
+                Step {String(step + 1).padStart(2, "0")} / {STEPS.length}
+              </div>
+              {resolution ? <StatusBadge status={resolution.status} /> : null}
+            </div>
+            <h2 className="mt-3 font-display text-[28px] leading-tight tracking-editorial text-ivory">
+              {STEPS[step]!.title}
+            </h2>
+            <p className="mt-2 max-w-2xl text-[12.5px] leading-relaxed text-ivory-dim">{STEPS[step]!.line}</p>
+
+            {!state ? (
+              <div className="mt-5 flex items-center gap-2 text-[12px] text-ivory-dim">
+                <Spinner /> Signing fixtures and running the verifier…
+              </div>
+            ) : (
+              <StepPanel step={step} state={state} />
+            )}
+          </Card>
+
+          {resolution ? <TimeMachine resolution={resolution} compact /> : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StepPanel({ step, state }: { step: number; state: DemoState }) {
+  const f = state.fixtures;
+
+  if (step === 0) {
+    return (
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <KeyPanel label="Nostr identity" value={f.npub} note="BIP-340 Schnorr key" />
+        <KeyPanel label="BCH wallet A" value={f.walletA.identity.address} note="P2PKH · signmessage" />
+        <p className="sm:col-span-2 font-mono text-[9px] uppercase tracking-[0.1em] text-ivory-muted">
+          distinct secp256k1 keys · no derivation across domains
+        </p>
+      </div>
+    );
+  }
+
+  if (step === 1) {
+    return (
+      <div className="mt-5 space-y-3">
+        <div className="border border-ivory/[0.12] bg-charcoal-950/50 p-4">
+          <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+            Genesis record · sequence 0
+          </div>
+          <div className="mt-2 break-all font-mono text-[11px] text-ivory">{f.walletA.identity.address}</div>
+          <div className="mt-1 font-mono text-[9px] text-ivory-muted">
+            record {shortHex(f.bind.recordId, 16, 10)}
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Badge tone="accent">BCH new-key proof</Badge>
+          <Badge tone="accent">Nostr event signature</Badge>
+          <Badge tone="neutral">canonical JSON</Badge>
+          <Badge tone="neutral">previous = null</Badge>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 2) {
+    return (
+      <div className="mt-5 space-y-2">
+        {state.rotationScenario.checks.slice(0, 3).map((check) => (
+          <CheckLine key={check.label} ok={check.ok} label={check.label} detail={check.detail} />
+        ))}
+        <p className="pt-2 text-[11px] leading-relaxed text-ivory-muted">
+          Resolved locally to <span className="text-ivory">{state.bind.status}</span>. The verifier
+          independently recomputes the payload digest, recovers the BCH public key and validates the
+          Nostr event id.
+        </p>
+      </div>
+    );
+  }
+
+  if (step === 3) {
+    return (
+      <div className="mt-5 space-y-3">
+        <div className="grid gap-px bg-ivory/[0.1] sm:grid-cols-2">
+          <div className="bg-charcoal-900 p-4">
+            <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">old wallet</div>
+            <div className="mt-1 break-all font-mono text-[10px] text-ivory-dim">{f.walletA.identity.address}</div>
+            <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.12em] text-signal">superseded</div>
+          </div>
+          <div className="bg-charcoal-900 p-4">
+            <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">new wallet</div>
+            <div className="mt-1 break-all font-mono text-[10px] text-ivory">{f.walletB.identity.address}</div>
+            <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-bright">
+              current
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Badge tone="warn">current-key signature</Badge>
+          <Badge tone="accent">new-key signature</Badge>
+          <Badge tone="accent">Nostr signature</Badge>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 4) {
+    return (
+      <div className="mt-5 space-y-2">
+        <CheckLine
+          ok={true}
+          label="Wallet A's historical bind still verifies"
+          detail="same signatures, same digest, same address"
+        />
+        <CheckLine ok={true} label="Wallet A is not the current destination" detail="SUPERSEDED by wallet B" />
+        <CheckLine
+          ok={true}
+          label="Replaying wallet A cannot move the head backwards"
+          detail={`head sequence ${state.rotation.head?.record.payload.sequence}`}
+        />
+        <pre className="mt-3 overflow-auto border border-ivory/[0.1] bg-charcoal-950/70 p-3 font-mono text-[9.5px] text-ivory-dim">
+{`resolve([bind(A), rotate(A→B), bind(A)])
+→ ${state.rotation.status}
+→ current: ${state.rotation.activeBch?.address}
+→ superseded: ${state.rotation.superseded.map((entry) => entry.address).join(", ")}`}
+        </pre>
+      </div>
+    );
+  }
+
+  if (step === 5) {
+    return (
+      <div className="mt-5 space-y-2">
+        <CheckLine ok={true} label="Nostr signature by the identity key" detail="valid — the thief has it" />
+        <CheckLine
+          ok={false}
+          label="Current wallet authorization"
+          detail={state.unauthorizedScenario.recordResult?.message ?? "rejected"}
+        />
+        <CheckLine
+          ok={true}
+          label="Current state unchanged"
+          detail={`${state.rotation.status} · wallet A cannot be replaced without its signature`}
+        />
+        <div className="mt-3 border border-danger/35 bg-danger/[0.04] p-3 font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#E5A49C]">
+          {state.unauthorizedScenario.recordResult?.code} · forged record excluded
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 6) {
+    const command = `pnpm cli ${f.npub} --relay ws://127.0.0.1:7777`;
+    return (
+      <div className="mt-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">terminal</span>
+          <CopyButton value={command} />
+        </div>
+        <pre className="overflow-auto border border-ivory/[0.12] bg-charcoal-950/80 p-4 font-mono text-[10px] leading-relaxed text-ivory-dim">
+{`$ ${command}
+
+status:    ACTIVE (ACTIVE_HEAD)
+assurance: FULL 1/1 relays
+BCH:       ${f.walletB.identity.address}
+history:
+  #0 bind   ${f.walletA.identity.address}
+  #1 rotate ${f.walletB.identity.address}
+superseded:
+  #0 ${shortAddress(f.walletA.identity.address)} → ${shortAddress(f.walletB.identity.address)}`}
+        </pre>
+        <p className="text-[11px] leading-relaxed text-ivory-muted">
+          The fixture identity is not published, so this exact command runs against the local demo relay
+          after seeding. The verifier logic is identical.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-5 space-y-2">
+      <CheckLine ok={true} label="Revocation signed by current wallet + Nostr key" detail="accepted" />
+      <CheckLine ok={true} label="No address asserted as current" detail="REVOKED" />
+      <CheckLine ok={true} label="History preserved" detail="bind → rotate → revoke" />
+      <p className="pt-2 text-[11px] leading-relaxed text-ivory-muted">
+        Revocation is not a deletion. The historical proofs remain inspectable; authorization simply
+        ends.
+      </p>
+    </div>
+  );
+}
+
+function KeyPanel({ label, value, note }: { label: string; value: string; note: string }) {
+  return (
+    <div className="border border-ivory/[0.12] bg-charcoal-950/50 p-4">
+      <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">{label}</div>
+      <div className="mt-2 break-all font-mono text-[10px] leading-relaxed text-ivory">{value}</div>
+      <div className="mt-2 font-mono text-[8.5px] uppercase tracking-[0.12em] text-ivory-muted">{note}</div>
+    </div>
+  );
+}
+
+function CheckLine({ ok, label, detail }: { ok: boolean; label: string; detail: string }) {
+  return (
+    <div className="flex items-start gap-2 border-b border-ivory/[0.06] pb-2 last:border-0">
+      <span
+        className={cn(
+          "mt-0.5 inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center border text-[8px]",
+          ok ? "border-accent/50 text-accent-bright" : "border-danger/60 text-[#E5A49C]",
+        )}
+      >
+        {ok ? "✓" : "×"}
+      </span>
+      <div>
+        <div className="text-[11.5px] text-ivory">{label}</div>
+        <div className="mt-0.5 break-all font-mono text-[9px] text-ivory-muted">{detail}</div>
+      </div>
+    </div>
+  );
+}

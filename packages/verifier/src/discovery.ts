@@ -38,6 +38,8 @@ export interface SyncSummary {
 export interface IdentityResolution extends ChainResolution {
   assurance: Assurance;
   sync: SyncSummary;
+  /** event id → relays (or "local cache") that supplied the record. */
+  sources: Record<string, string[]>;
 }
 
 export function summarizeRelays(reports: RelayQueryReport[]): SyncSummary {
@@ -105,15 +107,22 @@ export async function resolveIdentity(options: ResolveIdentityOptions): Promise<
   });
   const sync = summarizeRelays(aggregate.reports);
   const merged = new Map<string, KyveraEvent>();
+  const sources: Record<string, string[]> = {};
   for (const event of aggregate.events) merged.set(event.id, event);
   for (const event of options.additionalEvents ?? []) {
     if (!merged.has(event.id) && event.pubkey === options.subject) merged.set(event.id, event);
+  }
+  for (const [eventId, relays] of Object.entries(aggregate.sources)) sources[eventId] = [...relays];
+  for (const event of options.additionalEvents ?? []) {
+    if (event.pubkey !== options.subject) continue;
+    const list = sources[event.id] ?? (sources[event.id] = []);
+    if (!list.includes("local cache")) list.push("local cache");
   }
   const { resolution } = resolveEvents([...merged.values()], {
     ...verifyOptions,
     subject: options.subject,
   });
-  return applyCheckpoint(attachSync(resolution, sync), options.checkpoint);
+  return applyCheckpointToResolution(attachSync(resolution, sync, sources), options.checkpoint);
 }
 
 export interface AddressBinding {
@@ -236,7 +245,7 @@ export async function resolveAddress(options: ResolveAddressOptions): Promise<Ad
       maxClockSkewSeconds: options.maxClockSkewSeconds,
       subject,
     });
-    const withSync = attachSync(resolution, sync);
+    const withSync = attachSync(resolution, sync, full.sources);
     const step = findAddressInChain(resolution, address);
     const status = addressStatus(resolution, address, step !== null);
     bindings.push({
@@ -310,8 +319,12 @@ function reasonForAddressStatus(status: IdentityStatus): string {
   }
 }
 
-function attachSync(resolution: ChainResolution, sync: SyncSummary): IdentityResolution {
-  const withSync: IdentityResolution = { ...resolution, assurance: sync.assurance, sync };
+function attachSync(
+  resolution: ChainResolution,
+  sync: SyncSummary,
+  sources: Record<string, string[]> = {},
+): IdentityResolution {
+  const withSync: IdentityResolution = { ...resolution, assurance: sync.assurance, sync, sources };
   if (sync.assurance === "UNSYNCED") {
     withSync.status = "STALE";
     withSync.reasonCode = "RELAYS_UNREACHABLE";
@@ -321,7 +334,7 @@ function attachSync(resolution: ChainResolution, sync: SyncSummary): IdentityRes
   return withSync;
 }
 
-function applyCheckpoint(
+export function applyCheckpointToResolution(
   resolution: IdentityResolution,
   checkpoint: { sequence: number; recordId: string } | undefined,
 ): IdentityResolution {
@@ -377,5 +390,6 @@ function offlineResolution(subject: string, now: number, reasonCode: string): Id
     headIssuedAt: null,
     assurance: "UNSYNCED",
     sync: { relays: [], responded: 0, total: 0, assurance: "UNSYNCED" },
+    sources: {},
   };
 }

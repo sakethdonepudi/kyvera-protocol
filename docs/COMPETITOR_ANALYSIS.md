@@ -1,5 +1,7 @@
 # Competitor and Prior-Art Analysis
 
+> **Updated 2026-11-18:** a broader audit of current BCH Blaze 2026 identity submissions (Kola Link, CashLink ID, BCH Identity Bridge, bch-did-binding) is in [`COMPETITIVE_AUDIT_2026.md`](COMPETITIVE_AUDIT_2026.md). This document remains the closer source-level analysis of `nostr-bch-bind`, BCH OAuth, Nostron and key-reuse prior art.
+
 **Research date:** 2026-11-18
 **Method:** public repository and gist inspection, source reading, execution of published vectors where available.
 **Rule applied:** confirmed behaviour is separated from README claims. Missing documentation is not treated as a vulnerability. No vulnerability is asserted without a reproducible path, and no funds or private keys were used.
@@ -154,7 +156,7 @@ Legend: ✅ confirmed implemented, ◐ partial/claim only, ❌ absent.
 | Stale / partial sync result | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Challenge-response authentication | ✅ | ❌ | ✅ (OAuth tokens) | ❌ | ❌ |
 | Independent verifier without vendor backend | ✅ SDK + CLI | ✅ reference script | ❌ server required | n/a | n/a |
-| Published negative test vectors | ✅ 82 tests + vectors | ✅ 10 vectors | ◐ README claims | ❌ | ❌ |
+| Published negative test vectors | ✅ 94 tests + vectors | ✅ 10 vectors | ◐ README claims | ❌ | ❌ |
 | On-chain commitment | ❌ v1 | ✅ wc-tx proof | ❌ | ❌ | ❌ |
 | Live wallet interoperability evidence | ◐ format + independent vector | ✅ README claims formats checked | ✅ own client | n/a | n/a |
 

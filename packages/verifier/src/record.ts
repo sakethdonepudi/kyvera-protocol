@@ -7,6 +7,7 @@ import {
   type ChainResolution,
   type KyveraEvent,
   type RecordCheck,
+  type RecordRejection,
   type SignedRecord,
   type VerifiedRecord,
 } from "@kyvera/core";
@@ -119,6 +120,9 @@ export function verifyRecord(record: SignedRecord, options: VerifyOptions): Veri
 
 export interface VerifyEventResult extends VerifyRecordResult {
   verified?: VerifiedRecord;
+  /** Present when the event parsed as a record, even if verification failed. */
+  record?: SignedRecord;
+  event?: KyveraEvent;
 }
 
 /** Parses a KYVERA Nostr event and verifies both the Nostr and BCH proofs. */
@@ -126,18 +130,23 @@ export function verifyEventRecord(event: KyveraEvent, options: VerifyOptions): V
   const parsed = parseRecordEvent(event);
   if (!parsed.ok || !parsed.record) return { ok: false, code: parsed.code, message: parsed.message };
   const checked = verifyRecord(parsed.record, options);
-  if (!checked.ok) return checked;
+  if (!checked.ok) {
+    return { ...checked, record: parsed.record, event };
+  }
   return {
     ok: true,
     code: "OK",
     message: "ok",
     recordId: checked.recordId,
     payloadDigest: checked.payloadDigest,
+    record: parsed.record,
+    event,
     verified: {
       record: parsed.record,
       recordId: checked.recordId!,
       payloadDigest: checked.payloadDigest!,
       eventId: event.id,
+      event,
       observedAt: options.now,
     },
   };
@@ -145,7 +154,7 @@ export function verifyEventRecord(event: KyveraEvent, options: VerifyOptions): V
 
 export interface ResolutionWithRejections {
   resolution: ChainResolution;
-  rejected: Array<{ eventId: string | null; code: string; message: string }>;
+  rejected: RecordRejection[];
 }
 
 export function resolveEvents(
@@ -153,7 +162,7 @@ export function resolveEvents(
   options: VerifyOptions & { subject?: string },
 ): ResolutionWithRejections {
   const verified: VerifiedRecord[] = [];
-  const rejected: Array<{ eventId: string | null; code: string; message: string }> = [];
+  const rejected: RecordRejection[] = [];
   const unique = new Map<string, KyveraEvent>();
   for (const event of events) {
     if (!unique.has(event.id)) unique.set(event.id, event);
@@ -170,7 +179,14 @@ export function resolveEvents(
       }
       verified.push(result.verified);
     } else {
-      rejected.push({ eventId: event.id, code: result.code, message: result.message });
+      rejected.push({
+        eventId: event.id,
+        code: result.code,
+        message: result.message,
+        sequence: result.record?.payload.sequence,
+        type: result.record?.payload.type,
+        record: result.record,
+      });
     }
   }
 

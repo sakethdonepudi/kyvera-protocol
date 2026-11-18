@@ -8,13 +8,14 @@ import { DEFAULT_RELAYS, NETWORK } from "@/lib/config";
 import { refreshIdentity } from "@/lib/identity";
 import { RelayEditor } from "@/components/relay-editor";
 import { AddressResolutionPanel, ResolutionPanel } from "@/components/resolution";
+import { TimeMachine } from "@/components/time-machine";
 import { Alert, Button, Card, Input, SectionLabel, Spinner, cn } from "@/components/ui";
 
 type Mode = "identity" | "address";
 
 export default function VerifyPage() {
   return (
-    <Suspense fallback={<div className="mx-auto max-w-4xl px-5 py-16 text-slate-500">Loading verifier…</div>}>
+    <Suspense fallback={<div className="mx-auto max-w-4xl px-5 py-16 text-ivory-muted">Loading verifier…</div>}>
       <VerifyInner />
     </Suspense>
   );
@@ -70,17 +71,17 @@ function VerifyInner() {
         <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
           Public verifier
         </div>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white">
+        <h1 className="mt-3 font-display text-[38px] leading-[1.05] tracking-editorial text-ivory">
           Inspect an identity. Trust the signatures, not the site.
         </h1>
-        <p className="mt-3 text-[13.5px] leading-relaxed text-slate-400">
+        <p className="mt-3 text-[13.5px] leading-relaxed text-ivory-muted">
           The verifier fetches signed records from independent relays, validates both keys, walks the
           authorization chain and reports uncertainty explicitly. Nothing is sent to a KYVERA server.
         </p>
       </div>
 
       <Card className="mt-8 p-5">
-        <div className="mb-4 flex rounded-lg border border-white/10 p-0.5 sm:w-fit">
+        <div className="mb-4 flex rounded-lg border border-ivory/10 p-0.5 sm:w-fit">
           {(["identity", "address"] as const).map((value) => (
             <button
               key={value}
@@ -92,7 +93,7 @@ function VerifyInner() {
               }}
               className={cn(
                 "flex-1 rounded-md px-4 py-2 text-[12px] capitalize transition-colors sm:flex-none",
-                mode === value ? "bg-white/10 text-white" : "text-slate-400 hover:text-white",
+                mode === value ? "bg-ivory/10 text-ivory" : "text-ivory-muted hover:text-ivory",
               )}
             >
               {value === "identity" ? "Nostr identity" : "BCH address"}
@@ -139,12 +140,13 @@ function VerifyInner() {
       ) : null}
 
       {loading ? (
-        <Card className="mt-5 flex items-center gap-3 p-8 text-[13px] text-slate-400">
+        <Card className="mt-5 flex items-center gap-3 p-8 text-[13px] text-ivory-muted">
           <Spinner /> Querying relays and verifying proofs…
         </Card>
       ) : identity ? (
-        <div className="mt-5">
-          <ResolutionPanel resolution={identity} />
+        <div className="mt-5 space-y-4">
+          <ResolutionPanel resolution={identity} compact />
+          <TimeMachine resolution={identity} />
         </div>
       ) : address ? (
         <div className="mt-5">
@@ -158,9 +160,9 @@ function VerifyInner() {
           ["Chain", "Each record commits to the previous record digest. Sequence gaps are STALE."],
           ["Uncertainty", "Relay failures reduce assurance. No relay means STALE, even with cached history."],
         ].map(([title, body]) => (
-          <div key={title} className="rounded-lg border border-white/[0.07] bg-ink-900/50 p-4">
-            <div className="text-[12px] font-medium text-white">{title}</div>
-            <p className="mt-1.5 text-[11px] leading-relaxed text-slate-500">{body}</p>
+          <div key={title} className="rounded-lg border border-ivory/[0.07] bg-ink-900/50 p-4">
+            <div className="text-[12px] font-medium text-ivory">{title}</div>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-ivory-muted">{body}</p>
           </div>
         ))}
       </div>

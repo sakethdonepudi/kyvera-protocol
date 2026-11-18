@@ -4,12 +4,13 @@
 
 :root {
   color-scheme: dark;
+  --rule: rgba(241, 236, 223, 0.12);
 }
 
 html,
 body {
-  background-color: #050807;
-  color: #e6efec;
+  background-color: #0a0a08;
+  color: #f1ecdf;
 }
 
 body {
@@ -18,37 +19,55 @@ body {
 }
 
 ::selection {
-  background: rgba(61, 220, 151, 0.25);
-  color: #f4fffb;
+  background: rgba(240, 90, 40, 0.28);
+  color: #fff8f0;
 }
 
 *:focus-visible {
-  outline: 2px solid rgba(61, 220, 151, 0.6);
+  outline: 2px solid rgba(240, 90, 40, 0.75);
   outline-offset: 2px;
 }
 
 @layer utilities {
   .grid-surface {
     background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    background-size: 44px 44px;
+      linear-gradient(to right, rgba(241, 236, 223, 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(241, 236, 223, 0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .rule-grid {
+    background-image: linear-gradient(to bottom, rgba(241, 236, 223, 0.08) 1px, transparent 1px);
+    background-size: 100% 28px;
   }
 
   .text-balance {
     text-wrap: balance;
   }
 
-  .hairline {
-    border-color: rgba(255, 255, 255, 0.09);
+  .kicker {
+    font-family: var(--font-mono, ui-monospace);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
   }
 }
 
-/* Scrollbars stay quiet in long document and JSON panes. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 pre,
 .scroll-pane {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  scrollbar-color: rgba(241, 236, 223, 0.16) transparent;
 }
 
 pre::-webkit-scrollbar,
@@ -59,6 +78,6 @@ pre::-webkit-scrollbar,
 
 pre::-webkit-scrollbar-thumb,
 .scroll-pane::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(241, 236, 223, 0.16);
   border-radius: 999px;
 }

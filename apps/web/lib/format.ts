@@ -17,13 +17,29 @@ export function shortNpub(npub: string): string {
 
 export function timestamp(seconds: number | null | undefined): string {
   if (!seconds) return "—";
-  return new Date(seconds * 1000).toLocaleString(undefined, {
+  return new Intl.DateTimeFormat("en-GB", {
     year: "numeric",
     month: "short",
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-  });
+    hour12: false,
+    timeZone: "UTC",
+  }).format(new Date(seconds * 1000)) + " UTC";
+}
+
+/** Compact UTC timestamp for narrow metric cells. */
+export function timestampShort(seconds: number | null | undefined): string {
+  if (!seconds) return "—";
+  return new Intl.DateTimeFormat("en-GB", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "UTC",
+  }).format(new Date(seconds * 1000));
 }
 
 export function relativeTime(seconds: number): string {
@@ -48,17 +64,19 @@ export const STATUS_LABEL: Record<IdentityStatus, string> = {
 export function statusClasses(status: IdentityStatus): string {
   switch (status) {
     case "ACTIVE":
-      return "border-accent/40 bg-accent/10 text-accent-bright";
+      return "border-accent/45 bg-accent/[0.08] text-accent-bright";
     case "SUPERSEDED":
+      return "border-signal/45 bg-signal/[0.06] text-signal-bright";
     case "EXPIRED":
+      return "border-ivory/25 bg-ivory/[0.03] text-ivory-dim";
     case "STALE":
-      return "border-amber-400/35 bg-amber-400/10 text-amber-300";
+      return "border-signal/35 bg-signal/[0.04] text-[#F0B39E]";
     case "REVOKED":
     case "CONFLICT":
     case "INVALID":
-      return "border-rose-400/35 bg-rose-400/10 text-rose-300";
+      return "border-danger/45 bg-danger/[0.06] text-[#E5A49C]";
     default:
-      return "border-white/15 bg-white/5 text-slate-300";
+      return "border-ivory/18 bg-ivory/[0.02] text-ivory-muted";
   }
 }
 

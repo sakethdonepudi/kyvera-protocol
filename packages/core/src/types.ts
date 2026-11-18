@@ -84,6 +84,8 @@ export interface VerifiedRecord {
   /** sha256 hex over canonical bytes of the payload only (what BCH keys sign). */
   payloadDigest: string;
   eventId: string | null;
+  /** The verified Nostr event, retained so inspecting tools can show its signature. */
+  event?: KyveraEvent;
   /** Unix seconds at which the record was observed (local verification time). */
   observedAt: number;
 }
@@ -103,6 +105,8 @@ export interface ChainStep {
   recordId: string;
   payloadDigest: string;
   eventId: string | null;
+  /** Verified Nostr event, available for proof inspection UIs. */
+  event?: KyveraEvent;
 }
 
 export interface SupersededBinding {
@@ -116,6 +120,10 @@ export interface RecordRejection {
   eventId: string | null;
   code: string;
   message: string;
+  /** Sequence/type when the record parsed but failed verification. */
+  sequence?: number;
+  type?: string;
+  record?: SignedRecord;
 }
 
 export interface ChainResolution {

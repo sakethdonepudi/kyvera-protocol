@@ -16,6 +16,7 @@ import {
 import { getIdentity, type StoredIdentity } from "@/lib/store";
 import { RelayEditor } from "@/components/relay-editor";
 import { ResolutionPanel } from "@/components/resolution";
+import { TimeMachine } from "@/components/time-machine";
 import {
   Alert,
   Badge,
@@ -134,8 +135,8 @@ export default function IdentityPage() {
           <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
             Identity dashboard
           </div>
-          <h1 className="mt-2 break-all font-mono text-[14px] leading-relaxed text-white sm:text-[17px]">{toNpub(subject)}</h1>
-          <p className="mt-1 break-all font-mono text-[10px] text-slate-500">{subject}</p>
+          <h1 className="mt-2 break-all font-mono text-[14px] leading-relaxed text-ivory sm:text-[17px]">{toNpub(subject)}</h1>
+          <p className="mt-1 break-all font-mono text-[10px] text-ivory-muted">{subject}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <CopyButton value={raw ?? subject} label="Copy npub" />
             <CopyButton value={subject} label="Copy hex" />
@@ -149,13 +150,19 @@ export default function IdentityPage() {
         <div className="flex flex-wrap gap-2">
           <Link
             href={`/verify?npub=${encodeURIComponent(raw ?? subject)}`}
-            className="rounded-lg border border-white/12 bg-white/[0.03] px-3.5 py-2 text-[12.5px] text-slate-200 hover:border-white/25"
+            className="rounded-lg border border-ivory/12 bg-ivory/[0.03] px-3.5 py-2 text-[12.5px] text-ivory-dim hover:border-ivory/25"
           >
             Public verifier
           </Link>
           <Link
+            href={`/identity/${encodeURIComponent(raw ?? subject)}/time-machine`}
+            className="rounded-lg border border-ivory/12 bg-ivory/[0.03] px-3.5 py-2 text-[12.5px] text-ivory-dim hover:border-ivory/25"
+          >
+            Full time machine
+          </Link>
+          <Link
             href={`/auth?npub=${encodeURIComponent(raw ?? subject)}`}
-            className="rounded-lg border border-white/12 bg-white/[0.03] px-3.5 py-2 text-[12.5px] text-slate-200 hover:border-white/25"
+            className="rounded-lg border border-ivory/12 bg-ivory/[0.03] px-3.5 py-2 text-[12.5px] text-ivory-dim hover:border-ivory/25"
           >
             Test authentication
           </Link>
@@ -165,7 +172,7 @@ export default function IdentityPage() {
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_300px]">
         <div className="space-y-5">
           {loading ? (
-            <Card className="flex items-center gap-3 p-8 text-[13px] text-slate-400">
+            <Card className="flex items-center gap-3 p-8 text-[13px] text-ivory-muted">
               <Spinner /> Resolving from {relays.length} relay{relays.length === 1 ? "" : "s"}…
             </Card>
           ) : error ? (
@@ -173,7 +180,10 @@ export default function IdentityPage() {
               {error}
             </Alert>
           ) : resolution ? (
-            <ResolutionPanel resolution={resolution} />
+            <>
+              <ResolutionPanel resolution={resolution} compact />
+              <TimeMachine resolution={resolution} />
+            </>
           ) : null}
 
           {actionMessage ? <Alert tone="info">{actionMessage}</Alert> : null}
@@ -184,16 +194,16 @@ export default function IdentityPage() {
                 <SectionLabel>Lifecycle controls</SectionLabel>
                 <Badge tone="warn">demo keys in browser</Badge>
               </div>
-              <p className="text-[12.5px] leading-relaxed text-slate-400">
+              <p className="text-[12.5px] leading-relaxed text-ivory-muted">
                 This browser holds the Nostr key and every BCH key it generated, so it can produce the
                 two-signature rotation authorization. Actions are enabled only when the resolved state is
                 ACTIVE; rotating from a stale or conflicting head could fork the identity.
               </p>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-white/[0.08] bg-ink-900/60 p-4">
-                  <div className="text-[13px] font-medium text-white">Rotate BCH wallet</div>
-                  <p className="mt-1 text-[11.5px] leading-relaxed text-slate-400">
+                <div className="rounded-lg border border-ivory/[0.08] bg-ink-900/60 p-4">
+                  <div className="text-[13px] font-medium text-ivory">Rotate BCH wallet</div>
+                  <p className="mt-1 text-[11.5px] leading-relaxed text-ivory-muted">
                     The current wallet and the Nostr key authorize a new address. The old address becomes
                     SUPERSEDED, never ACTIVE.
                   </p>
@@ -209,9 +219,9 @@ export default function IdentityPage() {
                     Prepare rotation
                   </Button>
                 </div>
-                <div className="rounded-lg border border-rose-400/20 bg-rose-400/[0.03] p-4">
-                  <div className="text-[13px] font-medium text-white">Revoke identity</div>
-                  <p className="mt-1 text-[11.5px] leading-relaxed text-slate-400">
+                <div className="rounded-lg border border-danger/20 bg-danger/[0.03] p-4">
+                  <div className="text-[13px] font-medium text-ivory">Revoke identity</div>
+                  <p className="mt-1 text-[11.5px] leading-relaxed text-ivory-muted">
                     Signed by the current BCH wallet and the Nostr key. Revocation ends the chain; later
                     records are rejected as CONFLICT.
                   </p>
@@ -230,20 +240,20 @@ export default function IdentityPage() {
               </div>
 
               {!canAct ? (
-                <p className="mt-3 text-[11px] text-amber-300/80">
+                <p className="mt-3 text-[11px] text-signal-bright/80">
                   Controls are locked while the resolved status is {resolution?.status ?? "unknown"}.
                 </p>
               ) : null}
 
               {action !== "none" ? (
-                <div className="mt-5 rounded-lg border border-white/[0.09] bg-ink-950/60 p-5">
+                <div className="mt-5 rounded-lg border border-ivory/[0.09] bg-ink-950/60 p-5">
                   <div className="flex items-center justify-between">
-                    <div className="text-[13px] font-semibold text-white">
+                    <div className="text-[13px] font-semibold text-ivory">
                       {action === "rotate" ? "Confirm rotation" : "Confirm revocation"}
                     </div>
                     <button
                       onClick={() => setAction("none")}
-                      className="text-[11px] text-slate-500 hover:text-white"
+                      className="text-[11px] text-ivory-muted hover:text-ivory"
                     >
                       Cancel
                     </button>
@@ -251,17 +261,17 @@ export default function IdentityPage() {
 
                   {action === "rotate" ? (
                     <div className="mt-3 space-y-3">
-                      <div className="text-[12px] text-slate-400">
+                      <div className="text-[12px] text-ivory-muted">
                         <span className="text-muted">Current:</span>{" "}
-                        <span className="font-mono text-slate-200">
+                        <span className="font-mono text-ivory-dim">
                           {resolution?.activeBch?.address ?? "—"}
                         </span>
                       </div>
-                      <div className="text-[12px] text-slate-400">
+                      <div className="text-[12px] text-ivory-muted">
                         <span className="text-muted">Next:</span> a fresh demo keypair generated in this
                         browser
                       </div>
-                      <p className="text-[11.5px] leading-relaxed text-slate-500">
+                      <p className="text-[11.5px] leading-relaxed text-ivory-muted">
                         This publishes one rotate record at sequence{" "}
                         {(resolution?.head?.record.payload.sequence ?? 0) + 1}, signed by the current BCH
                         key, the new BCH key and your Nostr key.
@@ -297,7 +307,7 @@ export default function IdentityPage() {
           ) : stored ? (
             <Card className="p-5">
               <SectionLabel>Lifecycle controls</SectionLabel>
-              <p className="text-[12.5px] leading-relaxed text-slate-400">
+              <p className="text-[12.5px] leading-relaxed text-ivory-muted">
                 This identity uses a NIP-07 or external BCH signer. Rotation and revocation require
                 signatures from the current BCH wallet, which this browser does not hold.
               </p>
@@ -316,7 +326,7 @@ export default function IdentityPage() {
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <SectionLabel>Local record ledger</SectionLabel>
-                  <p className="text-[12px] text-slate-400">
+                  <p className="text-[12px] text-ivory-muted">
                     {stored.events.length} signed event{stored.events.length === 1 ? "" : "s"} cached in
                     this browser.
                   </p>
@@ -326,10 +336,10 @@ export default function IdentityPage() {
                 </Button>
               </div>
               <details className="mt-4">
-                <summary className="cursor-pointer text-[11px] text-slate-500 hover:text-slate-300">
+                <summary className="cursor-pointer text-[11px] text-ivory-muted hover:text-ivory-dim">
                   Show local event ids
                 </summary>
-                <ul className="mt-2 space-y-1 font-mono text-[10px] text-slate-600">
+                <ul className="mt-2 space-y-1 font-mono text-[10px] text-ivory-muted/70">
                   {stored.events.map((event) => (
                     <li key={event.id}>
                       {shortHex(event.id, 16, 10)} · kind {event.kind} · {timestamp(event.created_at)}
@@ -341,7 +351,7 @@ export default function IdentityPage() {
           ) : null}
         </div>
 
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-4">
           <Card className="p-5">
             <SectionLabel>Relays</SectionLabel>
             <RelayEditor relays={relays} onChange={setRelays} compact />
@@ -362,17 +372,17 @@ export default function IdentityPage() {
                 <Row label="Rejected" value={String(resolution.rejected.length)} />
               </div>
             ) : (
-              <p className="text-[12px] text-slate-500">Not resolved yet.</p>
+              <p className="text-[12px] text-ivory-muted">Not resolved yet.</p>
             )}
             <Divider />
-            <p className="text-[10.5px] leading-relaxed text-slate-600">
+            <p className="text-[10.5px] leading-relaxed text-ivory-muted/70">
               Verification is performed locally from signed events. Relays are untrusted transport.
             </p>
           </Card>
 
           <Card className="p-5">
             <SectionLabel>Independent check</SectionLabel>
-            <pre className="scroll-pane overflow-auto whitespace-pre-wrap break-all rounded-lg border border-white/[0.07] bg-ink-950/60 p-3 font-mono text-[10px] leading-relaxed text-slate-400">
+            <pre className="scroll-pane overflow-auto whitespace-pre-wrap break-all rounded-lg border border-ivory/[0.07] bg-ink-950/60 p-3 font-mono text-[10px] leading-relaxed text-ivory-muted">
 {`pnpm cli ${raw ?? ""} \\
   --relay ${relays[0] ?? "ws://127.0.0.1:7777"}`}
             </pre>
@@ -391,7 +401,7 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className={cn("flex items-center justify-between gap-3")}>
       <span className="text-muted">{label}</span>
-      <span className="truncate font-mono text-[11px] text-slate-300">{value}</span>
+      <span className="truncate font-mono text-[11px] text-ivory-dim">{value}</span>
     </div>
   );
 }

@@ -20,6 +20,8 @@
     "relay": "node scripts/local-relay.mjs",
     "demo": "pnpm -r --filter \"./packages/*\" build && tsx scripts/seed-demo.ts",
     "demo:lifecycle": "pnpm -r --filter \"./packages/*\" build && tsx examples/identity-lifecycle/run.ts",
+    "demo:standalone": "pnpm -r --filter \"./packages/*\" build && node scripts/build-standalone-demo.mjs",
+    "qa:browser": "node scripts/qa-browser.mjs",
     "cli": "pnpm -r --filter \"./packages/*\" build && node packages/verifier/dist/cli.js"
   },
   "devDependencies": {
@@ -32,6 +34,8 @@
     "@noble/hashes": "^1.8.0",
     "@types/node": "^22.10.2",
     "@types/ws": "^8.5.13",
+    "esbuild": "0.24.2",
+    "fast-check": "3.23.2",
     "nostr-tools": "^2.26.1",
     "playwright": "1.65.1",
     "tsx": "4.19.2",

@@ -198,6 +198,7 @@ async function main(): Promise<number> {
       ...resolution,
       assurance: "UNSYNCED" as const,
       sync: summarizeRelays([]),
+      sources: {},
     };
     if (parsed.json) {
       process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

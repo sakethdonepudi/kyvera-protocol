@@ -1,6 +1,7 @@
 # KYVERA
 
-**Identity. Proven.**
+**The Identity Continuity Protocol**
+**Keys change. Trust shouldn't disappear.**
 
 KYVERA is an open-source decentralized identity lifecycle protocol connecting Bitcoin Cash wallets with Nostr identities. It is a BCH Blaze 2026 submission for the Paytaca Decentralized Identity bounty.
 
@@ -45,7 +46,17 @@ Existing bindings (including the closest public implementation, [`nostr-bch-bind
 - cannot distinguish a stale relay from a quiet identity;
 - do not define challenge-response authentication for relying applications.
 
-KYVERA treats identity as a state machine with authorization rules, not as a directory of signatures. See [`docs/COMPETITOR_ANALYSIS.md`](docs/COMPETITOR_ANALYSIS.md) for source-level evidence and a comparison matrix.
+KYVERA treats identity as a state machine with authorization rules, not as a directory of signatures. See [`docs/COMPETITIVE_AUDIT_2026.md`](docs/COMPETITIVE_AUDIT_2026.md) for source-level evidence on Kola Link, CashLink ID, BCH Identity Bridge and prior art, and [`docs/FINAL_COMPETITIVE_AUDIT.md`](docs/FINAL_COMPETITIVE_AUDIT.md) for the submission-readiness assessment.
+
+## 2.1 What is new in this iteration
+
+- **Identity Time Machine** (`/demo` and every identity dashboard): inspect each signed record, its predecessor digest, both proofs, relay observations and the explanation for acceptance or rejection.
+- **Security laboratory** (`/lab`): six executable adversarial scenarios — authorized rotation, unauthorized rotation, replay, equivocation, missing history/rollback, revocation — using real verifier functions and deterministic unspendable keys.
+- **Guided 90-second demo** (`/demo`): the full argument in eight steps, with no wallet or relay required.
+- **Standalone HTML demo** (`demo/kyvera-standalone.html`): the real verifier bundled into one file for judges who cannot install dependencies.
+- **Wallet probe** (`/interop`): test a real Electron Cash / Cashonize / Paytaca `signmessage` signature and record the actual result. No compatibility is claimed until a real row exists.
+- **Editorial design system** (`docs/DESIGN_SYSTEM.md`): charcoal, ivory, signal orange, muted emerald; accessible interaction states and reduced-motion support.
+- **Property-based and malformed-input testing** for canonical JSON and authorization-chain parsing.
 
 ## 3. Architecture
 
@@ -56,9 +67,10 @@ packages/bch/             CashAddr handling, wallet signmessage signing/verifica
 packages/nostr/           NIP-78 event encoding, relay queries, publishing
 packages/verifier/        Independent verifier, lifecycle SDK, challenge service, CLI
 examples/                 Executable node verifier and lifecycle demonstration
-tests/                    Unit, security and relay integration tests, deterministic vectors
-scripts/                  Local demo relay, vector generator, demo seeder
-docs/                     Protocol, threat model, requirements, competitor and test reports
+demo/                     Single-file standalone browser demonstration
+tests/                    Unit, security, property and relay integration tests, vectors
+scripts/                  Local demo relay, vector generator, browser QA, standalone builder
+docs/                     Protocol, threat model, requirements, competitor and security reports
 ```
 
 ```mermaid
@@ -155,6 +167,9 @@ pnpm dev
 
 # terminal 3 — optional: seed a complete bind → rotate identity
 pnpm demo
+
+# no install required for the standalone demonstration
+open demo/kyvera-standalone.html
 ```
 
 `pnpm relay` is a demo relay only: NIP-01 EVENT/REQ/CLOSE, signature checking, in-memory store with a JSON snapshot. It has no auth, rate limits or NIP-11 document.
@@ -162,10 +177,12 @@ pnpm demo
 ## 8. Running tests
 
 ```bash
-pnpm test           # 82 tests across 9 files
+pnpm test           # 94 tests across 10 files (unit, integration, security, property)
 pnpm typecheck      # strict TypeScript for every package
 pnpm build          # production build
 pnpm demo:lifecycle # executable lifecycle demo with assertions
+pnpm qa:browser     # Playwright: desktop, mobile, reduced motion, keyboard
+pnpm demo:standalone# rebuild the single-file browser demo
 ```
 
 Deterministic vectors live in [`tests/fixtures/vectors.json`](tests/fixtures/vectors.json) and are reproducible:
@@ -236,17 +253,23 @@ A rotation signed without any one of those three keys is rejected. Losing the cu
 
 ## 11. Demonstration steps
 
+The fastest path for a judge is the single-file demo: open `demo/kyvera-standalone.html`. It runs the real verifier with deterministic fixtures and needs no install.
+
+For the full application:
+
 1. Start `pnpm relay` and `pnpm dev`.
-2. Open `http://localhost:3000/create`.
+2. Open `http://localhost:3000/demo` for the guided eight-step demonstration, or `/create` to make a real browser-local identity.
 3. Generate a demo Nostr key and a demo BCH wallet (or connect NIP-07 and sign with an external wallet).
 4. Inspect the exact BCH proof message and canonical Nostr content.
-5. Publish. Open the identity dashboard.
+5. Publish. Open the identity dashboard and use the **Identity Time Machine** to inspect record digests, both proofs and relay observations.
 6. Rotate to a new wallet. Confirm the old address becomes `SUPERSEDED`.
 7. Verify the same npub in the public verifier and from the CLI.
 8. Revoke the identity. Confirm the verifier returns `REVOKED` and no payment address.
-9. Run `pnpm demo:lifecycle` for the same sequence as an assertion-based terminal demo, including rejected forgery, rollback detection and equivocation.
+9. Run `/lab` for the six adversarial scenarios, and `pnpm demo:lifecycle` for the terminal version.
 
 Do not fund any demo address. Demo keys are throwaway material stored in browser localStorage.
+
+The 90-second script and recording guidance are in [`docs/DEMO.md`](docs/DEMO.md).
 
 ## 12. Security assumptions
 
@@ -292,14 +315,19 @@ Honest status as of 2026-11-18:
 - [x] Chain resolution with eight explicit result states
 - [x] Relay discovery, partial-sync and rollback-checkpoint handling
 - [x] Independent TypeScript SDK and CLI
-- [x] 82 automated tests, deterministic vectors, executable lifecycle demo
-- [x] Responsive web application, verified end-to-end in Chrome
-- [x] Local relay and reproducible offline demo
+- [x] 94 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
+- [x] Responsive editorial web application, verified end-to-end in Chrome, mobile viewport, reduced motion and keyboard navigation
+- [x] Identity Time Machine with per-record proof and relay inspection
+- [x] Interactive security laboratory with six real scenarios
+- [x] Single-file standalone browser demonstration (no install)
+- [x] Wallet interoperability probe and manual test instructions
+- [x] Competitive audit of Kola Link, CashLink ID, BCH Identity Bridge and prior art
 - [ ] Live wallet interoperability test (Electron Cash / Cashonize / Paytaca)
 - [ ] Public GitHub push, deployment, demo video, bounty submission
+- [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review
 
-Deadline note: the workspace brief states **22 November 2026, 19:30 IST**, while the official site currently advertises **14–28 November 2026**. The deadline must be confirmed on DoraHacks before submission.
+Deadline note: DoraHacks lists **22 November 2026, 14:00 UTC (19:30 IST)**. The BCH Blaze site footer still says 14–28 November; DoraHacks is authoritative. The Mainnet Track separately requires a live demo, WizardConnect and at least one mainnet transaction; confirm with organizers whether those apply to a bounty-only entry.
 
 ## 16. Future development
 

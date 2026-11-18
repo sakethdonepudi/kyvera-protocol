@@ -1,298 +1,321 @@
 import Link from "next/link";
+import { LifecycleDemo } from "@/components/lifecycle-demo";
 
 const STATUSES = [
   ["ACTIVE", "Valid chain, current authorization"],
-  ["SUPERSEDED", "Real historical binding, rotated away"],
-  ["REVOKED", "Explicitly withdrawn by the keys"],
-  ["EXPIRED", "Binding outlived its expiry"],
+  ["SUPERSEDED", "Valid history, rotated away"],
+  ["REVOKED", "Ended by the current keys"],
+  ["EXPIRED", "Authorization outlived its window"],
   ["CONFLICT", "The identity key equivocated"],
-  ["STALE", "History incomplete or relays silent"],
-  ["UNKNOWN", "No KYVERA records found"],
-  ["INVALID", "Proofs or chain failed verification"],
+  ["STALE", "History or relays are incomplete"],
+  ["UNKNOWN", "No records found"],
+  ["INVALID", "Proofs or transitions failed"],
 ];
-
-function Mark({ className = "" }: { className?: string }) {
-  return (
-    <svg className={className} width="34" height="34" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-      <path d="M13 1.8 23.2 7.6v10.8L13 24.2 2.8 18.4V7.6L13 1.8Z" stroke="currentColor" strokeWidth="1.2" />
-      <path d="m8.4 9.4 4.6 9 4.6-9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M13 6.4v4.2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export default function LandingPage() {
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-white/[0.06]">
-        <div className="grid-surface pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_72%)]" />
-        <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-20 sm:pb-28 sm:pt-28">
-          <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/[0.06] px-3 py-1.5 text-[10.5px] font-medium uppercase tracking-[0.16em] text-accent">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            BCH Blaze 2026 · Paytaca identity bounty
+      <section className="border-b border-ivory/[0.1]">
+        <div className="mx-auto max-w-[1240px] px-5 pb-16 pt-14 sm:pb-24 sm:pt-20">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 font-mono text-[9.5px] uppercase tracking-[0.18em] text-ivory-muted">
+              <span className="h-1.5 w-1.5 bg-signal" />
+              BCH Blaze 2026 · Paytaca identity bounty
+            </div>
+            <div className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-ivory-muted">
+              The identity continuity protocol
+            </div>
           </div>
 
-          <div className="mt-8 grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1.08fr_0.92fr]">
             <div>
-              <h1 className="max-w-2xl text-balance text-[38px] font-semibold leading-[1.08] tracking-tightest text-white sm:text-[54px]">
-                Your keys can change.
+              <h1 className="max-w-[720px] font-display text-[46px] leading-[0.98] tracking-editorial text-ivory sm:text-[70px]">
+                Keys change.
                 <br />
-                Your verified identity
+                Trust shouldn&apos;t
                 <br />
-                <span className="text-accent">should remain trustworthy.</span>
+                <span className="text-signal">disappear.</span>
               </h1>
-              <p className="mt-7 max-w-xl text-[15px] leading-relaxed text-slate-400">
-                KYVERA cryptographically links a Bitcoin Cash payment identity to a Nostr identity —
-                then keeps that link verifiable through rotation, revocation and compromise.
-                A signature proves what happened. KYVERA proves what is authorized{" "}
-                <span className="text-slate-200">now</span>.
+              <p className="mt-8 max-w-xl text-[14px] leading-relaxed text-ivory-dim">
+                A BCH address and a Nostr key can be bound with signatures. The harder question is what
+                remains authorized after a wallet is rotated, revoked or compromised. KYVERA makes that
+                distinction explicit, testable and independently verifiable.
               </p>
-              <div className="mt-9 flex flex-wrap items-center gap-3">
+
+              <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/create"
-                  className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-ink-950 transition-colors hover:bg-accent-bright"
+                  href="/demo"
+                  className="inline-flex items-center gap-2 rounded-[2px] bg-signal px-5 py-3 text-[13px] font-semibold text-charcoal-950 transition-colors hover:bg-signal-bright"
                 >
-                  Create a verifiable identity
+                  Watch the 90-second demo
                   <span aria-hidden="true">→</span>
                 </Link>
                 <Link
                   href="/verify"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-medium text-slate-200 transition-colors hover:border-white/25 hover:bg-white/[0.06]"
+                  className="inline-flex items-center gap-2 rounded-[2px] border border-ivory/25 px-5 py-3 text-[13px] text-ivory transition-colors hover:border-ivory/55 hover:bg-ivory/[0.04]"
                 >
                   Verify an identity
                 </Link>
               </div>
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-[11.5px] text-muted">
-                <span>◆ Dual-key proofs</span>
-                <span>◆ Nostr-native discovery</span>
-                <span>◆ No backend, no API key</span>
-              </div>
-            </div>
 
-            <div className="relative">
-              <div className="absolute -inset-8 -z-10 rounded-full bg-accent/[0.06] blur-3xl" />
-              <div className="rounded-2xl border border-white/[0.09] bg-ink-850/90 p-5 shadow-glow">
-                <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-accent">
-                      <Mark />
-                    </span>
-                    <div>
-                      <div className="text-[12px] font-semibold text-white">Identity resolution</div>
-                      <div className="font-mono text-[10px] text-slate-500">illustrative lifecycle</div>
+              <div className="mt-10 grid max-w-lg grid-cols-3 gap-px bg-ivory/[0.1]">
+                {[
+                  ["82", "automated tests"],
+                  ["8", "explicit states"],
+                  ["0", "verification servers"],
+                ].map(([value, label]) => (
+                  <div key={label} className="bg-charcoal-950 px-3 py-4">
+                    <div className="font-display text-[26px] leading-none text-ivory">{value}</div>
+                    <div className="mt-1.5 font-mono text-[8.5px] uppercase tracking-[0.12em] text-ivory-muted">
+                      {label}
                     </div>
                   </div>
-                  <span className="rounded-full border border-accent/35 bg-accent/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-accent-bright">
-                    Active
-                  </span>
-                </div>
-
-                <div className="mt-4 space-y-3">
-                  <div className="rounded-lg border border-white/[0.07] bg-ink-900/80 p-3.5">
-                    <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.14em] text-muted">
-                      <span>Seq 0 · bind</span>
-                      <span className="text-amber-300/80">superseded</span>
-                    </div>
-                    <div className="mt-2 flex items-center gap-2 font-mono text-[12px] text-slate-500">
-                      <span className="h-2 w-2 rounded-full border border-amber-400/60" />
-                      wallet A · bitcoincash:q…a91f
-                    </div>
-                  </div>
-                  <div className="ml-3 h-4 border-l border-dashed border-white/20" />
-                  <div className="rounded-lg border border-accent/25 bg-accent/[0.05] p-3.5">
-                    <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.14em] text-accent/80">
-                      <span>Seq 1 · rotate</span>
-                      <span>current head</span>
-                    </div>
-                    <div className="mt-2 flex items-center gap-2 font-mono text-[12px] text-white">
-                      <span className="h-2 w-2 rounded-full bg-accent" />
-                      wallet B · bitcoincash:q…7c02
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-white/[0.07] bg-white/[0.06]">
-                  {[
-                    ["Proofs", "verified"],
-                    ["Relays", "3 / 3"],
-                    ["Chain", "intact"],
-                  ].map(([label, value]) => (
-                    <div key={label} className="bg-ink-900 px-3 py-2.5">
-                      <div className="text-[9px] uppercase tracking-[0.14em] text-muted">{label}</div>
-                      <div className="mt-0.5 text-[11px] text-slate-200">{value}</div>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="mt-4 text-[10.5px] leading-relaxed text-slate-500">
-                  A historical signature for wallet A stays cryptographically valid forever. It is not
-                  the current payment identity — and KYVERA says so explicitly.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-5 py-20">
-        <div className="max-w-2xl">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
-            The gap
-          </div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-            A valid signature is not a valid identity.
-          </h2>
-          <p className="mt-4 text-[14px] leading-relaxed text-slate-400">
-            Existing BCH↔Nostr bindings can prove that two keys were associated once. None of them
-            answer the question a merchant, relay or application actually has: which address is
-            authorized right now?
-          </p>
-        </div>
-
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {[
-            {
-              title: "Historical proofs never expire",
-              body: "A signature from a compromised or retired wallet remains mathematically valid. Without an explicit sequence and revocation state, it can be replayed as current.",
-            },
-            {
-              title: "A relay can withhold the newest state",
-              body: "Sorting events by created_at lets an old binding look newest. Without a hash-linked chain and freshness reporting, a verifier cannot tell quiet from stale.",
-            },
-            {
-              title: "Key compromise needs a lifecycle",
-              body: "Rotation and revocation are authorization events, not key replacements. They must be signed under a documented policy — and rejected when they are not.",
-            },
-          ].map((item, index) => (
-            <div key={item.title} className="rounded-xl border border-white/[0.08] bg-ink-850/60 p-5">
-              <div className="font-mono text-[11px] text-accent/70">0{index + 1}</div>
-              <h3 className="mt-3 text-[15px] font-semibold text-white">{item.title}</h3>
-              <p className="mt-2 text-[12.5px] leading-relaxed text-slate-400">{item.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="border-y border-white/[0.06] bg-ink-900/40">
-        <div className="mx-auto max-w-6xl px-5 py-20">
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-            <div>
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
-                The protocol
-              </div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-                Two independent keys.
-                <br />
-                One authorized state.
-              </h2>
-              <p className="mt-4 max-w-md text-[14px] leading-relaxed text-slate-400">
-                Every binding is a Nostr event (NIP-78, kind 30078) whose author is the identity key and
-                whose content is a canonical, hash-linked record. The BCH key signs a domain-separated
-                proof over that exact record. Neither key is derived from the other.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {["BIP-340 Schnorr", "ECDSA signmessage", "SHA-256 chain", "Canonical JSON"].map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[10.5px] text-slate-300"
-                  >
-                    {tag}
-                  </span>
                 ))}
               </div>
             </div>
 
-            <div className="space-y-3">
-              {[
-                ["bind", "New BCH key + Nostr key", "Establishes the genesis binding at sequence 0."],
-                ["rotate", "Current BCH + new BCH + Nostr", "The old wallet explicitly authorizes its replacement."],
-                ["revoke", "Current BCH + Nostr", "Ends the identity. Historical proofs stay historical."],
-              ].map(([type, keys, description]) => (
-                <div
-                  key={type}
-                  className="grid gap-2 rounded-xl border border-white/[0.08] bg-ink-850/70 p-5 sm:grid-cols-[110px_1fr]"
-                >
-                  <div className="font-mono text-[12px] uppercase tracking-wider text-accent">{type}</div>
-                  <div>
-                    <div className="text-[13px] font-medium text-white">{keys}</div>
-                    <p className="mt-1 text-[12px] leading-relaxed text-slate-400">{description}</p>
-                  </div>
-                </div>
-              ))}
-              <p className="px-1 text-[11px] leading-relaxed text-muted">
-                Consequence, stated plainly: losing the current BCH key blocks rotation. KYVERA does not
-                pretend otherwise or hide a recovery shortcut.
+            <div className="lg:pt-2">
+              <LifecycleDemo />
+              <p className="mt-3 font-mono text-[9px] leading-relaxed tracking-[0.06em] text-ivory-muted">
+                This is an actual verification run in your browser, not a recorded animation. The fixture
+                keys are deterministic and unspendable.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-20">
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <div className="max-w-xl">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
-              Verification results
+      <section className="mx-auto max-w-[1240px] px-5 py-20">
+        <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
+          <div>
+            <div className="kicker">01 / The gap</div>
+            <h2 className="mt-4 font-display text-[34px] leading-[1.08] tracking-editorial text-ivory">
+              A valid signature
+              <br />
+              is not a current
+              <br />
+              authorization.
+            </h2>
+            <p className="mt-5 max-w-sm text-[12.5px] leading-relaxed text-ivory-dim">
+              Existing bindings prove that two keys were associated once. They rarely answer which
+              address a payer should trust <em>now</em>.
+            </p>
+          </div>
+
+          <div className="grid gap-px bg-ivory/[0.1] sm:grid-cols-3">
+            {[
+              [
+                "01",
+                "History never expires",
+                "A signature from a retired or compromised wallet stays mathematically valid forever. Recency is not authorization.",
+              ],
+              [
+                "02",
+                "Newest is not authorized",
+                "Sorting events by created_at lets a stale relay, a replayed binding or an equivocating key look current.",
+              ],
+              [
+                "03",
+                "Silence is not freshness",
+                "A verifier that cannot reach enough relays must say so. Falling back to an older address is a payment risk.",
+              ],
+            ].map(([number, title, body]) => (
+              <div key={number} className="bg-charcoal-950 p-5">
+                <div className="font-mono text-[9px] tracking-[0.14em] text-signal">{number}</div>
+                <h3 className="mt-3 font-display text-[19px] leading-tight text-ivory">{title}</h3>
+                <p className="mt-2 text-[11.5px] leading-relaxed text-ivory-muted">{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-ivory/[0.1] bg-charcoal-900/40">
+        <div className="mx-auto max-w-[1240px] px-5 py-20">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1fr]">
+            <div>
+              <div className="kicker">02 / The chain</div>
+              <h2 className="mt-4 font-display text-[34px] leading-[1.08] tracking-editorial text-ivory">
+                Identity is a sequence,
+                <br />
+                not a directory entry.
+              </h2>
+              <p className="mt-5 max-w-md text-[12.5px] leading-relaxed text-ivory-dim">
+                Every KYVERA record commits to the previous record&apos;s digest. The chain starts at a
+                genesis binding and can only move forward through explicitly authorized transitions.
+              </p>
+              <div className="mt-7 border border-ivory/[0.14]">
+                <div className="grid grid-cols-[64px_1fr] border-b border-ivory/[0.1]">
+                  <div className="border-r border-ivory/[0.1] p-3 font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-muted">
+                    bind
+                  </div>
+                  <div className="p-3">
+                    <div className="font-mono text-[10px] text-ivory">NEW BCH KEY + NOSTR KEY</div>
+                    <div className="mt-1 text-[10.5px] text-ivory-muted">Sequence 0. No predecessor.</div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-[64px_1fr] border-b border-ivory/[0.1]">
+                  <div className="border-r border-ivory/[0.1] p-3 font-mono text-[9px] uppercase tracking-[0.12em] text-signal">
+                    rotate
+                  </div>
+                  <div className="p-3">
+                    <div className="font-mono text-[10px] text-ivory">CURRENT BCH + NEW BCH + NOSTR</div>
+                    <div className="mt-1 text-[10.5px] text-ivory-muted">
+                      The old wallet authorizes leaving. The new wallet proves control.
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-[64px_1fr]">
+                  <div className="border-r border-ivory/[0.1] p-3 font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-muted">
+                    revoke
+                  </div>
+                  <div className="p-3">
+                    <div className="font-mono text-[10px] text-ivory">CURRENT BCH + NOSTR</div>
+                    <div className="mt-1 text-[10.5px] text-ivory-muted">
+                      Terminal. Later transitions are rejected as conflict.
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white">
-              Uncertainty is a result, not an error message.
+
+            <div>
+              <div className="kicker">03 / The difference</div>
+              <h2 className="mt-4 font-display text-[34px] leading-[1.08] tracking-editorial text-ivory">
+                What competitors answer,
+                <br />
+                and what they don&apos;t.
+              </h2>
+              <div className="mt-5 space-y-4 text-[12px] leading-relaxed text-ivory-dim">
+                <p>
+                  <span className="text-ivory">Kola Link</span> publishes a signed message and an optional
+                  XO anchor; rotation is a new binding and the newest event wins.{" "}
+                  <span className="text-ivory">CashLink ID</span> orders rotations with an on-chain
+                  commitment and also selects the newest event.{" "}
+                  <span className="text-ivory">BCH Identity Bridge</span> marks prior bindings with
+                  revocation/supersession events discovered at verification time.
+                </p>
+                <p className="border-l-2 border-signal/70 pl-3">
+                  None of the inspected implementations resolves a <span className="text-ivory">hash-linked
+                  authorization chain</span> with explicit `SUPERSEDED`, `CONFLICT` and `STALE` results.
+                  Newest-wins cannot distinguish a replay from a rotation, or a quiet identity from a
+                  withholding relay.
+                </p>
+                <p>
+                  KYVERA does not claim those projects are insecure. They make different scope choices.
+                  The evidence and source references are in the{" "}
+                  <a
+                    href="https://github.com/sakethdonepudi/kyvera-protocol/blob/main/docs/COMPETITIVE_AUDIT_2026.md"
+                    className="text-ivory underline decoration-ivory/25 underline-offset-4 hover:text-signal"
+                  >
+                    competitive audit
+                  </a>
+                  .
+                </p>
+              </div>
+              <Link
+                href="/lab"
+                className="mt-6 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-signal hover:text-signal-bright"
+              >
+                See the adversarial scenarios run →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1240px] px-5 py-20">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <div className="kicker">04 / The time machine</div>
+            <h2 className="mt-3 font-display text-[34px] leading-[1.08] tracking-editorial text-ivory">
+              Inspect the state transition,
+              <br />
+              not just the badge.
             </h2>
           </div>
-          <Link href="/verify" className="text-[13px] text-accent hover:text-accent-bright">
-            Open the public verifier →
+          <Link href="/demo" className="font-mono text-[10px] uppercase tracking-[0.14em] text-signal hover:text-signal-bright">
+            Open the guided demo →
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.06] sm:grid-cols-2 lg:grid-cols-4">
-          {STATUSES.map(([status, description]) => (
-            <div key={status} className="bg-ink-900/80 p-4">
-              <div
-                className={
-                  status === "ACTIVE"
-                    ? "font-mono text-[11px] uppercase tracking-[0.12em] text-accent"
-                    : ["CONFLICT", "INVALID", "REVOKED"].includes(status)
-                      ? "font-mono text-[11px] uppercase tracking-[0.12em] text-rose-300"
-                      : ["SUPERSEDED", "EXPIRED", "STALE"].includes(status)
-                        ? "font-mono text-[11px] uppercase tracking-[0.12em] text-amber-300"
-                        : "font-mono text-[11px] uppercase tracking-[0.12em] text-slate-400"
-                }
-              >
-                {status}
-              </div>
-              <p className="mt-2 text-[11.5px] leading-relaxed text-slate-500">{description}</p>
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          {[
+            ["Record digests", "Payload digest, full-record digest and the predecessor link are exposed for every step."],
+            ["Both proofs", "The exact BCH proof message, recovered address and Nostr Schnorr signature are inspectable."],
+            ["Relay observations", "Which relay supplied each record, plus explicit FULL / PARTIAL / UNSYNCED freshness."],
+          ].map(([title, body]) => (
+            <div key={title} className="border border-ivory/[0.12] p-5">
+              <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-signal">instrument</div>
+              <h3 className="mt-3 text-[14px] font-medium text-ivory">{title}</h3>
+              <p className="mt-2 text-[11.5px] leading-relaxed text-ivory-muted">{body}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 pb-8">
-        <div className="rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/[0.07] to-transparent p-8 sm:p-10">
-          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight text-white">
-                Verify it yourself. Without us.
-              </h2>
-              <p className="mt-2 max-w-lg text-[13px] leading-relaxed text-slate-400">
-                Every state in this app resolves from signed Nostr events through an open TypeScript
-                SDK. The CLI reproduces the same result from a terminal.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/create"
-                className="rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-ink-950 transition-colors hover:bg-accent-bright"
-              >
-                Run the demo
-              </Link>
-              <Link
-                href="/developers"
-                className="rounded-lg border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-medium text-slate-200 transition-colors hover:border-white/25"
-              >
-                Read the SDK
-              </Link>
-            </div>
+      <section className="border-t border-ivory/[0.1]">
+        <div className="mx-auto max-w-[1240px] px-5 py-20">
+          <div className="kicker">05 / The result space</div>
+          <h2 className="mt-4 max-w-2xl font-display text-[34px] leading-[1.08] tracking-editorial text-ivory">
+            Uncertainty is a result,
+            <br />
+            not an error toast.
+          </h2>
+          <div className="mt-8 grid gap-px bg-ivory/[0.1] sm:grid-cols-2 lg:grid-cols-4">
+            {STATUSES.map(([status, description]) => (
+              <div key={status} className="bg-charcoal-950 p-4">
+                <div
+                  className={
+                    status === "ACTIVE"
+                      ? "font-mono text-[10px] uppercase tracking-[0.14em] text-accent"
+                      : ["REVOKED", "CONFLICT", "INVALID"].includes(status)
+                        ? "font-mono text-[10px] uppercase tracking-[0.14em] text-[#E5A49C]"
+                        : status === "SUPERSEDED" || status === "STALE"
+                          ? "font-mono text-[10px] uppercase tracking-[0.14em] text-signal"
+                          : "font-mono text-[10px] uppercase tracking-[0.14em] text-ivory-muted"
+                  }
+                >
+                  {status}
+                </div>
+                <p className="mt-2 text-[11px] leading-relaxed text-ivory-muted">{description}</p>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-[1240px] px-5 pb-8">
+        <div className="grid gap-8 border border-ivory/[0.14] p-7 sm:p-9 lg:grid-cols-[1.2fr_0.8fr]">
+          <div>
+            <h2 className="font-display text-[30px] leading-tight tracking-editorial text-ivory">
+              Verify it yourself. Without us.
+            </h2>
+            <p className="mt-3 max-w-xl text-[12.5px] leading-relaxed text-ivory-dim">
+              The same TypeScript SDK powers the web app, the CLI and the security lab. No API key, no
+              hosted verifier, no centralized identity provider.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3 lg:justify-end">
+            <Link
+              href="/create"
+              className="rounded-[2px] bg-signal px-5 py-3 text-[13px] font-semibold text-charcoal-950 hover:bg-signal-bright"
+            >
+              Create an identity
+            </Link>
+            <Link
+              href="/developers"
+              className="rounded-[2px] border border-ivory/25 px-5 py-3 text-[13px] text-ivory hover:border-ivory/55"
+            >
+              Read the SDK
+            </Link>
+          </div>
+        </div>
+        <p className="mt-4 max-w-3xl font-mono text-[9px] leading-relaxed tracking-[0.06em] text-ivory-muted">
+          KYVERA does not claim recovery after losing all authorized keys, absolute rollback protection
+          against a colluding relay set, or production readiness without an independent audit and live
+          wallet testing.
+        </p>
       </section>
     </div>
   );
