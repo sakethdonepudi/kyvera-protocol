@@ -267,7 +267,7 @@ export default function MerchantPage() {
               <li>◆ Only an ACTIVE chain can unlock a destination.</li>
               <li>◆ Rotation changes the destination after verification.</li>
               <li>◆ The old wallet is reported superseded.</li>
-              <li>◆ No payment was broadcast in this demo.</li>
+              <li>◆ Deterministic fixtures; no record or payment was published.</li>
             </ul>
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
