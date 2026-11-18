@@ -1,0 +1,796 @@
+{
+  "spec": "kyvera-test-vectors-v1",
+  "note": "Keys are unspendable and derived from sha256('kyvera test key: <label>'). Never send funds to these addresses.",
+  "network": "mainnet",
+  "subject": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+  "bch": {
+    "A": {
+      "address": "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp",
+      "network": "mainnet",
+      "publicKey": "02b4d9fae67155eb3755ef9e7d4d7c5ef682934b6241555c017485bded44f88cf9"
+    },
+    "B": {
+      "address": "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh",
+      "network": "mainnet",
+      "publicKey": "03f30dd9a8a771257e27f2480096d8c46531326a59fe9612f5bb950f85c9b09388"
+    },
+    "C": {
+      "address": "bitcoincash:qq76gnnzzuggwvn0dys53l3cayeu0qflh5973nrqsn",
+      "network": "mainnet",
+      "publicKey": "03dbed02d3aba0239e6a7b3a61bfad2b635573180b56cc4bedb3168864b8bea03f"
+    }
+  },
+  "canonical": [
+    {
+      "name": "key order",
+      "value": {
+        "b": 2,
+        "a": 1
+      },
+      "canonical": "{\"a\":1,\"b\":2}",
+      "sha256": "43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777"
+    },
+    {
+      "name": "nested",
+      "value": {
+        "z": [
+          3,
+          {
+            "y": true,
+            "x": null
+          }
+        ],
+        "a": "text"
+      },
+      "canonical": "{\"a\":\"text\",\"z\":[3,{\"x\":null,\"y\":true}]}",
+      "sha256": "1624864907405e0cee31270bc456ba9027032b860b54ed6f144cfcdb6930fc26"
+    },
+    {
+      "name": "unicode NFC",
+      "value": {
+        "name": "Kyvéra"
+      },
+      "canonical": "{\"name\":\"Kyvéra\"}",
+      "sha256": "c019b4a10e87b5e318b232df47ea0884c57975dfc2e39d242f640eb52876c7c2"
+    }
+  ],
+  "bchMessage": {
+    "message": "KYVERA/v1/bch-proof\nrole:new\naddress:bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\nrecord:95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765",
+    "hash": "bc8e9c85cdfc1e11a447dcc7f847474e467add84867f0e1175b956e305ac39bc",
+    "address": "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp",
+    "signature": "H5uW/pylBR4+VvrIFn77SX+H6tYU2Aubbhm6gggV2rJlV+07283u9FQI2VN7FD4+yxHcjsRkfRR/GahTynnkMl4="
+  },
+  "records": [
+    {
+      "name": "valid bind",
+      "event": {
+        "kind": 30078,
+        "created_at": 1794000000,
+        "tags": [
+          [
+            "d",
+            "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:0:95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765"
+          ],
+          [
+            "k",
+            "kyvera-v1"
+          ],
+          [
+            "s",
+            "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+          ],
+          [
+            "seq",
+            "0"
+          ],
+          [
+            "prev",
+            "genesis"
+          ],
+          [
+            "b",
+            "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+          ],
+          [
+            "alt",
+            "KYVERA identity record v1 (bind)"
+          ]
+        ],
+        "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"network\":\"mainnet\",\"publicKey\":\"02b4d9fae67155eb3755ef9e7d4d7c5ef682934b6241555c017485bded44f88cf9\"},\"expiresAt\":null,\"issuedAt\":1794000000,\"nonce\":\"0101010101010101010101010101010101010101010101010101010101010101\",\"previous\":null,\"protocol\":\"kyvera\",\"sequence\":0,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"bind\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H5uW/pylBR4+VvrIFn77SX+H6tYU2Aubbhm6gggV2rJlV+07283u9FQI2VN7FD4+yxHcjsRkfRR/GahTynnkMl4=\"}]}}",
+        "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+        "id": "ac74ac712b931dfd4fe20eb053d4cc39f8cd2dec35659b27d5d39afae53b6552",
+        "sig": "7d24de91bc7ee4192ac80468a724e8954abb2619889e737e4825c65430bd384a402ec73529063d49a0a5927e6c13d1faf181a5392c242820a46a1911eaed12ad"
+      },
+      "recordId": "9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8",
+      "payloadDigest": "95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765",
+      "verify": {
+        "ok": true
+      }
+    },
+    {
+      "name": "valid rotation",
+      "event": {
+        "kind": 30078,
+        "created_at": 1794000060,
+        "tags": [
+          [
+            "d",
+            "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:1:9ad2d8a63b980e98c00d56cf01ab5aab0f0bddc6f5ab6be7489300a7db89dd48"
+          ],
+          [
+            "k",
+            "kyvera-v1"
+          ],
+          [
+            "s",
+            "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+          ],
+          [
+            "seq",
+            "1"
+          ],
+          [
+            "prev",
+            "9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8"
+          ],
+          [
+            "b",
+            "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+          ],
+          [
+            "b",
+            "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh"
+          ],
+          [
+            "alt",
+            "KYVERA identity record v1 (rotate)"
+          ]
+        ],
+        "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"network\":\"mainnet\",\"publicKey\":\"03f30dd9a8a771257e27f2480096d8c46531326a59fe9612f5bb950f85c9b09388\"},\"expiresAt\":null,\"issuedAt\":1794000060,\"nonce\":\"0202020202020202020202020202020202020202020202020202020202020202\",\"previous\":\"9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8\",\"protocol\":\"kyvera\",\"sequence\":1,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"rotate\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"current\",\"signature\":\"HxGPfpxtWyeEffEb+v6mcLcLOGtBF8nWgJb1hYQjHJF1JqxzgEjA/9Iu/BP+n1LsaA4riNvl5oRLdAkX+PVLESY=\"},{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H/CvH+RAalh+xg/BTH2X5juk7zSvK1B+4LdZkTUt9axMazIKEec9S7XK/6GsVczvPa48AMuwApZlblpqNwotVVY=\"}]}}",
+        "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+        "id": "aa788fc381def84604e676f5e439429031bee7892955252ddd0715bc8cc41e38",
+        "sig": "ac6e671ef5012da6b24549cfefa664799747e00ba0a4a832b774de0f0b0ad448c568a4b8099da0602dfcda76a03ec634b82a356fc62022b18f7c994a651dc4ac"
+      },
+      "recordId": "df50d206cf9e496ad554e2a5338c0e126152a0522d7727156ccfe5097aa780ff",
+      "payloadDigest": "9ad2d8a63b980e98c00d56cf01ab5aab0f0bddc6f5ab6be7489300a7db89dd48",
+      "verify": {
+        "ok": true
+      }
+    },
+    {
+      "name": "valid revocation",
+      "event": {
+        "kind": 30078,
+        "created_at": 1794000120,
+        "tags": [
+          [
+            "d",
+            "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:2:698612b7957696dffbb815db1d517297f8bd1b4ead9463fbec69892ece7364d4"
+          ],
+          [
+            "k",
+            "kyvera-v1"
+          ],
+          [
+            "s",
+            "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+          ],
+          [
+            "seq",
+            "2"
+          ],
+          [
+            "prev",
+            "df50d206cf9e496ad554e2a5338c0e126152a0522d7727156ccfe5097aa780ff"
+          ],
+          [
+            "b",
+            "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh"
+          ],
+          [
+            "alt",
+            "KYVERA identity record v1 (revoke)"
+          ]
+        ],
+        "content": "{\"payload\":{\"bch\":null,\"expiresAt\":null,\"issuedAt\":1794000120,\"nonce\":\"0303030303030303030303030303030303030303030303030303030303030303\",\"previous\":\"df50d206cf9e496ad554e2a5338c0e126152a0522d7727156ccfe5097aa780ff\",\"protocol\":\"kyvera\",\"sequence\":2,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"revoke\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"current\",\"signature\":\"H3xYfR/GwpXiTTNzhFf+K0n68bJjINbw2JJwZ46xUDnwRPnQx510Vjtm0R71eqwGVZcselJH81Vb2AYJ/haovi4=\"}]}}",
+        "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+        "id": "83a66ba4ce4e9154865fb4cafc268db3887b346b2d5c4a90ed558a8b07b821fe",
+        "sig": "151a4fe4344c431563ca4ecec5165986f33fbd39e46283846087e70a4c2bb003f6b5d3715a4210b1b492aa275ab204fb5645bd7781062eda13665bebafe8c345"
+      },
+      "recordId": "01ba8e06bc4a0ff0753b49f2ec70096f14e00b43699adbcf522f4de753845395",
+      "payloadDigest": "698612b7957696dffbb815db1d517297f8bd1b4ead9463fbec69892ece7364d4",
+      "verify": {
+        "ok": true
+      }
+    },
+    {
+      "name": "tampered BCH proof",
+      "event": {
+        "kind": 30078,
+        "created_at": 1794000000,
+        "tags": [
+          [
+            "d",
+            "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:0:95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765"
+          ],
+          [
+            "k",
+            "kyvera-v1"
+          ],
+          [
+            "s",
+            "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+          ],
+          [
+            "seq",
+            "0"
+          ],
+          [
+            "prev",
+            "genesis"
+          ],
+          [
+            "b",
+            "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+          ],
+          [
+            "alt",
+            "KYVERA identity record v1 (bind)"
+          ]
+        ],
+        "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"network\":\"mainnet\",\"publicKey\":\"02b4d9fae67155eb3755ef9e7d4d7c5ef682934b6241555c017485bded44f88cf9\"},\"expiresAt\":null,\"issuedAt\":1794000000,\"nonce\":\"0101010101010101010101010101010101010101010101010101010101010101\",\"previous\":null,\"protocol\":\"kyvera\",\"sequence\":0,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"bind\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H5uW/pylBRA+VvrIFn77SX+H6tYU2Aubbhm6gggV2rJlV+07283u9FQI2VN7FD4+yxHcjsRkfRR/GahTynnkMl4=\"}]}}",
+        "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+        "id": "f38fb7d9269ba456a38aa4d7975641153e2d0856a016f035e5b34da78c8d01e3",
+        "sig": "1fe5075204eadb5620d76f1302104a80dd37b8566a813ac61576f989a38c49b58514cb593e847799bf7615adbf7bfd7ec37b2ef4da8d81a1feab5ad645a18f1a"
+      },
+      "verify": {
+        "ok": false,
+        "code": "BCH_SIGNATURE_NOT_BY_ADDRESS"
+      }
+    }
+  ],
+  "chains": [
+    {
+      "name": "bind only",
+      "events": [
+        {
+          "kind": 30078,
+          "created_at": 1794000000,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:0:95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "0"
+            ],
+            [
+              "prev",
+              "genesis"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (bind)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"network\":\"mainnet\",\"publicKey\":\"02b4d9fae67155eb3755ef9e7d4d7c5ef682934b6241555c017485bded44f88cf9\"},\"expiresAt\":null,\"issuedAt\":1794000000,\"nonce\":\"0101010101010101010101010101010101010101010101010101010101010101\",\"previous\":null,\"protocol\":\"kyvera\",\"sequence\":0,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"bind\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H5uW/pylBR4+VvrIFn77SX+H6tYU2Aubbhm6gggV2rJlV+07283u9FQI2VN7FD4+yxHcjsRkfRR/GahTynnkMl4=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "ac74ac712b931dfd4fe20eb053d4cc39f8cd2dec35659b27d5d39afae53b6552",
+          "sig": "7d24de91bc7ee4192ac80468a724e8954abb2619889e737e4825c65430bd384a402ec73529063d49a0a5927e6c13d1faf181a5392c242820a46a1911eaed12ad"
+        }
+      ],
+      "now": 1794003600,
+      "expect": {
+        "status": "ACTIVE",
+        "sequence": 0,
+        "address": "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+      }
+    },
+    {
+      "name": "rotation supersedes the old address",
+      "events": [
+        {
+          "kind": 30078,
+          "created_at": 1794000000,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:0:95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "0"
+            ],
+            [
+              "prev",
+              "genesis"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (bind)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"network\":\"mainnet\",\"publicKey\":\"02b4d9fae67155eb3755ef9e7d4d7c5ef682934b6241555c017485bded44f88cf9\"},\"expiresAt\":null,\"issuedAt\":1794000000,\"nonce\":\"0101010101010101010101010101010101010101010101010101010101010101\",\"previous\":null,\"protocol\":\"kyvera\",\"sequence\":0,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"bind\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H5uW/pylBR4+VvrIFn77SX+H6tYU2Aubbhm6gggV2rJlV+07283u9FQI2VN7FD4+yxHcjsRkfRR/GahTynnkMl4=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "ac74ac712b931dfd4fe20eb053d4cc39f8cd2dec35659b27d5d39afae53b6552",
+          "sig": "7d24de91bc7ee4192ac80468a724e8954abb2619889e737e4825c65430bd384a402ec73529063d49a0a5927e6c13d1faf181a5392c242820a46a1911eaed12ad"
+        },
+        {
+          "kind": 30078,
+          "created_at": 1794000060,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:1:9ad2d8a63b980e98c00d56cf01ab5aab0f0bddc6f5ab6be7489300a7db89dd48"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "1"
+            ],
+            [
+              "prev",
+              "9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "b",
+              "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (rotate)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"network\":\"mainnet\",\"publicKey\":\"03f30dd9a8a771257e27f2480096d8c46531326a59fe9612f5bb950f85c9b09388\"},\"expiresAt\":null,\"issuedAt\":1794000060,\"nonce\":\"0202020202020202020202020202020202020202020202020202020202020202\",\"previous\":\"9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8\",\"protocol\":\"kyvera\",\"sequence\":1,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"rotate\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"current\",\"signature\":\"HxGPfpxtWyeEffEb+v6mcLcLOGtBF8nWgJb1hYQjHJF1JqxzgEjA/9Iu/BP+n1LsaA4riNvl5oRLdAkX+PVLESY=\"},{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H/CvH+RAalh+xg/BTH2X5juk7zSvK1B+4LdZkTUt9axMazIKEec9S7XK/6GsVczvPa48AMuwApZlblpqNwotVVY=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "aa788fc381def84604e676f5e439429031bee7892955252ddd0715bc8cc41e38",
+          "sig": "ac6e671ef5012da6b24549cfefa664799747e00ba0a4a832b774de0f0b0ad448c568a4b8099da0602dfcda76a03ec634b82a356fc62022b18f7c994a651dc4ac"
+        }
+      ],
+      "now": 1794003600,
+      "expect": {
+        "status": "ACTIVE",
+        "sequence": 1,
+        "address": "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh"
+      }
+    },
+    {
+      "name": "revocation wins over a replayed binding",
+      "events": [
+        {
+          "kind": 30078,
+          "created_at": 1794000000,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:0:95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "0"
+            ],
+            [
+              "prev",
+              "genesis"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (bind)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"network\":\"mainnet\",\"publicKey\":\"02b4d9fae67155eb3755ef9e7d4d7c5ef682934b6241555c017485bded44f88cf9\"},\"expiresAt\":null,\"issuedAt\":1794000000,\"nonce\":\"0101010101010101010101010101010101010101010101010101010101010101\",\"previous\":null,\"protocol\":\"kyvera\",\"sequence\":0,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"bind\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H5uW/pylBR4+VvrIFn77SX+H6tYU2Aubbhm6gggV2rJlV+07283u9FQI2VN7FD4+yxHcjsRkfRR/GahTynnkMl4=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "ac74ac712b931dfd4fe20eb053d4cc39f8cd2dec35659b27d5d39afae53b6552",
+          "sig": "7d24de91bc7ee4192ac80468a724e8954abb2619889e737e4825c65430bd384a402ec73529063d49a0a5927e6c13d1faf181a5392c242820a46a1911eaed12ad"
+        },
+        {
+          "kind": 30078,
+          "created_at": 1794000060,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:1:9ad2d8a63b980e98c00d56cf01ab5aab0f0bddc6f5ab6be7489300a7db89dd48"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "1"
+            ],
+            [
+              "prev",
+              "9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "b",
+              "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (rotate)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"network\":\"mainnet\",\"publicKey\":\"03f30dd9a8a771257e27f2480096d8c46531326a59fe9612f5bb950f85c9b09388\"},\"expiresAt\":null,\"issuedAt\":1794000060,\"nonce\":\"0202020202020202020202020202020202020202020202020202020202020202\",\"previous\":\"9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8\",\"protocol\":\"kyvera\",\"sequence\":1,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"rotate\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"current\",\"signature\":\"HxGPfpxtWyeEffEb+v6mcLcLOGtBF8nWgJb1hYQjHJF1JqxzgEjA/9Iu/BP+n1LsaA4riNvl5oRLdAkX+PVLESY=\"},{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H/CvH+RAalh+xg/BTH2X5juk7zSvK1B+4LdZkTUt9axMazIKEec9S7XK/6GsVczvPa48AMuwApZlblpqNwotVVY=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "aa788fc381def84604e676f5e439429031bee7892955252ddd0715bc8cc41e38",
+          "sig": "ac6e671ef5012da6b24549cfefa664799747e00ba0a4a832b774de0f0b0ad448c568a4b8099da0602dfcda76a03ec634b82a356fc62022b18f7c994a651dc4ac"
+        },
+        {
+          "kind": 30078,
+          "created_at": 1794000120,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:2:698612b7957696dffbb815db1d517297f8bd1b4ead9463fbec69892ece7364d4"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "2"
+            ],
+            [
+              "prev",
+              "df50d206cf9e496ad554e2a5338c0e126152a0522d7727156ccfe5097aa780ff"
+            ],
+            [
+              "b",
+              "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (revoke)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":null,\"expiresAt\":null,\"issuedAt\":1794000120,\"nonce\":\"0303030303030303030303030303030303030303030303030303030303030303\",\"previous\":\"df50d206cf9e496ad554e2a5338c0e126152a0522d7727156ccfe5097aa780ff\",\"protocol\":\"kyvera\",\"sequence\":2,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"revoke\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"current\",\"signature\":\"H3xYfR/GwpXiTTNzhFf+K0n68bJjINbw2JJwZ46xUDnwRPnQx510Vjtm0R71eqwGVZcselJH81Vb2AYJ/haovi4=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "83a66ba4ce4e9154865fb4cafc268db3887b346b2d5c4a90ed558a8b07b821fe",
+          "sig": "151a4fe4344c431563ca4ecec5165986f33fbd39e46283846087e70a4c2bb003f6b5d3715a4210b1b492aa275ab204fb5645bd7781062eda13665bebafe8c345"
+        },
+        {
+          "kind": 30078,
+          "created_at": 1794000000,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:0:95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "0"
+            ],
+            [
+              "prev",
+              "genesis"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (bind)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"network\":\"mainnet\",\"publicKey\":\"02b4d9fae67155eb3755ef9e7d4d7c5ef682934b6241555c017485bded44f88cf9\"},\"expiresAt\":null,\"issuedAt\":1794000000,\"nonce\":\"0101010101010101010101010101010101010101010101010101010101010101\",\"previous\":null,\"protocol\":\"kyvera\",\"sequence\":0,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"bind\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H5uW/pylBR4+VvrIFn77SX+H6tYU2Aubbhm6gggV2rJlV+07283u9FQI2VN7FD4+yxHcjsRkfRR/GahTynnkMl4=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "ac74ac712b931dfd4fe20eb053d4cc39f8cd2dec35659b27d5d39afae53b6552",
+          "sig": "7d24de91bc7ee4192ac80468a724e8954abb2619889e737e4825c65430bd384a402ec73529063d49a0a5927e6c13d1faf181a5392c242820a46a1911eaed12ad"
+        }
+      ],
+      "now": 1794003600,
+      "expect": {
+        "status": "REVOKED",
+        "sequence": 2,
+        "address": null
+      }
+    },
+    {
+      "name": "missing genesis is stale",
+      "events": [
+        {
+          "kind": 30078,
+          "created_at": 1794000060,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:1:9ad2d8a63b980e98c00d56cf01ab5aab0f0bddc6f5ab6be7489300a7db89dd48"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "1"
+            ],
+            [
+              "prev",
+              "9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "b",
+              "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (rotate)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"network\":\"mainnet\",\"publicKey\":\"03f30dd9a8a771257e27f2480096d8c46531326a59fe9612f5bb950f85c9b09388\"},\"expiresAt\":null,\"issuedAt\":1794000060,\"nonce\":\"0202020202020202020202020202020202020202020202020202020202020202\",\"previous\":\"9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8\",\"protocol\":\"kyvera\",\"sequence\":1,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"rotate\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"current\",\"signature\":\"HxGPfpxtWyeEffEb+v6mcLcLOGtBF8nWgJb1hYQjHJF1JqxzgEjA/9Iu/BP+n1LsaA4riNvl5oRLdAkX+PVLESY=\"},{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H/CvH+RAalh+xg/BTH2X5juk7zSvK1B+4LdZkTUt9axMazIKEec9S7XK/6GsVczvPa48AMuwApZlblpqNwotVVY=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "aa788fc381def84604e676f5e439429031bee7892955252ddd0715bc8cc41e38",
+          "sig": "ac6e671ef5012da6b24549cfefa664799747e00ba0a4a832b774de0f0b0ad448c568a4b8099da0602dfcda76a03ec634b82a356fc62022b18f7c994a651dc4ac"
+        }
+      ],
+      "now": 1794003600,
+      "expect": {
+        "status": "STALE",
+        "sequence": null,
+        "address": null
+      }
+    },
+    {
+      "name": "competing rotations conflict",
+      "events": [
+        {
+          "kind": 30078,
+          "created_at": 1794000000,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:0:95c752ad01b1fc3bfd45cddbde7736f34f1b093e664e49147ae9f63d7479f765"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "0"
+            ],
+            [
+              "prev",
+              "genesis"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (bind)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"network\":\"mainnet\",\"publicKey\":\"02b4d9fae67155eb3755ef9e7d4d7c5ef682934b6241555c017485bded44f88cf9\"},\"expiresAt\":null,\"issuedAt\":1794000000,\"nonce\":\"0101010101010101010101010101010101010101010101010101010101010101\",\"previous\":null,\"protocol\":\"kyvera\",\"sequence\":0,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"bind\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H5uW/pylBR4+VvrIFn77SX+H6tYU2Aubbhm6gggV2rJlV+07283u9FQI2VN7FD4+yxHcjsRkfRR/GahTynnkMl4=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "ac74ac712b931dfd4fe20eb053d4cc39f8cd2dec35659b27d5d39afae53b6552",
+          "sig": "7d24de91bc7ee4192ac80468a724e8954abb2619889e737e4825c65430bd384a402ec73529063d49a0a5927e6c13d1faf181a5392c242820a46a1911eaed12ad"
+        },
+        {
+          "kind": 30078,
+          "created_at": 1794000061,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:1:d11610c3c72149e92d44eb60167ff8f2e1301d9f50dbf1c6825c0ad1112abc46"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "1"
+            ],
+            [
+              "prev",
+              "9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8"
+            ],
+            [
+              "b",
+              "bitcoincash:qq76gnnzzuggwvn0dys53l3cayeu0qflh5973nrqsn"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (rotate)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qq76gnnzzuggwvn0dys53l3cayeu0qflh5973nrqsn\",\"network\":\"mainnet\",\"publicKey\":\"03dbed02d3aba0239e6a7b3a61bfad2b635573180b56cc4bedb3168864b8bea03f\"},\"expiresAt\":null,\"issuedAt\":1794000061,\"nonce\":\"0505050505050505050505050505050505050505050505050505050505050505\",\"previous\":\"9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8\",\"protocol\":\"kyvera\",\"sequence\":1,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"rotate\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"current\",\"signature\":\"H8sLB/xuZXPELtKK+gT88VQHmSiUMu2YVw8Ilw9pPZYBH29TVgPuOSB306tOJCmzbSjoCGbPRlrUhuONMjRc2TY=\"},{\"address\":\"bitcoincash:qq76gnnzzuggwvn0dys53l3cayeu0qflh5973nrqsn\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"ICWY1PKfwqZQDPGz6Y22ym18mR2PSlhvXZYcG4kfVX4TcW0ztF6PybYv4bXv4IBydxVdKPHYVWazck34SEGQlEI=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "855ae74fc3e44f885c4e165f400bc4f5f44b699c565ffa1b6463c3f6f806497f",
+          "sig": "92f4e131494e690defb4b538e6e64fe512b095d744889b12c43c67532296b7669fd2f9c3b18c76930d956bb5f619f339400b8db3ce9ae3724bfa0d5a10e31d69"
+        },
+        {
+          "kind": 30078,
+          "created_at": 1794000060,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462:1:9ad2d8a63b980e98c00d56cf01ab5aab0f0bddc6f5ab6be7489300a7db89dd48"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462"
+            ],
+            [
+              "seq",
+              "1"
+            ],
+            [
+              "prev",
+              "9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8"
+            ],
+            [
+              "b",
+              "bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp"
+            ],
+            [
+              "b",
+              "bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (rotate)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"network\":\"mainnet\",\"publicKey\":\"03f30dd9a8a771257e27f2480096d8c46531326a59fe9612f5bb950f85c9b09388\"},\"expiresAt\":null,\"issuedAt\":1794000060,\"nonce\":\"0202020202020202020202020202020202020202020202020202020202020202\",\"previous\":\"9ee42f25755fd2a0e6165f9deef94376f31877559b84e0843e34207c5d1676f8\",\"protocol\":\"kyvera\",\"sequence\":1,\"subject\":\"cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462\",\"type\":\"rotate\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qrutsv35tpd3w978t2kuxa0lk8d4mfwjxcndd524gp\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"current\",\"signature\":\"HxGPfpxtWyeEffEb+v6mcLcLOGtBF8nWgJb1hYQjHJF1JqxzgEjA/9Iu/BP+n1LsaA4riNvl5oRLdAkX+PVLESY=\"},{\"address\":\"bitcoincash:qzhestxra7fyzdgas5ztxgmcz6cqrhheyyuga58afh\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"H/CvH+RAalh+xg/BTH2X5juk7zSvK1B+4LdZkTUt9axMazIKEec9S7XK/6GsVczvPa48AMuwApZlblpqNwotVVY=\"}]}}",
+          "pubkey": "cec40c9d4c5a64972e3f4a2d59c9fe365362e2ffe4d10ecd8c3207bff4808462",
+          "id": "aa788fc381def84604e676f5e439429031bee7892955252ddd0715bc8cc41e38",
+          "sig": "ac6e671ef5012da6b24549cfefa664799747e00ba0a4a832b774de0f0b0ad448c568a4b8099da0602dfcda76a03ec634b82a356fc62022b18f7c994a651dc4ac"
+        }
+      ],
+      "now": 1794003600,
+      "expect": {
+        "status": "CONFLICT",
+        "sequence": null,
+        "address": null
+      }
+    },
+    {
+      "name": "expired binding",
+      "events": [
+        {
+          "kind": 30078,
+          "created_at": 1794000000,
+          "tags": [
+            [
+              "d",
+              "kyvera:v1:2d984e60f7a82417dde9098255d60d3fba73afa197b14a0e4f19e2ec0b833791:0:121ba2584a429f162caa9bdf7444ed95056976c4cb1f28204fc60b0c5fb65234"
+            ],
+            [
+              "k",
+              "kyvera-v1"
+            ],
+            [
+              "s",
+              "2d984e60f7a82417dde9098255d60d3fba73afa197b14a0e4f19e2ec0b833791"
+            ],
+            [
+              "seq",
+              "0"
+            ],
+            [
+              "prev",
+              "genesis"
+            ],
+            [
+              "b",
+              "bitcoincash:qpwnw4xaqpxt0ya5y9z0h6q4m2hax3ylssf8zvg3qd"
+            ],
+            [
+              "alt",
+              "KYVERA identity record v1 (bind)"
+            ]
+          ],
+          "content": "{\"payload\":{\"bch\":{\"address\":\"bitcoincash:qpwnw4xaqpxt0ya5y9z0h6q4m2hax3ylssf8zvg3qd\",\"network\":\"mainnet\",\"publicKey\":\"0372beb566c07bf4c7f8d6128274ab3f90b31a917debd8e0e168053610d0a67b7f\"},\"expiresAt\":1794000100,\"issuedAt\":1794000000,\"nonce\":\"0404040404040404040404040404040404040404040404040404040404040404\",\"previous\":null,\"protocol\":\"kyvera\",\"sequence\":0,\"subject\":\"2d984e60f7a82417dde9098255d60d3fba73afa197b14a0e4f19e2ec0b833791\",\"type\":\"bind\",\"version\":1},\"proofs\":{\"bch\":[{\"address\":\"bitcoincash:qpwnw4xaqpxt0ya5y9z0h6q4m2hax3ylssf8zvg3qd\",\"algorithm\":\"bch-signmessage-v1\",\"role\":\"new\",\"signature\":\"IDbHjXCur6z5af30QmaimaQ9gIm38YLB4nCG+k+7ztRcJQm6MMJLQxtF9gUtmFKhco6OaZgF2vjYUnYOJLaxfdI=\"}]}}",
+          "pubkey": "2d984e60f7a82417dde9098255d60d3fba73afa197b14a0e4f19e2ec0b833791",
+          "id": "2bc9bfad12e2b0f5c8349cfc9eb2566236da6a3783a931694980f3bc1a70fc7c",
+          "sig": "a2f8379bf1ec96cf9d84845be6dd64104abe9507dc79f431db88274df898d35dc234065a35315156d0035e003c3598508c6400b75389c55ef49e743c853a514d"
+        }
+      ],
+      "now": 1794000200,
+      "expect": {
+        "status": "EXPIRED",
+        "sequence": 0,
+        "address": "bitcoincash:qpwnw4xaqpxt0ya5y9z0h6q4m2hax3ylssf8zvg3qd"
+      }
+    }
+  ]
+}

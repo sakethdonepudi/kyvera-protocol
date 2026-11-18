@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: #050807;
+  color: #e6efec;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(61, 220, 151, 0.25);
+  color: #f4fffb;
+}
+
+*:focus-visible {
+  outline: 2px solid rgba(61, 220, 151, 0.6);
+  outline-offset: 2px;
+}
+
+@layer utilities {
+  .grid-surface {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .hairline {
+    border-color: rgba(255, 255, 255, 0.09);
+  }
+}
+
+/* Scrollbars stay quiet in long document and JSON panes. */
+pre,
+.scroll-pane {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+pre::-webkit-scrollbar,
+.scroll-pane::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+pre::-webkit-scrollbar-thumb,
+.scroll-pane::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}

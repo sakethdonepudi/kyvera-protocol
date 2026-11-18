@@ -1,0 +1,33 @@
+{
+  "name": "@kyvera/web",
+  "version": "0.1.0",
+  "private": true,
+  "browserslist": [
+    "chrome >= 100",
+    "edge >= 100",
+    "firefox >= 100",
+    "safari >= 15"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@kyvera/bch": "workspace:*",
+    "@kyvera/core": "workspace:*",
+    "@kyvera/nostr": "workspace:*",
+    "@kyvera/verifier": "workspace:*",
+    "next": "15.5.29",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
+  }
+}

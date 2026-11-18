@@ -1,0 +1,42 @@
+{
+  "name": "kyvera",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "KYVERA — verifiable identity lifecycle for Bitcoin Cash and Nostr",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "predev": "pnpm -r --filter \"./packages/*\" build",
+    "build": "pnpm -r --if-present build",
+    "dev": "pnpm --filter @kyvera/web dev",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "vectors": "pnpm -r --filter \"./packages/*\" build && tsx scripts/generate-vectors.ts && cp tests/fixtures/vectors.json apps/web/public/vectors.json",
+    "relay": "node scripts/local-relay.mjs",
+    "demo": "pnpm -r --filter \"./packages/*\" build && tsx scripts/seed-demo.ts",
+    "demo:lifecycle": "pnpm -r --filter \"./packages/*\" build && tsx examples/identity-lifecycle/run.ts",
+    "cli": "pnpm -r --filter \"./packages/*\" build && node packages/verifier/dist/cli.js"
+  },
+  "devDependencies": {
+    "@bitauth/libauth": "3.1.0-next.8",
+    "@kyvera/bch": "workspace:*",
+    "@kyvera/core": "workspace:*",
+    "@kyvera/nostr": "workspace:*",
+    "@kyvera/verifier": "workspace:*",
+    "@noble/curves": "^1.9.0",
+    "@noble/hashes": "^1.8.0",
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.5.13",
+    "nostr-tools": "^2.26.1",
+    "playwright": "1.65.1",
+    "tsx": "4.19.2",
+    "typescript": "~5.6.3",
+    "vitest": "^2.1.9",
+    "ws": "^8.18.0"
+  }
+}
