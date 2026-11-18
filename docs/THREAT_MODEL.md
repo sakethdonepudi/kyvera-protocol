@@ -302,7 +302,7 @@ Each threat lists the attack path, mitigation, residual risk and the test or cod
 | R-5 | Live wallet incompatibility | Medium | Medium | Format cross-verified; live test outstanding |
 | R-6 | No security audit | High | Medium | Stated; not production-ready |
 | R-7 | Public metadata correlation | High | Low–Medium | Inherent to public identity; future privacy work |
-| R-8 | Implementation bugs in chain logic | Medium | High | 117 tests, adversarial vectors; external review still needed |
+| R-8 | Implementation bugs in chain logic | Medium | High | 128 tests, adversarial vectors; external review still needed |
 
 ## 9. Verification commands
 

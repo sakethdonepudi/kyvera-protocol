@@ -67,11 +67,11 @@ Full evidence: [`docs/COMPETITIVE_AUDIT_2026.md`](COMPETITIVE_AUDIT_2026.md).
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **117/117 pass**, 12 files (`property.test.ts` added) |
+| `pnpm test` | **128/128 pass**, 13 files (`property.test.ts` added) |
 | `pnpm typecheck` | pass, all 5 projects |
-| `pnpm build` | pass (14 routes; third-party `libauth` top-level-await warning) |
+| `pnpm build` | pass (16 routes; third-party `libauth` top-level-await warning) |
 | `pnpm demo:lifecycle` | all assertions pass |
-| Browser QA (`scripts/qa-browser.mjs`) | **47/47 checks**, 0 console/page errors |
+| Browser QA (`scripts/qa-browser.mjs`) | **54/54 checks**, 0 console/page errors |
 | Standalone file demo | six scenarios, advanced inputs, 0 errors |
 | Deterministic vectors | byte-identical regeneration |
 | Independent BCH vector | verified |

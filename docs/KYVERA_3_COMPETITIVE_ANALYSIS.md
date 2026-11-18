@@ -38,7 +38,7 @@ Legend: ✅ confirmed implemented; ◐ partial/claim only; ❌ absent; ? unverif
 | Identity payments | ◐ verified BIP21 handoff; no txid | ✅ | ✅ | ❌ | ❌ |
 | Live hosted demo | ❌ | ✅ | ✅ | ✅ | ❌ |
 | Property/fuzz tests | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Automated tests | ✅ 117 | ◐ statement only | ◐ protocol/live | ◐ 2 files | ◐ 8 checks |
+| Automated tests | ✅ 128 | ◐ statement only | ◐ protocol/live | ◐ 2 files | ◐ 8 checks |
 | Warm light / dark theme | ✅ | ◐ light only | ❌ dark only | ❌ dark only | ❌ |
 | Documented limitations | ✅ extensive | ✅ | ✅ | ✅ | ✅ |
 

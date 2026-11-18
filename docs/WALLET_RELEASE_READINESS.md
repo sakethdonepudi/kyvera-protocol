@@ -24,10 +24,10 @@
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **117/117**, 12 files |
+| `pnpm test` | **128/128**, 13 files |
 | `pnpm typecheck` | pass (all packages + web) |
-| `pnpm qa:browser` | **47/47**, 0 console/page errors |
-| `pnpm build` | pass, 14 routes |
+| `pnpm qa:browser` | **54/54**, 0 console/page errors |
+| `pnpm build` | pass, 16 routes |
 | `next start` production smoke | pass |
 | `pnpm audit --prod` | 0 known vulnerabilities |
 

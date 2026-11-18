@@ -11,11 +11,11 @@
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **117 / 117 tests pass** across 12 files |
+| `pnpm test` | **128 / 128 tests pass** across 13 files |
 | `pnpm typecheck` | **pass** for core, bch, nostr, verifier and web |
 | `pnpm build` | **pass** (Next.js production build; one third-party top-level-await warning) |
 | `pnpm demo:lifecycle` | **all assertions pass** (6 lifecycle scenarios) |
-| Browser end-to-end | **pass** (47/47 checks: create → pay handoff → auth-demo session → time machine → verify → auth → revoke, WizardConnect dialog, mobile, reduced motion, warm light, keyboard; 0 console errors) |
+| Browser end-to-end | **pass** (54/54 checks: create → challenge demo/live → merchant rotation → pay handoff → auth-demo session → time machine → verify → auth → revoke, WizardConnect dialog, mobile, reduced motion, warm light, keyboard; 0 console errors) |
 | Deterministic vectors | **byte-identical on regeneration** (`sha256 074af1d4…`) |
 | Independent BCH interop vector | **pass** (signature from `nostr-bch-bind v1`) |
 | CLI end-to-end against local relay | **pass** (exit code 0 for ACTIVE and SUPERSEDED) |
@@ -37,11 +37,12 @@ $ pnpm test
  ✓ tests/interop.test.ts (2 tests)
  ✓ tests/property.test.ts (12 tests)
  ✓ tests/auth-request.test.ts (12 tests)
+ ✓ tests/security-challenge.test.ts (11 tests)
  ✓ tests/pay.test.ts (11 tests)
  ✓ tests/smoke.test.ts (1 test)
  ✓ tests/relay.test.ts (13 tests)
- Test Files  12 passed (12)
-      Tests  117 passed (117)
+ Test Files  13 passed (13)
+      Tests  128 passed (128)
    Duration  ~2.7s
 ```
 
@@ -180,12 +181,30 @@ The older `/auth` page tests the core challenge-response primitive. The full rel
 | Event edited after signing | `EVENT_SIGNATURE` |
 | Outside time window | `TIMESTAMP_OUT_OF_WINDOW` |
 
-### 3.6 Vectors and interoperability
+### 3.6 Security challenge suite (`tests/security-challenge.test.ts` — 11)
+
+Explicit adversarial cases:
+
+| Case | Expected |
+| --- | --- |
+| BCH proof signed by a different wallet | `BCH_SIGNATURE_NOT_BY_ADDRESS` |
+| Tampered Nostr event | `NOSTR_SIGNATURE_INVALID` |
+| Unauthorized rotation | rejected; wallet A remains current |
+| Replayed login challenge | `UNKNOWN_CHALLENGE` |
+| Expired login challenge | `CHALLENGE_EXPIRED` |
+| Revoked identity + session | `REVOKED`; `SESSION_IDENTITY_REVOKED` |
+| Missing chain segment | `STALE` / `MISSING_CHAIN_SEGMENT`; head stays at the last known sequence |
+| Conflicting sequence records | `CONFLICT` / `SEQUENCE_EQUIVOCATION` |
+| Rollback against a checkpoint | `STALE` / `ROLLBACK_DETECTED` |
+| Payment destination not ACTIVE or changed | blocked / intent cancelled |
+| Challenge signed by an unrelated key | `SUBJECT_MISMATCH` |
+
+### 3.7 Vectors and interoperability
 
 - `tests/vectors.test.ts` (5): canonical encodings, wallet message hash, record ids/digests, six chain outcomes.
 - `tests/interop.test.ts` (2): verifies a BCH `signmessage` signature published by the independent `nostr-bch-bind v1` implementation; rejects the same signature over a different message.
 
-### 3.7 Property-based and malformed-input tests (`tests/property.test.ts` — 12)
+### 3.8 Property-based and malformed-input tests (`tests/property.test.ts` — 12)
 
 | Property | Runs | Assertion |
 | --- | --- | --- |
@@ -246,7 +265,7 @@ Fast-check seeds are randomized per run; failures print a reproducible counterex
 
 ## 5. Browser end-to-end evidence
 
-Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **47/47 checks passed, 0 console/page errors.**
+Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **54/54 checks passed, 0 console/page errors.**
 
 Flow:
 
@@ -255,18 +274,21 @@ Flow:
 3. `/lab` executes all six scenarios; equivocation returns `CONFLICT`, withheld history returns `STALE`; advanced mode exposes the signed input events.
 4. `/interop` verifies the independent BCH vector.
 5. Create page exposes Connect → Sign → Verified → Publish states, opens the WizardConnect pairing dialog, and defaults to Connect Wallet. The Demo tab still generates real keys, displays the proof/event preview, publishes, and stores a local demo identity. The Paste path rejects an invalid signature automatically, keeps publishing locked, then verifies a real wallet-style signature, unlocks publishing and publishes a second binding.
-6. Dashboard renders the Time Machine; selecting the genesis record and switching to cryptographic mode exposes the payload digest and exact BCH proof message; Compare mode shows historical validity beside current authorization.
-7. KYVERA Pay resolves an active identity, enforces payment policy, accepts an amount/confirmation and produces a BIP21 handoff; WizardConnect opens a pairing dialog.
-8. `/auth-demo` resolves an identity, issues an origin/session/identity-bound request, signs with the local demo key, issues a session, rejects replay, invalidates the session after rotation and after logout, and blocks a revoked identity.
-9. Rotation publishes sequence 1; the historical record reports `SUPERSEDED`.
-10. Public verifier resolves the identity and renders the Time Machine.
-11. Address lookup for the old address returns `SUPERSEDED`.
-12. Challenge-response authentication succeeds with the demo key.
-13. Revocation publishes sequence 2 and the verifier returns `REVOKED`; Pay and auth-demo block the identity.
-14. Mobile viewport (390×844): landing, demo, lab, create and pay have no horizontal overflow.
-15. Reduced motion: transitions collapse to ~0ms.
-16. Warm-light theme toggles via `data-theme`.
-17. Keyboard: Tab reaches navigation links with a visible focus target.
+6. `/challenge` guided demo authenticates, rejects unauthorized rotation, and proves that wallet A's historical proof remains valid while its authorization is superseded.
+7. `/challenge` live mode resolves a stored identity and issues a relying-party session from a single-use challenge.
+8. `/merchant` verifies a self-asserted merchant, unlocks the payment destination, rotates the wallet, moves the destination to wallet B and reports wallet A superseded.
+9. Dashboard renders the Time Machine; selecting the genesis record and switching to cryptographic mode exposes the payload digest and exact BCH proof message; Compare mode shows historical validity beside current authorization.
+10. KYVERA Pay resolves an active identity, enforces payment policy, accepts an amount/confirmation and produces a BIP21 handoff; WizardConnect opens a pairing dialog.
+11. `/auth-demo` resolves an identity, issues an origin/session/identity-bound request, signs with the local demo key, issues a session, rejects replay, invalidates the session after rotation and after logout, and blocks a revoked identity.
+12. Rotation publishes sequence 1; the historical record reports `SUPERSEDED`.
+13. Public verifier resolves the identity and renders the Time Machine.
+14. Address lookup for the old address returns `SUPERSEDED`.
+15. Challenge-response authentication succeeds with the demo key.
+16. Revocation publishes sequence 2 and the verifier returns `REVOKED`; Pay and auth-demo block the identity.
+17. Mobile viewport (390×844): landing, demo, lab, create, pay, challenge and merchant have no horizontal overflow.
+18. Reduced motion: transitions collapse to ~0ms.
+19. Warm-light theme toggles via `data-theme`.
+20. Keyboard: Tab reaches navigation links with a visible focus target.
 
 Screenshots: `.context/screens/qa/01-landing.png` … `13-pay-revoked.png` (gitignored, local evidence).
 
@@ -303,7 +325,16 @@ BIP-340 signing normally uses auxiliary randomness; the vector generator uses fi
 
 ---
 
-## 8. Conclusion
+## 8. History-wide secret scan
+
+A manual scan across all 32 commits checked tracked paths and patches for private keys, seed phrases, `xprv`/WIF material, credential files and populated environment secrets.
+
+- No `.env`, `.env.local` or credential file is tracked; only `.env.example` and production example values.
+- All tracked `NEXT_PUBLIC_*` values are public build-time configuration.
+- Demo keys are labelled throwaway keys in `localStorage` and are not funded.
+- The repository is still private; a dedicated secret scanner and independent review are still recommended before making it public.
+
+## 9. Conclusion
 
 Within the tested scope, the implementation behaves as specified: valid dual-key bindings are accepted, unauthorized lifecycle transitions are rejected, historical addresses are not presented as current, revoked identities cannot authenticate, and incomplete or conflicting history is surfaced rather than hidden.
 

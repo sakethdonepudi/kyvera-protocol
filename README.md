@@ -50,6 +50,9 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 
 ## 2.1 What is new in this iteration
 
+- **Trust Challenge** (`/challenge`): five executable stages — Bind, Verify, Authenticate, Rotate, Prove — in a deterministic guided demo or against a live stored identity. The final stage shows a historically valid wallet that is no longer authorized.
+- **Merchant example** (`/merchant`): a self-asserted demo merchant whose payment destination unlocks only after verification, then moves to the new wallet after an authorized rotation.
+- **Standalone relying party** (`pnpm rp:demo`): a framework-independent Node app that authenticates, rejects replay and verifies rotation/revocation without the KYVERA website, API or relay.
 - **Identity Time Machine** (`/demo` and every identity dashboard): inspect each signed record, its predecessor digest, both proofs, relay observations and the explanation for acceptance or rejection.
 - **Security laboratory** (`/lab`): six executable adversarial scenarios — authorized rotation, unauthorized rotation, replay, equivocation, missing history/rollback, revocation — using real verifier functions and deterministic unspendable keys.
 - **Guided 90-second demo** (`/demo`): the full argument in eight steps, with no wallet or relay required.
@@ -63,6 +66,7 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 - **Security laboratory 3.0**: split view, transition strip, replay/reset controls, real verifier output.
 - **Editorial design system** (`docs/DESIGN_SYSTEM.md`): charcoal, ivory, signal orange, muted mint; accessible interaction states and reduced-motion support.
 - **Property-based and malformed-input testing** for canonical JSON and authorization-chain parsing.
+- **Security challenge suite**: explicit adversarial tests for forged proofs, unauthorized rotation, replay, expiry, revocation, missing history, conflicts, rollback and payment gating.
 
 ## 3. Architecture
 
@@ -183,11 +187,12 @@ open demo/kyvera-standalone.html
 ## 8. Running tests
 
 ```bash
-pnpm test           # 117 tests across 12 files (unit, integration, security, property)
+pnpm test           # 128 tests across 13 files (unit, integration, security, property)
 pnpm typecheck      # strict TypeScript for every package
 pnpm build          # production build
 pnpm demo:lifecycle # executable lifecycle demo with assertions
 pnpm qa:browser     # Playwright: desktop, mobile, reduced motion, keyboard
+pnpm rp:demo        # independent relying party: 10/10 checks
 pnpm demo:standalone# rebuild the single-file browser demo
 ```
 
@@ -264,7 +269,7 @@ The fastest path for a judge is the single-file demo: open `demo/kyvera-standalo
 For the full application:
 
 1. Start `pnpm relay` and `pnpm dev`.
-2. Open `http://localhost:3000/demo` for the guided eight-step demonstration, or `/create` to make a real browser-local identity.
+2. Open `http://localhost:3000/challenge` for the five-stage Trust Challenge, `http://localhost:3000/demo` for the guided eight-step demonstration, or `/create` to make a real browser-local identity.
 3. Generate a demo Nostr key and a demo BCH wallet (or connect NIP-07 and sign with an external wallet).
 4. Inspect the exact BCH proof message and canonical Nostr content.
 5. Publish. Open the identity dashboard and use the **Identity Time Machine** to inspect record digests, both proofs and relay observations.
@@ -272,7 +277,8 @@ For the full application:
 7. Verify the same npub in the public verifier and from the CLI.
 8. Open `/pay?npub=…` to resolve the current destination and prepare a BIP21 wallet handoff. It blocks revoked/conflicted/stale identities and never invents a receipt.
 9. Revoke the identity. Confirm the verifier returns `REVOKED` and no payment address.
-10. Run `/lab` for the six adversarial scenarios, and `pnpm demo:lifecycle` for the terminal version.
+10. Run `/lab` for the six adversarial scenarios, `/merchant` for the rotation-aware payment destination, and `pnpm rp:demo` for the standalone relying party.
+11. Run `pnpm demo:lifecycle` for the terminal lifecycle version.
 
 Do not fund any demo address. Demo keys are throwaway material stored in browser localStorage.
 
@@ -317,17 +323,20 @@ Stretch goals implemented: **key rotation and recovery with independently verifi
 
 ## 15. Repository status and remaining work
 
-Honest status as of 2026-11-18:
+Honest status as of 2026-11-19:
 
 - [x] Protocol specification, threat model, canonical encoding
 - [x] BCH + Nostr dual-key binding, rotation, revocation
 - [x] Chain resolution with eight explicit result states
 - [x] Relay discovery, partial-sync and rollback-checkpoint handling
 - [x] Independent TypeScript SDK and CLI
-- [x] 117 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
+- [x] 128 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
 - [x] Responsive editorial web application, verified end-to-end in Chrome, mobile viewport, reduced motion and keyboard navigation
 - [x] Identity Time Machine with per-record proof and relay inspection
 - [x] Interactive security laboratory with six real scenarios
+- [x] Trust Challenge with five executable stages and separate demo/live modes
+- [x] Rotation-aware merchant example with a verified payment destination
+- [x] Standalone relying-party application (`pnpm rp:demo`, 10/10 checks)
 - [x] Single-file standalone browser demonstration (no install)
 - [x] Wallet interoperability probe and manual test instructions
 - [x] Competitive audit of Kola Link, CashLink ID, BCH Identity Bridge and prior art
@@ -337,7 +346,7 @@ Honest status as of 2026-11-18:
 - [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review
 
-**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`PAYTACA_COMPLIANCE.md`](docs/PAYTACA_COMPLIANCE.md) · [`WALLET_UX_AUDIT.md`](docs/WALLET_UX_AUDIT.md) · [`WALLET_DEVICE_TEST.md`](docs/WALLET_DEVICE_TEST.md) · [`WALLET_RELEASE_READINESS.md`](docs/WALLET_RELEASE_READINESS.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
+**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`REQUIREMENTS_MATRIX.md`](docs/REQUIREMENTS_MATRIX.md) · [`PAYTACA_COMPLIANCE.md`](docs/PAYTACA_COMPLIANCE.md) · [`TRUST_CHALLENGE.md`](docs/TRUST_CHALLENGE.md) · [`INTEGRATION.md`](docs/INTEGRATION.md) · [`JUDGE_3_MINUTE.md`](docs/JUDGE_3_MINUTE.md) · [`WALLET_UX_AUDIT.md`](docs/WALLET_UX_AUDIT.md) · [`WALLET_DEVICE_TEST.md`](docs/WALLET_DEVICE_TEST.md) · [`WALLET_RELEASE_READINESS.md`](docs/WALLET_RELEASE_READINESS.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
 
 Deadline note: DoraHacks lists **22 November 2026, 14:00 UTC (19:30 IST)**. The BCH Blaze site footer still says 14–28 November; DoraHacks is authoritative. The Mainnet Track separately requires a live demo, WizardConnect/XO and at least one mainnet transaction; confirm with organizers whether those apply to a bounty-only entry.
 

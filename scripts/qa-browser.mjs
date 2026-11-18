@@ -75,6 +75,30 @@ async function desktopFlow() {
   record("wallet probe verifies independent vector", true);
   await shot(page, "04-interop");
 
+  await page.goto(`${BASE}/challenge`, { waitUntil: "networkidle" });
+  await page.getByText("Five stages.").waitFor({ timeout: 20_000 });
+  const stages = page.locator("ol button");
+  await stages.filter({ hasText: "Authenticate" }).click();
+  await page.getByText(/independent relying party/i).waitFor();
+  await page.getByText(/ADDRESS_MISMATCH/).first().waitFor();
+  record("trust challenge authenticates and rejects unauthorized rotation", true);
+  await stages.filter({ hasText: "Prove" }).click();
+  await page.getByText(/no longer authorized/i).waitFor();
+  await page.getByText(/SESSION_ADDRESS_CHANGED/).first().waitFor();
+  record("trust challenge separates historical proof from current authorization", true);
+  await shot(page, "08-challenge");
+
+  await page.goto(`${BASE}/merchant`, { waitUntil: "networkidle" });
+  await page.getByText("Sawa Market").waitFor({ timeout: 20_000 });
+  await page.getByText("Locked until the merchant identity verifies.").waitFor();
+  await page.getByRole("button", { name: "Verify merchant" }).click();
+  await page.getByText("wallet A", { exact: false }).first().waitFor();
+  await page.getByRole("button", { name: "Rotate wallet" }).click();
+  await page.getByText("wallet B", { exact: false }).first().waitFor();
+  await page.getByText(/superseded/).first().waitFor();
+  record("merchant destination updates after verified rotation", true);
+  await shot(page, "09-merchant");
+
   await page.goto(`${BASE}/create`, { waitUntil: "networkidle" });
   const progress = page.getByRole("group", { name: "Wallet progress" });
   await progress.waitFor({ timeout: 10_000 });
@@ -124,6 +148,20 @@ async function desktopFlow() {
   await page.getByRole("button", { name: "Publish identity" }).click();
   await page.getByText("Binding published").waitFor({ timeout: 20_000 });
   record("verified paste flow publishes a binding", true);
+
+  await page.goto(`${BASE}/challenge`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Live identity" }).click();
+  await page
+    .locator("button")
+    .filter({ hasText: identity.npub.slice(0, 10) })
+    .first()
+    .click();
+  await page.getByText("Resolved identity").waitFor({ timeout: 20_000 });
+  record("trust challenge live mode resolves a stored identity", true);
+  await page.locator("ol button").filter({ hasText: "Authenticate" }).click();
+  await page.getByRole("button", { name: "Sign in with this identity" }).click();
+  await page.getByText("A relying-party session was issued").waitFor({ timeout: 20_000 });
+  record("trust challenge live authentication passes", true);
 
   await page.goto(`${BASE}/pay?npub=${encodeURIComponent(identity.npub)}`, { waitUntil: "networkidle" });
   await page.getByText("Destination is currently authorized").waitFor({ timeout: 20_000 });
@@ -247,6 +285,8 @@ async function mobileFlow() {
     ["mobile-lab", "/lab"],
     ["mobile-create", "/create"],
     ["mobile-pay", "/pay"],
+    ["mobile-challenge", "/challenge"],
+    ["mobile-merchant", "/merchant"],
   ]) {
     await page.goto(`${BASE}${path}`, { waitUntil: "networkidle" });
     await page.waitForTimeout(1000);

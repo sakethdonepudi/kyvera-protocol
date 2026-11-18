@@ -7,6 +7,8 @@ for (const [name,url,waitFor] of [
  ["home","/","Keys change."],
  ["demo","/demo","Identity time machine"],
  ["lab","/lab","scenarios executed"],
+ ["challenge","/challenge","Five stages."],
+ ["merchant","/merchant","Sawa Market"],
  ["interop","/interop","Verify wallet signature"],
  ["pay","/pay","Pay the person"],
  ["auth-demo","/auth-demo","Sign in with an identity"],

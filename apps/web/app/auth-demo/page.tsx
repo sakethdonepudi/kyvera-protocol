@@ -292,7 +292,7 @@ function AuthDemoInner() {
             <div>
               <div className="font-display text-[20px] leading-none text-ivory">Sawa Market</div>
               <div className="mt-1 font-mono text-[8.5px] uppercase tracking-[0.16em] text-ivory-muted">
-                Independent relying party · merchant console
+                Relying-party demo · same origin
               </div>
             </div>
           </div>

@@ -9,6 +9,7 @@ const NAV = [
   { href: "/#protocol", label: "Product" },
   { href: "/verify", label: "Verify" },
   { href: "/demo", label: "Time Machine" },
+  { href: "/challenge", label: "Challenge" },
   { href: "/lab", label: "Security Lab" },
   { href: "/developers", label: "Developers" },
 ];
@@ -124,6 +125,9 @@ export function Footer() {
           <Link href="/demo" className="hover:text-ivory">
             Time Machine
           </Link>
+          <Link href="/challenge" className="hover:text-ivory">
+            Trust Challenge
+          </Link>
           <Link href="/lab" className="hover:text-ivory">
             Security Lab
           </Link>
@@ -135,6 +139,9 @@ export function Footer() {
           </Link>
           <Link href="/auth-demo" className="hover:text-ivory">
             Auth demo
+          </Link>
+          <Link href="/merchant" className="hover:text-ivory">
+            Merchant demo
           </Link>
           <a
             href="https://github.com/sakethdonepudi/kyvera-protocol"

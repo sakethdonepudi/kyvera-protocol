@@ -208,6 +208,8 @@ export default function DevelopersPage() {
               ["KYVERA 3.0 competitive analysis", `${REPO}/blob/main/docs/KYVERA_3_COMPETITIVE_ANALYSIS.md`],
               ["KYVERA Pay", `${REPO}/blob/main/docs/KYVERA_PAY.md`],
               ["Relying-party compliance", `${REPO}/blob/main/docs/PAYTACA_COMPLIANCE.md`],
+              ["Wallet API audit", `${REPO}/blob/main/docs/WALLET_UX_AUDIT.md`],
+              ["Wallet device test", `${REPO}/blob/main/docs/WALLET_DEVICE_TEST.md`],
               ["Design system", `${REPO}/blob/main/docs/DESIGN_SYSTEM.md`],
               ["Security test report", `${REPO}/blob/main/docs/SECURITY_TEST_REPORT.md`],
             ].map(([label, href]) => (
@@ -256,6 +258,27 @@ export default function DevelopersPage() {
           <p className="mt-3 text-[10.5px] leading-relaxed text-ivory-muted">
             All keys in the vectors are unspendable, derived from labels. Never fund their addresses.
           </p>
+        </div>
+      </section>
+
+      <section className="mt-12 rounded-xl border border-ivory/[0.08] bg-ink-850/60 p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-[13px] font-semibold text-ivory">Standalone relying party</h3>
+          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-accent-bright">
+            10/10 checks
+          </span>
+        </div>
+        <p className="mt-2 max-w-3xl text-[12px] leading-relaxed text-ivory-muted">
+          Build deterministic records, issue a single-use challenge, verify rotation, revoke the
+          identity and invalidate the session without calling any KYVERA API or relay.
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <code className="rounded-lg border border-ivory/12 px-3 py-2 font-mono text-[11px] text-ivory-dim">
+            pnpm rp:demo
+          </code>
+          <Link href="/auth-demo" className="text-[11.5px] text-signal hover:text-signal-bright">
+            Browser relying-party demo →
+          </Link>
         </div>
       </section>
 

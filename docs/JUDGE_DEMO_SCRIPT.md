@@ -83,6 +83,10 @@
 
 ---
 
+## Optional 20-second Trust Challenge hook
+
+Open `/challenge`. Click **Prove**. Say: "Wallet A's historical signature is still mathematically valid, but the chain moved to wallet B. That is the difference between a proof that a key existed and proof of what is authorized now." If time permits, click **Authenticate** to show the single-use challenge and replay rejection.
+
 ## Optional 10-second auth-demo hook
 
 Open `/auth-demo`, select the demo identity, create a sign-in request and sign. Show the issued session, replay rejection, logout, and the rotation/revocation session invalidation. Say: "An independent relying party verifies the signature and resolves the chain itself; it never asks KYVERA for a login decision."
@@ -105,12 +109,13 @@ Open `demo/kyvera-standalone.html` directly. It contains the same six scenarios 
 
 ## Claims that are safe
 
-- 117 automated tests, including property/fuzz tests.
+- 128 automated tests across 13 files, including property/fuzz tests and an explicit adversarial suite.
+- `pnpm rp:demo` — independent relying party, 10/10 checks with no KYVERA API or relay.
 - Independent BCH `signmessage` vector verified.
 - Eight explicit statuses, including `SUPERSEDED`, `CONFLICT`, `STALE`.
 - BCH + Nostr dual-key binding, rotation, revocation.
 - Independent SDK and CLI.
-- Browser E2E 47/47, mobile and reduced motion tested.
+- Browser E2E 54/54, mobile and reduced motion tested.
 
 ## Claims to avoid until completed
 

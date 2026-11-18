@@ -151,13 +151,14 @@ Status values: **Implemented** (code + automated evidence), **Partial** (works b
 | `tests/chain.test.ts` | 9 | R3: unknown/invalid, genesis conflict, missing genesis, order independence, subject isolation, orphan handling, record-vs-state |
 | `tests/auth.test.ts` | 11 | R4: valid, replay, expiry, wrong domain/challenge, unrelated key, revoked, stale, address binding, tamper, window |
 | `tests/auth-request.test.ts` | 12 | R4 relying party: origin/session/identity/address binding, replay, expiry, revoked/stale, session rotation/revocation/logout, unauthorized rotation |
+| `tests/security-challenge.test.ts` | 11 | Forged BCH/Nostr proofs, unauthorized rotation, replay, expiry, revocation, missing history, conflict, rollback, payment gate |
 | `tests/relay.test.ts` | 13 | R3: publish/query, dedupe, partial sync, unreachable, no relays, rollback checkpoint, conflicting chains, hostile event, no EOSE, address resolution, multi-identity address, invalid address |
 | `tests/vectors.test.ts` | 5 | Published vectors: canonical, BCH message, record ids, chain outcomes |
 | `tests/interop.test.ts` | 2 | Independent BCH `signmessage` vector |
 | `tests/property.test.ts` | 12 | Property/fuzz: canonical idempotence, key order, NFC, numeric edges, duplicate keys, depth limits; chain subsets/mutations; malformed event metadata |
 | `tests/pay.test.ts` | 11 | Payment amount parsing, BIP21 encoding, ACTIVE/network/assurance policy, destination-change cancellation |
 | `tests/smoke.test.ts` | 1 | End-to-end creation |
-| **Total** | **117** | |
+| **Total** | **128** | |
 
 ---
 

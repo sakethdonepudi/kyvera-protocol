@@ -92,7 +92,9 @@ The compliance gate is implemented at `/auth-demo` and `packages/verifier/src/au
 ### 4.2 Authentication evidence
 
 - Automated: `tests/auth-request.test.ts` — 12 tests, including replay, expiry, origin/session/identity/address mismatch, revoked/stale, session rotation/revocation/logout, unauthorized rotation.
-- Browser: `/auth-demo` session issuance, replay rejection, unauthorized-rotation check, session invalidation after rotation, logout, revoked-identity block (47/47 browser checks overall).
+- Adversarial: `tests/security-challenge.test.ts` — 11 tests covering forged BCH/Nostr proofs, unauthorized rotation, replay, expiry, revocation, missing history, conflict, rollback and payment gating.
+- Browser: `/auth-demo` session issuance, replay rejection, unauthorized-rotation check, session invalidation after rotation, logout, revoked-identity block. `/challenge` runs the same journey across five stages, including live mode (54/54 browser checks overall).
+- Standalone: `pnpm rp:demo` — framework-independent relying party, 10/10 checks with no KYVERA website, API or relay.
 - The relying party is separate from the identity dashboard and has its own origin/session state.
 - NIP-07 signing path is implemented; demo local signer is exercised; physical wallet signing is not yet recorded.
 
@@ -106,13 +108,14 @@ The compliance gate is implemented at `/auth-demo` and `packages/verifier/src/au
 
 | Deliverable | Location |
 | --- | --- |
-| Working app | `/create`, `/demo`, `/verify`, `/auth-demo`, `/lab`, `/pay` |
+| Working app | `/create`, `/demo`, `/challenge`, `/verify`, `/auth-demo`, `/lab`, `/merchant`, `/pay` |
 | Source | monorepo packages/apps |
 | Setup | `README.md`, `docs/DEPLOYMENT.md` |
 | Architecture | `docs/ARCHITECTURE.md`, README Mermaid |
 | Verification process | `docs/PROTOCOL.md`, `/verify`, CLI |
 | Auth process | `docs/PAYTACA_COMPLIANCE.md`, `packages/verifier/src/auth.ts` |
-| Judge script | `docs/JUDGE_DEMO_SCRIPT.md` |
+| Judge script | `docs/JUDGE_DEMO_SCRIPT.md`, `docs/JUDGE_3_MINUTE.md` |
+| Independent RP | `examples/relying-party/demo.mjs`, `docs/INTEGRATION.md` |
 | Independent offline demo | `demo/kyvera-standalone.html` |
 
 **Status: demonstrated locally; public deployment pending.**

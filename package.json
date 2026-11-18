@@ -28,6 +28,7 @@
     "demo:standalone": "pnpm -r --filter \"./packages/*\" build && node scripts/build-standalone-demo.mjs",
     "qa:browser": "node scripts/qa-browser.mjs",
     "wallet:verify": "node scripts/verify-wallet-signature.mjs",
+    "rp:demo": "pnpm -r --filter \"./packages/*\" build && node examples/relying-party/demo.mjs",
     "cli": "pnpm -r --filter \"./packages/*\" build && node packages/verifier/dist/cli.js"
   },
   "devDependencies": {

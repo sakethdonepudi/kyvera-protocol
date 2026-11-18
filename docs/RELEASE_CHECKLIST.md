@@ -12,10 +12,12 @@
 | Check | Command | Result |
 | --- | --- | --- |
 | Repository commit | `git rev-parse HEAD` | `82a3e1b…` (3.0 working tree) |
-| Unit/integration/security tests | `pnpm test` | **117/117 pass**, 12 files, ~3s |
+| Unit/integration/security tests | `pnpm test` | **128/128 pass**, 13 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
-| Production build | `pnpm build` | pass, 14 routes |
-| Browser QA | `pnpm qa:browser` | **47/47**, 0 console/page errors |
+| Production build | `pnpm build` | pass, 16 routes |
+| Browser QA | `pnpm qa:browser` | **54/54**, 0 console/page errors |
+| Independent relying party | `pnpm rp:demo` | **10/10**, no KYVERA API/relay |
+| History-wide secret scan | manual scan across 32 commits | no tracked keys/env secrets |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |
 | Dependency audit | `pnpm audit --prod` | **0 known vulnerabilities** |
@@ -60,8 +62,11 @@ Every important claim links to a source, test or running demonstration.
 | Payment destination policy | `apps/web/lib/pay.ts` | `tests/pay.test.ts` (11), browser QA |
 | WizardConnect pairing | `apps/web/app/pay/page.tsx` | browser QA dialog; physical wallet untested |
 | Warm light theme | `globals.css`, `tailwind.config.ts`, toggle | browser QA theme check |
-| 117-test suite | `tests/` | `pnpm test` |
+| 128-test suite | `tests/` | `pnpm test` |
 | Relying-party authentication | `apps/web/app/auth-demo/page.tsx`, `packages/verifier/src/auth.ts` | `tests/auth-request.test.ts` (12), browser QA |
+| Trust Challenge | `apps/web/app/challenge/page.tsx`, `apps/web/lib/challenge.ts` | browser QA demo + live; security suite |
+| Standalone relying party | `examples/relying-party/demo.mjs` | `pnpm rp:demo` → 10/10 |
+| Merchant rotation demo | `apps/web/app/merchant/page.tsx` | browser QA destination update |
 | Paytaca compliance matrix | `docs/PAYTACA_COMPLIANCE.md` | requirement-to-evidence mapping |
 | Lab runs real verifier functions | `apps/web/lib/lab.ts`, `app/lab` | browser QA, standalone |
 | Mobile/reduced motion/keyboard | design system/global CSS | browser QA checks 12–14 |
@@ -117,11 +122,11 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | Production relay fallback (no localhost) | ✅ `wss://relay.damus.io,wss://nos.lol` |
 | Security headers | ✅ verified on `next start` |
 | Static assets (`/vectors.json`, standalone, icon) | ✅ 200 |
-| Routes | ✅ 14 routes build and render (`/pay` included) |
+| Routes | ✅ 16 routes build and render (`/pay` included) |
 | KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (11) |
 | WizardConnect pairing | ✅ dialog opens; ❌ untested with a physical wallet |
 | Theme / glass system | ✅ dark + warm light, reduced motion, mobile |
-| Browser QA | ✅ **47/47**, pay/theme/auth-demo included |
+| Browser QA | ✅ **54/54**, challenge/merchant/pay/theme/auth-demo included |
 | CSP + WASM | ✅ fixed and smoke-tested |
 | No secrets in client bundle | ✅ scanned |
 | Demo/lab/standalone work without relay | ✅ |
