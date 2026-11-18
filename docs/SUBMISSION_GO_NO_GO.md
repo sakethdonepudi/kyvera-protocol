@@ -3,7 +3,7 @@
 **Date:** 2026-11-19
 **Project:** KYVERA
 **Bounty:** Paytaca Decentralized Identity · BCH Blaze 2026
-**Baseline:** commit `6cc811f` plus the audit fixes and documents in this commit
+**Baseline:** commit `dfb0023` (audit fixes and evidence)
 
 ---
 
@@ -62,8 +62,8 @@ pnpm rp:demo                     PASS 10/10, no KYVERA API/relay
 pnpm audit --prod                PASS, 0 known vulnerabilities
 ```
 
-Fresh clone: `git clone` of the audit commit, `pnpm install --frozen-lockfile`,
-`pnpm test` and `pnpm build` passed. The install emits a non-fatal warning that
+Fresh clone: `git clone` of `dfb0023`, `pnpm install --frozen-lockfile`,
+`pnpm test` (134/134) and `pnpm build` passed. The install emits a non-fatal warning that
 the `kyvera-verify` bin points to an unbuilt `dist/cli.js`; it resolves after
 `pnpm build` or `pnpm cli`.
 

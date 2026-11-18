@@ -1,7 +1,7 @@
 # KYVERA Final Security Audit
 
 **Date:** 2026-11-19
-**Scope:** latest local repository at the audit start commit `6cc811f`, plus the local fixes below
+**Scope:** audit began at `6cc811f`; fixes and evidence are committed in `dfb0023`
 **Type:** internal red-team review and reproducible test audit
 **Not:** an independent third-party security audit, a formal verification, or a warranty
 
@@ -15,7 +15,7 @@ No mainnet transaction was broadcast and no external Nostr event was published.
 
 | Category | Status | Evidence |
 | --- | --- | --- |
-| **Verified locally** | Yes | 134 unit/integration/security tests; typecheck; production build; 54 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone install/test/build |
+| **Verified locally** | Yes | 134 unit/integration/security tests; typecheck; production build; 54 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `dfb0023` with `--frozen-lockfile`, test and build |
 | **Verified with real wallets** | No | No Paytaca, Cashonize or Selene device/extension was available; no wallet-produced signature was recorded |
 | **Verified on public relays** | Partial | Read-only probe: `wss://relay.damus.io` failed, `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published |
 | **Verified in production** | No | `next start` works locally; no public deployment exists |
@@ -522,6 +522,8 @@ pnpm qa:browser           # 54/54, 0 console/page errors
 pnpm rp:demo              # 10/10, no KYVERA API/relay
 pnpm audit --prod
 ```
+
+Fresh clone of commit `dfb0023`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 134/134, `pnpm build` pass.
 
 ---
 
