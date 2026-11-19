@@ -150,7 +150,7 @@ export default function DevelopersPage() {
       </section>
 
       <section className="mt-12 grid gap-5 lg:grid-cols-2">
-        <div>
+        <div className="min-w-0">
           <h2 className="text-[15px] font-semibold text-ivory">CLI verification</h2>
           <p className="mt-1 text-[12px] text-ivory-muted">
             Exit code 0 means a conclusive lifecycle state; 1 means uncertain or invalid.
@@ -159,7 +159,7 @@ export default function DevelopersPage() {
             <CodeBlock code={CLI_LINES} language="bash" />
           </div>
         </div>
-        <div>
+        <div className="min-w-0">
           <h2 className="text-[15px] font-semibold text-ivory">Reproduce the demo</h2>
           <p className="mt-1 text-[12px] text-ivory-muted">
             The local relay persists demo events so the browser and CLI see the same signed history.

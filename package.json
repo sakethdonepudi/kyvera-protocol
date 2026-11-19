@@ -31,6 +31,7 @@
     "rp:demo": "pnpm -r --filter \"./packages/*\" build && node examples/relying-party/demo.mjs",
     "relay:health": "pnpm -r --filter \"./packages/*\" build && node scripts/relay-health.mjs",
     "smoke:deploy": "node scripts/post-deploy-smoke.mjs",
+    "prod:qa": "node scripts/prod-readonly-qa.mjs",
     "test:public-relay": "node scripts/public-relay-identity-test.mjs",
     "cli": "pnpm -r --filter \"./packages/*\" build && node packages/verifier/dist/cli.js"
   },

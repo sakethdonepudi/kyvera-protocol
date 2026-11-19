@@ -5,7 +5,7 @@ import { useState } from "react";
 export function CodeBlock({ code, language }: { code: string; language: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="relative overflow-hidden rounded-lg border border-ivory/[0.08] bg-ink-950/80">
+    <div className="relative min-w-0 max-w-full overflow-hidden rounded-lg border border-ivory/[0.08] bg-ink-950/80">
       <div className="flex items-center justify-between border-b border-ivory/[0.06] px-3.5 py-2">
         <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ivory-muted">{language}</span>
         <button

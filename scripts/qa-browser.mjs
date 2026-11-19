@@ -314,6 +314,7 @@ async function mobileFlow() {
     ["mobile-challenge", "/challenge"],
     ["mobile-merchant", "/merchant"],
     ["mobile-tutorial", "/tutorial"],
+    ["mobile-developers", "/developers"],
   ]) {
     await page.goto(`${BASE}${path}`, { waitUntil: "networkidle" });
     await page.waitForTimeout(1000);
