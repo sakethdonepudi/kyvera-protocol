@@ -7,6 +7,15 @@ import { Disclosure, cn } from "./ui";
 
 const VIDEOS = [
   {
+    id: "v5",
+    label: "v5 product film",
+    title: "The KYVERA v5 product film",
+    duration: "2:00",
+    src: "/demo/kyvera-v5-product-film.mp4",
+    poster: "/demo/kyvera-v5-poster.webp",
+    captions: "/demo/kyvera-v5-product-film.vtt",
+  },
+  {
     id: "overview",
     label: "Overview",
     title: "The 90-second overview",
@@ -48,7 +57,7 @@ export function TutorialCinema() {
             See KYVERA in action.
           </h1>
           <p className="mt-3 max-w-md text-[12.5px] leading-relaxed text-ivory-dim">
-            Two films, recorded from the real application.
+            The v5 product film, plus previous demonstrations.
           </p>
         </div>
 
@@ -72,7 +81,11 @@ export function TutorialCinema() {
         </div>
       </div>
 
-      <div className="glass mt-8 rounded-2xl p-2">
+      <p className="mt-3 text-[10.5px] text-ivory-muted">
+        Overview and Technical demo are previous demonstrations.
+      </p>
+
+      <div className="glass mt-5 rounded-2xl p-2">
         <div className="overflow-hidden rounded-xl bg-black">
           {VIDEOS.map((video) => (
             <video

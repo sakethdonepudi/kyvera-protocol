@@ -1,0 +1,105 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:03.744
+Your digital identity shouldn't disappear when your keys change.
+
+2
+00:00:03.964 --> 00:00:06.508
+A wallet address can prove control.
+
+3
+00:00:06.728 --> 00:00:12.752
+But what happens when that wallet changes, a key is compromised, or authorization is revoked?
+
+4
+00:00:12.972 --> 00:00:17.628
+KYVERA introduces identity continuity for Bitcoin Cash and Nostr.
+
+5
+00:00:18.628 --> 00:00:23.596
+Two independently controlled keys establish a cryptographic relationship.
+
+6
+00:00:23.816 --> 00:00:26.648
+One belongs to a Bitcoin Cash wallet.
+
+7
+00:00:26.868 --> 00:00:29.748
+The other belongs to a Nostr identity.
+
+8
+00:00:29.968 --> 00:00:32.872
+Each proof is verified independently.
+
+9
+00:00:33.092 --> 00:00:35.948
+Neither private key needs to leave its owner.
+
+10
+00:00:36.948 --> 00:00:41.508
+KYVERA publishes signed identity records through public Nostr relays.
+
+11
+00:00:41.728 --> 00:00:47.824
+Independent applications can retrieve the evidence and verify it without relying on KYVERA's website.
+
+12
+00:00:48.044 --> 00:00:55.868
+A two-relay public lifecycle test reconstructs bind, rotate, and revoke, and rejects a forged rotation.
+
+13
+00:00:56.088 --> 00:01:01.056
+Synchronization assurance is reported separately from cryptographic validity.
+
+14
+00:01:02.056 --> 00:01:04.816
+Identity isn't a single signature.
+
+15
+00:01:05.036 --> 00:01:07.340
+It's a history of authorization.
+
+16
+00:01:07.560 --> 00:01:11.880
+When a wallet rotates, the earlier proof remains historically valid.
+
+17
+00:01:12.100 --> 00:01:16.252
+But the old wallet is no longer the current authorized destination.
+
+18
+00:01:16.472 --> 00:01:19.760
+Revocation changes that authorization again.
+
+19
+00:01:20.760 --> 00:01:27.888
+Applications can issue single-use challenges, verify responses, and establish short-lived sessions.
+
+20
+00:01:28.108 --> 00:01:34.540
+Outdated authorization, replayed challenges, and insufficient relay evidence are rejected.
+
+21
+00:01:35.540 --> 00:01:41.324
+KYVERA provides a reusable TypeScript SDK and an independent relying-party example.
+
+22
+00:01:41.544 --> 00:01:48.528
+Applications can inspect cryptographic evidence, authorization history, and synchronization assurance.
+
+23
+00:01:49.528 --> 00:01:51.400
+Keys change.
+
+24
+00:01:51.620 --> 00:01:53.612
+Trust shouldn't disappear.
+
+25
+00:01:53.832 --> 00:01:55.704
+KYVERA.
+
+26
+00:01:55.924 --> 00:01:58.540
+The Identity Continuity Protocol.

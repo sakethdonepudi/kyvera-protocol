@@ -1,0 +1,32 @@
+{
+  "sections": [
+    {
+      "id": "opening",
+      "text": "Your digital identity shouldn't disappear when your keys change. A wallet address can prove control. But what happens when that wallet changes, a key is compromised, or authorization is revoked? KYVERA introduces identity continuity for Bitcoin Cash and Nostr."
+    },
+    {
+      "id": "creation",
+      "text": "Two independently controlled keys establish a cryptographic relationship. One belongs to a Bitcoin Cash wallet. The other belongs to a Nostr identity. Each proof is verified independently. Neither private key needs to leave its owner."
+    },
+    {
+      "id": "discovery",
+      "text": "KYVERA publishes signed identity records through public Nostr relays. Independent applications can retrieve the evidence and verify it without relying on KYVERA's website. A two-relay public lifecycle test reconstructs bind, rotate, and revoke, and rejects a forged rotation. Synchronization assurance is reported separately from cryptographic validity."
+    },
+    {
+      "id": "lifecycle",
+      "text": "Identity isn't a single signature. It's a history of authorization. When a wallet rotates, the earlier proof remains historically valid. But the old wallet is no longer the current authorized destination. Revocation changes that authorization again."
+    },
+    {
+      "id": "authentication",
+      "text": "Applications can issue single-use challenges, verify responses, and establish short-lived sessions. Outdated authorization, replayed challenges, and insufficient relay evidence are rejected."
+    },
+    {
+      "id": "developer",
+      "text": "KYVERA provides a reusable TypeScript SDK and an independent relying-party example. Applications can inspect cryptographic evidence, authorization history, and synchronization assurance."
+    },
+    {
+      "id": "closing",
+      "text": "Keys change. Trust shouldn't disappear. KYVERA. The Identity Continuity Protocol."
+    }
+  ]
+}

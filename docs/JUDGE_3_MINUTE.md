@@ -103,12 +103,12 @@ Open `/lab` or scroll to the Trust Challenge evidence.
 
 ```bash
 pnpm install
-pnpm test          # 136 tests, 13 files
+pnpm test          # 154 tests, 13 files
 pnpm typecheck
 pnpm build
 pnpm relay         # terminal 1
 pnpm dev           # terminal 2
-pnpm qa:browser    # 57 browser checks
+pnpm qa:browser    # 64 browser checks
 pnpm rp:demo       # 10/10 independent RP checks
 ```
 

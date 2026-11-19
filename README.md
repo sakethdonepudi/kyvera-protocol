@@ -54,6 +54,7 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 
 ## 2.1 What is new in this iteration
 
+- **V5 product film**: a new 120-second narrated film recorded from the v5.0.1 application, a 15-second silent homepage preview, WebVTT captions and a WebP poster. The film is the primary experience on `/demo`, defaults on `/tutorial`, and opens from the homepage. Source in [`scripts/film-v5/`](scripts/film-v5); details in [`docs/VIDEO_NARRATION.md`](docs/VIDEO_NARRATION.md).
 - **V5 public SDK**: `@kyvera/sdk` exposes `KyveraClient`, structured cryptographic/historical/current-authorization/evidence results, auth helpers and evidence export. See [`docs/SDK_QUICKSTART.md`](docs/SDK_QUICKSTART.md).
 - **V5 public discovery**: each record is dual-published as an experimental regular event (kind `1078`) and a legacy NIP-78 mirror (kind `30078`). The verifier accepts both and de-duplicates by record ID. See [`docs/protocol/NOSTR_DISCOVERY_RFC.md`](docs/protocol/NOSTR_DISCOVERY_RFC.md).
 - **V5 wallet adapter**: `@kyvera/wallet-bch` reports connect/address/signing capabilities separately and verifies manual wallet proofs. See [`docs/WALLET_ADAPTERS.md`](docs/WALLET_ADAPTERS.md).
@@ -64,7 +65,7 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 - **Standalone relying party** (`pnpm rp:demo`): a framework-independent Node app that authenticates, rejects replay and verifies rotation/revocation without the KYVERA website, API or relay.
 - **Identity Time Machine** (`/demo` and every identity dashboard): inspect each signed record, its predecessor digest, both proofs, relay observations and the explanation for acceptance or rejection.
 - **Security laboratory** (`/lab`): six executable adversarial scenarios — authorized rotation, unauthorized rotation, replay, equivocation, missing history/rollback, revocation — using real verifier functions and deterministic unspendable keys.
-- **Guided 90-second demo** (`/demo`): the full argument in eight steps, with no wallet or relay required.
+- **Guided interactive demo** (`/demo`): the protocol in eight verifier steps, below the new product film and a clear offline-fixture mode indicator.
 - **Standalone HTML demo** (`demo/kyvera-standalone.html`): the real verifier bundled into one file for judges who cannot install dependencies.
 - **Wallet probe** (`/interop`): test a real Electron Cash / Cashonize / Paytaca `signmessage` signature and record the actual result. No compatibility is claimed until a real row exists.
 - **KYVERA Pay** (`/pay`): resolve an identity, enforce ACTIVE/network/freshness policy, re-resolve before handoff, and generate a BIP21/QR payment for Paytaca, Selene, Cashonize or Electron Cash. WizardConnect pairing is implemented for Paytaca and Cashonize.

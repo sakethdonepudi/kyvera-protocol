@@ -26,7 +26,7 @@
 | --- | --- |
 | `pnpm test` | **136/136**, 13 files |
 | `pnpm typecheck` | pass (all packages + web) |
-| `pnpm qa:browser` | **57/57**, 0 console/page errors |
+| `pnpm qa:browser` | **64/64**, 0 console/page errors |
 | `pnpm build` | pass, 17 routes |
 | `next start` production smoke | pass |
 | `pnpm audit --prod` | 0 known vulnerabilities |

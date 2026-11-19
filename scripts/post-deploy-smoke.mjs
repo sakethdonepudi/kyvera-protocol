@@ -65,6 +65,24 @@ for (const [path, text] of routes) {
   await page.getByText(text, { exact: false }).first().waitFor({ timeout: 20_000 });
 }
 
+await page.goto(`${BASE}/`, { waitUntil: "networkidle" });
+await page.getByText("See identity continuity.").waitFor({ timeout: 20_000 });
+const homepagePreview = page.getByTestId("film-preview");
+if ((await homepagePreview.count()) !== 1) {
+  failures.push("homepage film preview missing");
+} else {
+  const attrs = await homepagePreview.evaluate((element) => ({
+    muted: element.muted,
+    loop: element.loop,
+    playsInline: element.playsInline,
+    poster: element.getAttribute("poster"),
+  }));
+  if (!attrs.muted || !attrs.loop || !attrs.playsInline) {
+    failures.push("homepage film preview is not muted/looping/inline");
+  }
+  if (!attrs.poster) failures.push("homepage film preview missing poster");
+}
+
 const scripts = await page.evaluate(() =>
   performance
     .getEntriesByType("resource")
@@ -79,9 +97,21 @@ for (const script of scripts) {
   }
 }
 
+for (const path of [
+  "/demo/kyvera-v5-product-film.mp4",
+  "/demo/kyvera-v5-preview.mp4",
+  "/demo/kyvera-v5-poster.webp",
+  "/demo/kyvera-v5-product-film.vtt",
+  "/demo/kyvera-explainer-90s.mp4",
+  "/demo/kyvera-judge-demo-3min.mp4",
+]) {
+  const response = await page.request.get(`${BASE}${path}`);
+  if (!response.ok()) failures.push(`missing asset ${path} (${response.status()})`);
+}
+
 await page.goto(`${BASE}/tutorial`, { waitUntil: "networkidle" });
 const videos = page.locator("video");
-if ((await videos.count()) !== 2) failures.push("tutorial does not render two videos");
+if ((await videos.count()) !== 3) failures.push("tutorial does not render three videos");
 for (let index = 0; index < (await videos.count()); index += 1) {
   const video = videos.nth(index);
   if (!(await video.getAttribute("poster"))) failures.push(`video ${index} missing poster`);

@@ -4,7 +4,7 @@ import { TutorialCinema } from "@/components/tutorial-cinema";
 export const metadata: Metadata = {
   title: "See KYVERA in action",
   description:
-    "The 90-second overview and three-minute technical demo of the KYVERA identity-continuity protocol.",
+    "The two-minute KYVERA v5 product film, plus the previous overview and technical demonstration.",
 };
 
 export default function TutorialPage() {

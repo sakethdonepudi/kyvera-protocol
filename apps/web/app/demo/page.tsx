@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getDemoState, type DemoState } from "@/lib/lab";
 import { TimeMachine } from "@/components/time-machine";
+import { FilmPlayer } from "@/components/product-film";
 import { Alert, Button, Card, CopyButton, Disclosure, GlassPanel, SectionLabel, Spinner, StatusBadge, cn } from "@/components/ui";
 import { shortAddress, shortHex } from "@/lib/format";
 
@@ -66,11 +67,26 @@ export default function DemoPage() {
 
   return (
     <div className="mx-auto max-w-[1240px] px-5 py-12">
-      <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+      <div>
+        <h1 className="font-display text-[38px] leading-[1.04] tracking-editorial text-ivory sm:text-[52px]">
+          KYVERA in action.
+        </h1>
+        <div className="mt-6">
+          <FilmPlayer />
+        </div>
+      </div>
+
+      <div className="mt-14 border-t border-ivory/[0.08] pt-10">
+        <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-ivory-muted">
+          Explore the protocol
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
         <div>
-          <h1 className="font-display text-[38px] leading-[1.04] tracking-editorial text-ivory sm:text-[52px]">
+          <h2 className="font-display text-[30px] leading-tight tracking-editorial text-ivory sm:text-[38px]">
             Explore identity continuity.
-          </h1>
+          </h2>
           <div className="mt-3 flex flex-wrap items-center gap-4">
             <span className="inline-flex items-center gap-1.5 text-[10.5px] text-ivory-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-signal" />

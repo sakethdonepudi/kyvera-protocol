@@ -3,22 +3,23 @@ import { CodeBlock } from "@/components/code-block";
 
 const REPO = "https://github.com/sakethdonepudi/kyvera-protocol";
 
-const VERIFY_SNIPPET = `import { resolveIdentity } from "@kyvera/verifier";
+const VERIFY_SNIPPET = `import { KyveraClient } from "@kyvera/sdk";
 
-const result = await resolveIdentity({
-  subject: "64-char-hex-nostr-pubkey",
-  relays: ["wss://relay.damus.io", "wss://nos.lol"],
+const client = new KyveraClient({
+  relays: ["wss://nos.lol", "wss://relay.primal.net"],
 });
 
-if (result.status === "ACTIVE") {
-  console.log("pay to", result.activeBch?.address);
-} else {
-  console.log(result.status, result.reason);
-}`;
+const result = await client.verify(npub);
 
-const OFFLINE_SNIPPET = `import { resolveEvents } from "@kyvera/verifier";
+console.log(result.status);                 // ACTIVE, REVOKED, STALE, ...
+console.log(result.currentAuthorization.authorized);
+console.log(result.currentAuthorization.usableForSensitiveOperations);
+console.log(result.historicalValidity.records);
+console.log(result.evidenceCompleteness.assurance);`;
 
-// events: signed NIP-78 events fetched by any means, in any order.
+const OFFLINE_SNIPPET = `import { resolveEvents } from "@kyvera/sdk";
+
+// events: signed KYVERA events fetched by any means, in any order.
 const { resolution } = resolveEvents(events, {
   now: Math.floor(Date.now() / 1000),
   network: "mainnet",
@@ -27,7 +28,7 @@ const { resolution } = resolveEvents(events, {
 // A record can be valid while the chain is not:
 //   record valid  !=  currently authorized`;
 
-const ROTATE_SNIPPET = `import { createRotateRecord } from "@kyvera/verifier";
+const ROTATE_SNIPPET = `import { createRotateRecord } from "@kyvera/sdk";
 
 const rotation = await createRotateRecord({
   signer,                          // current Nostr key
@@ -43,14 +44,21 @@ const rotation = await createRotateRecord({
 
 // rotation.event is the signed Nostr event to publish.`;
 
-const AUTH_SNIPPET = `import { ChallengeService } from "@kyvera/verifier";
+const AUTH_SNIPPET = `import { AuthRequestService } from "@kyvera/sdk/auth";
 
-const service = new ChallengeService({ domain: "app.example", ttlSeconds: 300 });
-const challenge = service.issue();
+const service = new AuthRequestService({
+  origin: "https://app.example",
+  ttlSeconds: 120,
+  sessionTtlSeconds: 900,
+});
 
-// Send challenge.challenge to the user, receive a kind-22242 event, then:
-const result = service.verify(event, identityResolution);
-if (!result.authenticated) deny(result.code);`;
+const request = service.issue({ expectedSubject: subject });
+// Sign request with the user's Nostr key, then:
+const { check, session } = service.verify(event, resolution);
+if (!check.authenticated) deny(check.code);
+
+// Re-resolve before validating a session:
+service.validate(session.token, freshResolution);`;
 
 const CLI_LINES = `# build the workspace and run the verifier
 pnpm install
@@ -90,11 +98,14 @@ export default function DevelopersPage() {
         </p>
       </div>
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-3">
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {[
+          ["@kyvera/sdk", "developer façade, structured verification, evidence"],
+          ["@kyvera/verifier", "chain resolution, relay discovery, auth, CLI"],
           ["@kyvera/core", "canonical JSON, records, chain state machine"],
           ["@kyvera/bch", "CashAddr + wallet signmessage proofs"],
-          ["@kyvera/nostr", "NIP-78 events, relay queries, publishing"],
+          ["@kyvera/nostr", "public + legacy events, relay queries, publishing"],
+          ["@kyvera/wallet-bch", "capability model + manual proof verification"],
         ].map(([pkg, description]) => (
           <div key={pkg} className="rounded-lg border border-ivory/[0.08] bg-ink-850/60 p-4">
             <div className="font-mono text-[11.5px] text-accent">{pkg}</div>
@@ -107,8 +118,9 @@ export default function DevelopersPage() {
         <div>
           <h2 className="text-[15px] font-semibold text-ivory">Resolve the current state</h2>
           <p className="mt-1 text-[12px] text-ivory-muted">
-            The only call most applications need. It queries every relay independently, verifies each
-            record, walks the chain and reports assurance.
+            The SDK queries every relay independently, verifies each record, walks the chain and returns
+            cryptographic validity, historical validity, current authorization and evidence completeness
+            as separate fields.
           </p>
           <div className="mt-3">
             <CodeBlock code={VERIFY_SNIPPET} language="ts" />
@@ -118,8 +130,8 @@ export default function DevelopersPage() {
         <div>
           <h2 className="text-[15px] font-semibold text-ivory">Verify without a relay</h2>
           <p className="mt-1 text-[12px] text-ivory-muted">
-            Historical validity and current authorization are deliberately separate. This distinction is
-            the core contribution.
+            Historical validity and current authorization stay separate, even when the evidence is
+            supplied by another system.
           </p>
           <div className="mt-3">
             <CodeBlock code={OFFLINE_SNIPPET} language="ts" />
@@ -140,8 +152,8 @@ export default function DevelopersPage() {
         <div>
           <h2 className="text-[15px] font-semibold text-ivory">Challenge-response authentication</h2>
           <p className="mt-1 text-[12px] text-ivory-muted">
-            NIP-42-shaped kind 22242 events, verified against the resolved state. The relying app owns
-            challenge storage.
+            Single-use kind-22242 requests, verified against the resolved state. Challenges are consumed
+            before verification and sessions re-resolve the chain.
           </p>
           <div className="mt-3">
             <CodeBlock code={AUTH_SNIPPET} language="ts" />
@@ -176,7 +188,7 @@ export default function DevelopersPage() {
           <table className="w-full text-left text-[12px]">
             <tbody className="divide-y divide-ivory/[0.06]">
               {[
-                ["Nostr event", "kind 30078 (NIP-78), d = kyvera:v1:<subject>:<seq>:<payload digest>"],
+                ["Nostr event", "public kind 1078 + legacy kind 30078, d = kyvera:v1:<subject>:<seq>:<payload digest>"],
                 ["Canonical bytes", "KCJ-1: sorted keys, no whitespace, NFC, integers only"],
                 ["BCH proof", "signmessage compact ECDSA over KYVERA/v1/bch-proof + role + address + digest"],
                 ["Nostr proof", "BIP-340 Schnorr signature over the event"],
@@ -201,9 +213,12 @@ export default function DevelopersPage() {
           <h3 className="text-[13px] font-semibold text-ivory">Documentation</h3>
           <ul className="mt-2 space-y-1.5 text-[12px] text-ivory-muted">
             {[
-              ["Protocol specification", `${REPO}/blob/main/docs/PROTOCOL.md`],
-              ["Threat model", `${REPO}/blob/main/docs/THREAT_MODEL.md`],
-              ["Security limitations", `${REPO}/blob/main/docs/SECURITY_LIMITATIONS.md`],
+              ["Protocol specification", `${REPO}/blob/main/docs/PROTOCOL_SPEC.md`],
+              ["SDK quickstart", `${REPO}/blob/main/docs/SDK_QUICKSTART.md`],
+              ["Wallet adapters", `${REPO}/blob/main/docs/WALLET_ADAPTERS.md`],
+              ["Nostr discovery RFC", `${REPO}/blob/main/docs/protocol/NOSTR_DISCOVERY_RFC.md`],
+              ["Threat model", `${REPO}/blob/main/docs/security/THREAT_MODEL_V5.md`],
+              ["Known limitations", `${REPO}/blob/main/docs/security/KNOWN_LIMITATIONS.md`],
               ["Competitive audit 2026", `${REPO}/blob/main/docs/COMPETITIVE_AUDIT_2026.md`],
               ["KYVERA 3.0 competitive analysis", `${REPO}/blob/main/docs/KYVERA_3_COMPETITIVE_ANALYSIS.md`],
               ["KYVERA Pay", `${REPO}/blob/main/docs/KYVERA_PAY.md`],
@@ -270,11 +285,15 @@ export default function DevelopersPage() {
         </div>
         <p className="mt-2 max-w-3xl text-[12px] leading-relaxed text-ivory-muted">
           Build deterministic records, issue a single-use challenge, verify rotation, revoke the
-          identity and invalidate the session without calling any KYVERA API or relay.
+          identity, persist a session across process restarts and invalidate it without calling any
+          KYVERA API or relay.
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <code className="rounded-lg border border-ivory/12 px-3 py-2 font-mono text-[11px] text-ivory-dim">
             pnpm rp:demo
+          </code>
+          <code className="rounded-lg border border-ivory/12 px-3 py-2 font-mono text-[11px] text-ivory-dim">
+            pnpm rp:persist
           </code>
           <Link href="/auth-demo" className="text-[11.5px] text-signal hover:text-signal-bright">
             Browser relying-party demo →

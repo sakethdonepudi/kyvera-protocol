@@ -13,11 +13,11 @@ implementation, test evidence, demo route, documentation and remaining limits.
 
 | Requirement | Implementation | Test evidence | Demo | Documentation | Remaining limitation |
 | --- | --- | --- | --- | --- | --- |
-| **R1** Identity creation and management with self-held keys | `/create`, `apps/web/lib/identity.ts`, `packages/verifier/src/create.ts` | `tests/binding.test.ts`, `tests/security-challenge.test.ts`, 57 browser checks | `/create` | README, `docs/PROTOCOL.md` | Physical wallet pairing untested; demo keys are browser-local |
+| **R1** Identity creation and management with self-held keys | `/create`, `apps/web/lib/identity.ts`, `packages/verifier/src/create.ts` | `tests/binding.test.ts`, `tests/security-challenge.test.ts`, 64 browser checks | `/create` | README, `docs/PROTOCOL.md` | Physical wallet pairing untested; demo keys are browser-local |
 | **R2** Cryptographic BCH–Nostr binding with distinct keys | Canonical KCJ-1 records; BCH `signmessage`; BIP-340 Nostr proof; `KEY_REUSE` check | `tests/binding.test.ts`, `tests/interop.test.ts`, `tests/property.test.ts` | `/challenge` stage Bind, `/demo` | `docs/PROTOCOL.md` | P2PKH only; no multisig/CashTokens |
 | **R3** Decentralized discovery | public kind 1078 + legacy kind 30078; multi-relay resolution; per-relay sync; `STALE`/`PARTIAL`/`UNSYNCED` | `tests/relay.test.ts`, `tests/chain.test.ts` | `/verify`, `/challenge` live mode | `docs/INTEGRATION.md` | Relay sets can withhold history; checkpoints detect known rollbacks only |
 | **R4** Independent verification and authentication | `@kyvera/verifier`; `/auth-demo`; standalone RP; single-use challenges; origin/session/identity/address binding | `tests/auth-request.test.ts`, `tests/security-challenge.test.ts`, `/auth-demo` browser journey | `/auth-demo`, `/challenge` stage Authenticate, `pnpm rp:demo` | `docs/PAYTACA_COMPLIANCE.md`, `docs/INTEGRATION.md` | Browser session store is in-memory; production RP must persist |
-| **R5** Working prototype, source and documentation | 17 routes; monorepo; CLI; standalone verifier | 136 tests, 57 browser checks, production build | all routes | README, `docs/`, `docs/JUDGE_3_MINUTE.md` | Repository is public; public Vercel demo is live |
+| **R5** Working prototype, source and documentation | 17 routes; monorepo; CLI; standalone verifier | 154 tests, 64 browser checks, production build | all routes | README, `docs/`, `docs/JUDGE_3_MINUTE.md` | Repository is public; public Vercel demo is live |
 
 ---
 
@@ -28,7 +28,7 @@ implementation, test evidence, demo route, documentation and remaining limits.
 | Trust Challenge with five real stages | Implemented | `apps/web/lib/challenge.ts`, `tests/security-challenge.test.ts`, browser checks | `/challenge` | Live rotation needs browser-local keys |
 | Guided demo and live mode never mixed | Implemented | separate state in `challenge/page.tsx`; browser checks | `/challenge` | Live mode depends on configured relays |
 | Independent relying-party application | Implemented | `examples/relying-party/demo.mjs`, `pnpm rp:demo` → 10/10 | terminal | Deterministic keys, no wallet |
-| Real-wallet onboarding (Connect → Sign → Verified → Publish) | Implemented | `/create`, `apps/web/lib/wallet.ts`, 57 browser checks | `/create` | No physical wallet test; WizardConnect has no message signing |
+| Real-wallet onboarding (Connect → Sign → Verified → Publish) | Implemented | `/create`, `apps/web/lib/wallet.ts`, 64 browser checks | `/create` | No physical wallet test; WizardConnect has no message signing |
 | Secure manual signature fallback | Implemented | `/create` Paste tab; invalid signature rejected automatically | `/create` | Manual copy/paste is required by wallet API limits |
 | Kyvera Pay policy and handoff | Implemented | `apps/web/lib/pay.ts`, `tests/pay.test.ts` | `/pay` | BIP21 handoff only; no wallet-approved transaction or txid |
 | Merchant identity demonstration | Implemented | `/merchant`, deterministic verifier, browser check | `/merchant` | Self-asserted merchant; no third-party attestation |
@@ -36,7 +36,7 @@ implementation, test evidence, demo route, documentation and remaining limits.
 | Interoperability proof package | Implemented | `docs/INTEGRATION.md`, standalone RP, vectors, CLI, offline verifier | `/developers`, `pnpm rp:demo` | No third-party integration test |
 | Security challenge suite | Implemented | `tests/security-challenge.test.ts` (16), 13 test files | `/lab`, `/challenge` | No independent audit |
 | Video-ready judge experience | Implemented | `docs/JUDGE_3_MINUTE.md`, `/tutorial` MP4s | `/`, `/challenge`, `/merchant`, `/pay`, `/tutorial` | Real-wallet segment not available |
-| Quality and release | Verified | 136 tests, typecheck, build, 57 browser checks, audit | — | Public deployment and real-device wallets outstanding |
+| Quality and release | Verified | 154 tests, typecheck, build, 64 browser checks, audit | — | Public deployment and real-device wallets outstanding |
 
 ---
 
@@ -61,10 +61,10 @@ implementation, test evidence, demo route, documentation and remaining limits.
 ## 4. Commands
 
 ```bash
-pnpm test          # 136 tests, 13 files
+pnpm test          # 154 tests, 13 files
 pnpm typecheck
 pnpm build
-pnpm qa:browser    # 57 checks
+pnpm qa:browser    # 64 checks
 pnpm rp:demo       # 10/10 standalone RP checks
 pnpm relay         # local relay for browser/live tests
 pnpm dev

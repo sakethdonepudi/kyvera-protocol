@@ -41,7 +41,69 @@ async function desktopFlow() {
   record("landing lifecycle demo switches to rotation", true);
   await shot(page, "01-landing");
 
+  await page.getByText("See identity continuity.").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1200);
+  const preview = page.getByTestId("film-preview");
+  if ((await preview.count()) !== 1) throw new Error("homepage film preview missing");
+  const previewAttrs = await preview.evaluate((element) => ({
+    muted: element.muted,
+    loop: element.loop,
+    playsInline: element.playsInline,
+  }));
+  if (!previewAttrs.muted || !previewAttrs.loop || !previewAttrs.playsInline) {
+    throw new Error("homepage preview is not muted, looping and inline");
+  }
+  record("homepage film preview is muted, looping and inline", true);
+  await page.waitForFunction(
+    () => {
+      const video = document.querySelector('[data-testid="film-preview"]');
+      return Boolean(video && !video.paused);
+    },
+    { timeout: 15_000 },
+  ).catch(() => {
+    throw new Error("homepage preview did not autoplay when visible");
+  });
+  record("homepage preview autoplays when visible", true);
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(1200);
+  const offscreenPaused = await preview.evaluate((element) => element.paused);
+  if (!offscreenPaused) throw new Error("homepage preview did not pause offscreen");
+  record("homepage preview pauses when offscreen", true);
+  await page.getByText("See identity continuity.").scrollIntoViewIfNeeded();
+  await page.getByRole("button", { name: "Watch the film" }).first().click();
+  const dialog = page.getByRole("dialog", { name: "KYVERA product film" });
+  await dialog.waitFor({ timeout: 10_000 });
+  const modalVideo = dialog.locator("video");
+  if (!(await modalVideo.evaluate((element) => element.controls))) {
+    throw new Error("narrated film is missing controls");
+  }
+  if ((await modalVideo.locator("track[kind=captions]").count()) !== 1) {
+    throw new Error("narrated film is missing captions");
+  }
+  await page.waitForFunction(
+    () => {
+      const video = document.querySelector('[role="dialog"] video');
+      return Boolean(video && !video.paused && video.currentTime > 0.2);
+    },
+    { timeout: 20_000 },
+  ).catch(() => {
+    throw new Error("narrated film did not start after Watch the film");
+  });
+  record("narrated film starts with sound after Watch the film", true);
+  await page.getByRole("button", { name: "Close" }).click();
+  record("homepage film opens the narrated film with captions", true);
+
   await page.goto(`${BASE}/demo`, { waitUntil: "networkidle" });
+  const demoFilm = page.locator("video").first();
+  await demoFilm.waitFor({ timeout: 20_000 });
+  if (!(await demoFilm.getAttribute("poster"))) throw new Error("/demo film missing poster");
+  if (!(await demoFilm.evaluate((element) => element.controls))) {
+    throw new Error("/demo film missing controls");
+  }
+  if ((await demoFilm.locator("track[kind=captions]").count()) !== 1) {
+    throw new Error("/demo film missing captions");
+  }
+  record("/demo renders the v5 film with controls and captions", true);
   await page.getByText("Identity time machine").waitFor({ timeout: 20_000 });
   record("guided demo resolves deterministic fixtures", true);
   await page.getByRole("button", { name: /04 Rotate/ }).click();
@@ -78,8 +140,8 @@ async function desktopFlow() {
   await page.goto(`${BASE}/tutorial`, { waitUntil: "networkidle" });
   await page.getByText("See KYVERA in action.").waitFor({ timeout: 20_000 });
   const videos = page.locator("video");
-  if ((await videos.count()) !== 2) throw new Error("expected two demo videos");
-  for (let index = 0; index < 2; index += 1) {
+  if ((await videos.count()) !== 3) throw new Error("expected three demo videos");
+  for (let index = 0; index < 3; index += 1) {
     const video = videos.nth(index);
     if (!(await video.getAttribute("poster"))) throw new Error("missing video poster");
     if (!(await video.evaluate((element) => element.controls))) {
@@ -341,6 +403,13 @@ async function accessibilityFlow() {
     duration === "0s" || (duration !== null && Number.parseFloat(duration) < 0.01),
     String(duration),
   );
+
+  await page.getByText("See identity continuity.").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(700);
+  const reducedPreviewPaused = await page
+    .getByTestId("film-preview")
+    .evaluate((element) => element.paused);
+  record("reduced motion disables preview autoplay", reducedPreviewPaused);
 
   await page.goto(`${BASE}/`, { waitUntil: "networkidle" });
   await page.getByRole("button", { name: /warm light/i }).click();

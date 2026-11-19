@@ -51,7 +51,7 @@ The responsive set covers 375, 390, 768 and 1440 px for the homepage, create, ch
 - `pnpm test` — 136/136
 - `pnpm typecheck` — pass
 - `pnpm build` — pass
-- `pnpm qa:browser` — 57/57, 0 console/page errors
+- `pnpm qa:browser` — 64/64, 0 console/page errors
 - `pnpm rp:demo` — 10/10
 - production smoke — 9 routes, headers and bundle checks
 - production read-only QA — 12 routes, reload, mobile, video

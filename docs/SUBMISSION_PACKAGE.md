@@ -13,9 +13,12 @@
 | Item | URL |
 | --- | --- |
 | **Live website** | https://kyvera-alpha.vercel.app |
-| **Three-minute judge walkthrough** | https://kyvera-alpha.vercel.app/tutorial |
-| **90-second explainer** | https://kyvera-alpha.vercel.app/demo/kyvera-explainer-90s.mp4 (97s, narrated, AAC, logo reveal) |
-| **Three-minute MP4** | https://kyvera-alpha.vercel.app/demo/kyvera-judge-demo-3min.mp4 (189s, narrated, AAC, logo reveal) |
+| **V5 product film** | https://kyvera-alpha.vercel.app/demo/kyvera-v5-product-film.mp4 (120s, narrated, AAC, captions) |
+| **Homepage preview** | https://kyvera-alpha.vercel.app/demo/kyvera-v5-preview.mp4 (15s, silent, loopable) |
+| **Poster** | https://kyvera-alpha.vercel.app/demo/kyvera-v5-poster.webp |
+| **Tutorial cinema** | https://kyvera-alpha.vercel.app/tutorial |
+| **Previous 90-second explainer** | https://kyvera-alpha.vercel.app/demo/kyvera-explainer-90s.mp4 (97s) |
+| **Previous three-minute walkthrough** | https://kyvera-alpha.vercel.app/demo/kyvera-judge-demo-3min.mp4 (189s) |
 | **Trust Challenge** | https://kyvera-alpha.vercel.app/challenge |
 | **Standalone verifier** | https://kyvera-alpha.vercel.app/kyvera-standalone.html |
 | **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol (public) |
@@ -159,7 +162,7 @@ short-term retention was observed. See `docs/audits/DISCOVERY_EVIDENCE.md`.
 | Check | Result |
 | --- | --- |
 | Unit / integration / security | **154/154**, 16 files |
-| Browser QA | **57/57**, 0 console/page errors |
+| Browser QA | **64/64**, 0 console/page errors |
 | Production build | pass, 17 routes |
 | Standalone relying party | **13/13** |
 | Durable relying party | **7/7** |
@@ -234,8 +237,12 @@ pnpm rp:demo
 
 ## 15. Video files
 
-- `apps/web/public/demo/kyvera-explainer-90s.mp4` — 1920×1080, H.264, AAC, 30fps, 97s
-- `apps/web/public/demo/kyvera-judge-demo-3min.mp4` — 1920×1080, H.264, AAC, 30fps, 189s
+- `apps/web/public/demo/kyvera-v5-product-film.mp4` — 1920×1080, H.264, AAC 48kHz, 30fps, 120s
+- `apps/web/public/demo/kyvera-v5-product-film.vtt` — 26 WebVTT cues
+- `apps/web/public/demo/kyvera-v5-preview.mp4` — 1920×1080, silent, 15s
+- `apps/web/public/demo/kyvera-v5-poster.webp` — 1920×1080 poster
+- `apps/web/public/demo/kyvera-explainer-90s.mp4` — previous 97s explainer, retained
+- `apps/web/public/demo/kyvera-judge-demo-3min.mp4` — previous 189s walkthrough, retained
 - Both open and close with a 2.4s reveal of the approved primary logo.
 - Narration: Microsoft Edge Neural TTS, `en-US-AndrewNeural`; scripts and audio evidence in [`VIDEO_NARRATION.md`](VIDEO_NARRATION.md).
 - Posters and WebVTT captions are in the same directory.

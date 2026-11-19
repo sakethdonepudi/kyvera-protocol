@@ -25,7 +25,7 @@ those capabilities.
 
 | Environment | Status | What was actually verified |
 | --- | --- | --- |
-| **Verified locally** | ✅ | 154/154 tests across 16 files; strict typecheck; production build; 57/57 browser checks; `pnpm rp:demo` 13/13; `pnpm rp:persist` 7/7; local and public lifecycle tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
+| **Verified locally** | ✅ | 154/154 tests across 16 files; strict typecheck; production build; 64/64 browser checks; `pnpm rp:demo` 13/13; `pnpm rp:persist` 7/7; local and public lifecycle tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
 | **Verified with real wallets** | ❌ | No Paytaca, Cashonize or Selene installation was available. No wallet pairing, wallet-produced message signature, account switch, wrong network, rejection or disconnect was recorded |
 | **Verified on public relays** | ✅ | Disposable bind → rotate → revoke lifecycle published to `wss://nos.lol` and `wss://relay.primal.net`; both accepted both envelopes; full history reconstructed; forged rotation rejected; short-term retention observed |
 | **Verified in production** | ✅ limited | Public Vercel deployment at https://kyvera-alpha.vercel.app; HTTPS routes, headers, video and bundle smoke pass. Full production auth/payment behavior still depends on external relays |
@@ -55,7 +55,7 @@ pnpm install --frozen-lockfile   PASS (fresh clone)
 pnpm test                        PASS 154/154, 16 files
 pnpm typecheck                   PASS
 pnpm build                       PASS, 17 routes
-pnpm qa:browser                  PASS 57/57, 0 console/page errors
+pnpm qa:browser                  PASS 64/64, 0 console/page errors
 pnpm rp:demo                     PASS 13/13, no KYVERA API/relay
 pnpm rp:persist                  PASS 7/7 durable sessions
 pnpm audit --prod                PASS, 0 known vulnerabilities
@@ -114,7 +114,7 @@ reduced-motion checks pass in browser QA. This is not a full WCAG audit.
   authorization chain and rejects unauthorized transitions.
 - It demonstrates rotation, revocation, conflicts, stale history and independent
   relying-party authentication.
-- It has 154 automated tests, 57 browser checks and 13/13 + 7/7 standalone relying
+- It has 154 automated tests, 64 browser checks and 13/13 + 7/7 standalone relying
   party demonstration.
 - It is honest about wallet and payment limitations.
 

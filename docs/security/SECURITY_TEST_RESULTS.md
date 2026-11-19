@@ -22,7 +22,7 @@ pnpm rp:persist
 | Unit/integration/security tests | **154/154** (see final count after V5 additions) |
 | Typecheck | pass (7 projects) |
 | Production build | pass |
-| Browser QA | 57/57, 0 console/page errors |
+| Browser QA | 64/64, 0 console/page errors |
 | Independent RP demo | 13/13 |
 | Durable RP demo | 7/7 |
 | Local relay discovery | pass |

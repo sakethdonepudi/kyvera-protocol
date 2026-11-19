@@ -47,7 +47,7 @@ for (const [path, text] of routes) {
 
 await page.goto(`${BASE}/tutorial`, { waitUntil: "networkidle" });
 const videos = page.locator("video");
-if ((await videos.count()) !== 2) failures.push("tutorial does not render two videos");
+if ((await videos.count()) !== 3) failures.push("tutorial does not render three videos");
 for (let index = 0; index < (await videos.count()); index += 1) {
   const video = videos.nth(index);
   if (!(await video.getAttribute("poster"))) failures.push(`video ${index} missing poster`);

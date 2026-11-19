@@ -26,10 +26,10 @@
 ## 2. Executed evidence
 
 ```text
-pnpm test          153/153 (final V5 count)
+pnpm test          154/154 (final V5 count)
 pnpm typecheck     pass
 pnpm build         pass
-pnpm qa:browser    57/57, 0 console/page errors
+pnpm qa:browser    64/64, 0 console/page errors
 pnpm rp:demo       13/13
 pnpm rp:persist    7/7
 ```

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LifecycleDemo } from "@/components/lifecycle-demo";
+import { FilmPreview } from "@/components/product-film";
 
 const PRINCIPLES = [
   {
@@ -79,6 +80,22 @@ export default function LandingPage() {
           <div className="mt-14 sm:mt-16">
             <LifecycleDemo />
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1060px] px-5 py-20">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-ivory-muted">
+              The film
+            </div>
+            <h2 className="mt-3 font-display text-[34px] leading-[1.05] tracking-editorial text-ivory sm:text-[42px]">
+              See identity continuity.
+            </h2>
+          </div>
+        </div>
+        <div className="mt-8">
+          <FilmPreview />
         </div>
       </section>
 
