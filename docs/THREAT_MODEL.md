@@ -244,7 +244,7 @@ Each threat lists the attack path, mitigation, residual risk and the test or cod
 
 **Path:** Relays refuse events or queries.
 
-**Mitigation:** Multiple relays, configurable lists, explicit `PARTIAL`/`UNSYNCED`. The SDK works offline with a provided event set.
+**Mitigation:** Multiple relays, configurable lists, explicit `PARTIAL`/`UNSYNCED`. Sensitive payment/auth fail closed unless `FULL`. The SDK works offline with a provided event set.
 
 **Residual:** No built-in relay reputation, retry strategy or Tor support.
 
@@ -302,7 +302,7 @@ Each threat lists the attack path, mitigation, residual risk and the test or cod
 | R-5 | Live wallet incompatibility | Medium | Medium | Format cross-verified; live test outstanding |
 | R-6 | No security audit | High | Medium | Stated; not production-ready |
 | R-7 | Public metadata correlation | High | Low–Medium | Inherent to public identity; future privacy work |
-| R-8 | Implementation bugs in chain logic | Medium | High | 134 tests, adversarial vectors; external review still needed |
+| R-8 | Implementation bugs in chain logic | Medium | High | 136 tests, adversarial vectors; external review still needed |
 
 ## 9. Verification commands
 

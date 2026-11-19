@@ -12,11 +12,13 @@
 | Check | Command | Result |
 | --- | --- | --- |
 | Repository commit | `git rev-parse HEAD` | `82a3e1b…` (3.0 working tree) |
-| Unit/integration/security tests | `pnpm test` | **134/134 pass**, 13 files, ~3s |
+| Unit/integration/security tests | `pnpm test` | **136/136 pass**, 13 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 16 routes |
 | Browser QA | `pnpm qa:browser` | **54/54**, 0 console/page errors |
 | Independent relying party | `pnpm rp:demo` | **10/10**, no KYVERA API/relay |
+| Relay health | `pnpm relay:health <urls>` | read-only EOSE check; 2/2 for defaults |
+| Post-deployment smoke | `BASE=https://… pnpm smoke:deploy` | routes, headers, bundle, console errors |
 | History-wide secret scan | manual scan across 32 commits | no tracked keys/env secrets |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |
@@ -51,7 +53,7 @@ Every important claim links to a source, test or running demonstration.
 | Historical proof remains valid but is SUPERSEDED | `chain.ts`, `discovery.ts` | `tests/rotation.test.ts`, `/demo` step 5, `/verify` |
 | Equivocation yields CONFLICT, not a winner | `packages/core/src/chain.ts` | `tests/rotation.test.ts`, `/lab` scenario 4 |
 | Missing history yields STALE, not fallback | `chain.ts`, `discovery.ts` | `tests/chain.test.ts`, `/lab` scenario 5 |
-| Partial relay sync is explicit | `packages/nostr/src/relay.ts`, `discovery.ts` | `tests/relay.test.ts` |
+| Partial relay sync is explicit and fail-closed for sensitive actions | `packages/nostr/src/relay.ts`, `discovery.ts`, `auth.ts`, `apps/web/lib/pay.ts` | `tests/relay.test.ts`, `tests/pay.test.ts`, `tests/auth-request.test.ts` |
 | Checkpoint detects rollback | `discovery.ts` `applyCheckpointToResolution` | `tests/relay.test.ts`, `/lab` scenario 5 |
 | Challenge-response auth is replay-resistant | `packages/verifier/src/auth.ts` | `tests/auth.test.ts`, `/auth` |
 | Independent CLI verification | `packages/verifier/src/cli.ts` | `pnpm cli`, `/demo` step 7 |
@@ -62,7 +64,7 @@ Every important claim links to a source, test or running demonstration.
 | Payment destination policy | `apps/web/lib/pay.ts` | `tests/pay.test.ts` (12), browser QA |
 | WizardConnect pairing | `apps/web/app/pay/page.tsx` | browser QA dialog; physical wallet untested |
 | Warm light theme | `globals.css`, `tailwind.config.ts`, toggle | browser QA theme check |
-| 134-test suite | `tests/` | `pnpm test` |
+| 136-test suite | `tests/` | `pnpm test` |
 | Relying-party authentication | `apps/web/app/auth-demo/page.tsx`, `packages/verifier/src/auth.ts` | `tests/auth-request.test.ts` (12), browser QA |
 | Trust Challenge | `apps/web/app/challenge/page.tsx`, `apps/web/lib/challenge.ts` | browser QA demo + live; security suite |
 | Standalone relying party | `examples/relying-party/demo.mjs` | `pnpm rp:demo` → 10/10 |
@@ -119,7 +121,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | --- | --- |
 | `vercel.json` monorepo config | ✅ prepared |
 | Production env template | ✅ `apps/web/.env.production.example` |
-| Production relay fallback (no localhost) | ✅ `wss://relay.damus.io,wss://nos.lol` |
+| Production relay fallback (no localhost) | ✅ `wss://nos.lol,wss://relay.primal.net`, both EOSE on 2026-11-19 |
 | Security headers | ✅ verified on `next start` |
 | Static assets (`/vectors.json`, standalone, icon) | ✅ 200 |
 | Routes | ✅ 16 routes build and render (`/pay` included) |

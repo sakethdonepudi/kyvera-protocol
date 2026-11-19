@@ -80,7 +80,7 @@ The compliance gate is implemented at `/auth-demo` and `packages/verifier/src/au
 | Verify public-key signature | Fresh-copy Schnorr verification | `verifyAuthRequestEvent`; "rejects unauthorized signer" |
 | Resolve BCH–Nostr association independently | Same `resolveIdentity` chain verifier as `/verify` | `refreshIdentity`, chain tests |
 | Enforce current authorization | `status === ACTIVE` required | "rejects revoked and stale identities" |
-| Enforce relay freshness | `UNSYNCED` rejected; `PARTIAL` allowed | `validateAppSession`, `checkPayable` equivalents |
+| Enforce relay freshness | `UNSYNCED` and `PARTIAL` rejected for sensitive auth/session/payment; `FULL` required | `tests/auth-request.test.ts`, `tests/pay.test.ts`, `tests/relay.test.ts` |
 | Reject malformed | Tag/shape checks; structured errors | tests/verifier |
 | Reject mismatched | Origin/session/subject/address/digest checks | tests |
 | Issue session only on success | `issueAppSession` called after successful verification | `tests/auth-request.test.ts` "issues a session" |
@@ -91,8 +91,8 @@ The compliance gate is implemented at `/auth-demo` and `packages/verifier/src/au
 
 ### 4.2 Authentication evidence
 
-- Automated: `tests/auth-request.test.ts` — 12 tests, including replay, expiry, origin/session/identity/address mismatch, revoked/stale, session rotation/revocation/logout, unauthorized rotation.
-- Adversarial: `tests/security-challenge.test.ts` — 15 tests covering forged BCH/Nostr proofs, unauthorized rotation, replay, expiry, revocation, missing history, conflict, rollback and payment gating.
+- Automated: `tests/auth-request.test.ts` — 13 tests, including replay, expiry, origin/session/identity/address mismatch, revoked/stale, session rotation/revocation/logout, unauthorized rotation.
+- Adversarial: `tests/security-challenge.test.ts` — 16 tests covering forged BCH/Nostr proofs, unauthorized rotation, replay, expiry, revocation, missing history, conflict, rollback and payment gating.
 - Browser: `/auth-demo` session issuance, replay rejection, unauthorized-rotation check, session invalidation after rotation, logout, revoked-identity block. `/challenge` runs the same journey across five stages, including live mode (54/54 browser checks overall).
 - Standalone: `pnpm rp:demo` — framework-independent relying party, 10/10 checks with no KYVERA website, API or relay.
 - The relying party is separate from the identity dashboard and has its own origin/session state.

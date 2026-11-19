@@ -222,6 +222,13 @@ export function verifyAuthRequestEvent(options: VerifyAuthRequestOptions): AuthC
   if (resolution.assurance === "UNSYNCED") {
     return { authenticated: false, code: "IDENTITY_UNSYNCED", message: "identity state could not be refreshed from any relay" };
   }
+  if (resolution.assurance === "PARTIAL") {
+    return {
+      authenticated: false,
+      code: "IDENTITY_PARTIAL",
+      message: "authentication requires full relay agreement; some relays did not respond",
+    };
+  }
   if (!resolution.activeBch) {
     return { authenticated: false, code: "NO_CURRENT_ADDRESS", message: "identity asserts no current BCH address" };
   }
@@ -300,6 +307,13 @@ export function validateAppSession(
   }
   if (resolution.assurance === "UNSYNCED") {
     return { valid: false, code: "SESSION_UNSYNCED", message: "identity state could not be refreshed" };
+  }
+  if (resolution.assurance === "PARTIAL") {
+    return {
+      valid: false,
+      code: "SESSION_PARTIAL",
+      message: "session validation requires full relay agreement",
+    };
   }
   if (!resolution.activeBch || resolution.activeBch.address !== session.bchAddress) {
     return { valid: false, code: "SESSION_ADDRESS_CHANGED", message: "authorized BCH address changed; sign in again" };

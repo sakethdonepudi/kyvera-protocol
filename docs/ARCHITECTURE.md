@@ -117,7 +117,7 @@ sequenceDiagram
   App->>App: attach per-relay assurance
 ```
 
-Relay queries run in parallel, each with its own connection timeout and EOSE timeout. A relay that never sends EOSE still contributes events but lowers assurance to `PARTIAL`.
+Relay queries run in parallel, each with its own connection timeout and EOSE timeout. A relay that never sends EOSE still contributes events but lowers assurance to `PARTIAL`. Sensitive payment and authentication/session actions require `FULL`; `PARTIAL` is fail-closed for those actions.
 
 ### 2.3 Rotate
 

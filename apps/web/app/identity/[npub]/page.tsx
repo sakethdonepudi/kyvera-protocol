@@ -74,7 +74,7 @@ export default function IdentityPage() {
     setActionMessage("");
     try {
       const fresh = await refreshIdentity(stored.subject, relays, NETWORK);
-      if (fresh.status !== "ACTIVE" || !fresh.head) {
+      if (fresh.status !== "ACTIVE" || fresh.assurance !== "FULL" || !fresh.head) {
         throw new Error(`Identity is not ACTIVE (${fresh.status}); rotation aborted.`);
       }
       const result = await rotateDemoIdentity(stored, fresh.head.record, relays, NETWORK);
@@ -95,7 +95,7 @@ export default function IdentityPage() {
     setActionMessage("");
     try {
       const fresh = await refreshIdentity(stored.subject, relays, NETWORK);
-      if (fresh.status !== "ACTIVE" || !fresh.head) {
+      if (fresh.status !== "ACTIVE" || fresh.assurance !== "FULL" || !fresh.head) {
         throw new Error(`Identity is not ACTIVE (${fresh.status}); revocation aborted.`);
       }
       await revokeDemoIdentity(stored, fresh.head.record, relays);

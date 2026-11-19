@@ -15,7 +15,7 @@ No mainnet transaction was broadcast and no external Nostr event was published.
 
 | Category | Status | Evidence |
 | --- | --- | --- |
-| **Verified locally** | Yes | 134 unit/integration/security tests; typecheck; production build; 54 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `dfb0023` with `--frozen-lockfile`, test and build |
+| **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 54 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `dfb0023` with `--frozen-lockfile`, test and build |
 | **Verified with real wallets** | No | No Paytaca, Cashonize or Selene device/extension was available; no wallet-produced signature was recorded |
 | **Verified on public relays** | Partial | Read-only probe: `wss://relay.damus.io` failed, `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published |
 | **Verified in production** | No | `next start` works locally; no public deployment exists |
@@ -31,9 +31,9 @@ No mainnet transaction was broadcast and no external Nostr event was published.
 | H-02 | HIGH | Browser relying party authenticated against a cached resolution | **Fixed** |
 | H-03 | HIGH | Revoked address could be reported as SUPERSEDED after A→B→A→revoke | **Fixed** |
 | H-04 | HIGH | First-contact relay withholding can hide a newer rotation or revocation | **Open / partially mitigated** |
-| H-05 | HIGH | PARTIAL relay sync is accepted for payment and session validation | **Open** |
+| H-05 | HIGH | PARTIAL relay sync accepted for payment and session validation | **Fixed (fail-closed)** |
 | H-06 | HIGH | Real-wallet pairing and message signing are unverified | **Blocked** |
-| H-07 | HIGH | Default production relay set includes an unreachable relay; public retention unverified | **Open** |
+| H-07 | HIGH | Default production relay set/public retention; failed-relay WebSocket crash | **Partially fixed** |
 | H-08 | HIGH | KYVERA Pay is a BIP21 handoff, not a wallet-approved transaction/receipt | **Open (bounty gap)** |
 | M-01 | MEDIUM | Auth challenges/sessions are in-memory and not durable | Open |
 | M-02 | MEDIUM | WizardConnect has no account-change/network event in the integration | Open |
@@ -81,7 +81,7 @@ New tests in `tests/security-challenge.test.ts`:
 - `rejects an external-wallet bind that reuses the Nostr key`
 - `rejects an uncompressed BCH proof that reuses the Nostr key`
 
-Both regression tests exercise the previously accepted cases and pass with the fix (part of 134/134).
+Both regression tests exercise the previously accepted cases and pass with the fix (part of 136/136).
 
 **Fix**
 
@@ -209,37 +209,60 @@ broadcast time.
 
 ---
 
-### H-05 — PARTIAL sync accepted for payment and sessions (open)
+### H-05 — PARTIAL sync accepted for payment and sessions (fixed, fail-closed)
 
 **Files/functions**
 
 - `apps/web/lib/pay.ts` — `checkPayable`
-- `packages/verifier/src/auth.ts` — `validateAppSession`
+- `packages/verifier/src/auth.ts` — `verifyAuthRequestEvent`, `validateAppSession`
+- `apps/web/lib/challenge.ts` — `proveSuperseded`
+- `apps/web/app/challenge/page.tsx` — live Verify/Prove results
+- `apps/web/components/resolution.tsx` — UI status badge
 
 **Scenario**
 
-If one of several configured relays responds with an older chain and another is
-unreachable, `assurance` is `PARTIAL`. Payment still returns `ok: true` with a
-warning, and session validation still accepts the session if the stale address
-matches.
+If one of several configured relays returned an older chain and another was
+unreachable, `assurance` was `PARTIAL`. Payment returned `ok: true` with a
+warning, authentication/session validation accepted the stale address, and the
+UI labelled the chain “Current authorization.”
 
 **Impact**
 
-A stale or censoring relay can preserve an old payment destination or session
-when the relay set is only partially available.
+A stale or censoring relay could preserve an old payment destination or session
+while the relay set was only partially available.
+
+**Fix**
+
+Sensitive actions now fail closed:
+
+- Payment requires `ACTIVE` **and** `assurance === "FULL"`; otherwise
+  `PARTIAL_SYNC`.
+- Auth request verification returns `IDENTITY_PARTIAL` for `PARTIAL`.
+- Session validation returns `SESSION_PARTIAL`.
+- `UNSYNCED`, `STALE`, `CONFLICT`, `REVOKED`, `INVALID` and other non-ACTIVE
+  statuses remain blocked.
+- Live challenge Verify/Prove require `FULL`; partial results say current
+  authorization is not final.
+- Resolution UI shows `ACTIVE · not final` and “Reported current under partial
+  sync” instead of “Current authorization” when assurance is not FULL.
+
+Independent historical-record verification remains available:
+`verifyEventRecord` and the Time Machine still verify individual proofs even when
+the current chain is `STALE`/`CONFLICT`/`REVOKED`. Regression:
+`keeps historical proof verification available when current state is STALE`.
 
 **Evidence**
 
-`tests/pay.test.ts` explicitly asserts `PARTIAL` is allowed; `tests/relay.test.ts`
-shows `PARTIAL` behavior when a relay is unreachable.
+- `tests/pay.test.ts` — `fails closed on partial relay synchronization`.
+- `tests/auth-request.test.ts` — `requires FULL relay agreement for authentication and session validation`.
+- `tests/security-challenge.test.ts` — historical-proof/STALE test.
+- `tests/relay.test.ts` — partial sync and unreachable relay tests.
 
-**Recommended fix**
+**Residual**
 
-For payment and session validation, require `FULL` (all configured relays
-responded and sent EOSE), or an explicit 2-of-N independent-relay policy. Keep
-`PARTIAL` for read-only inspection. This is a policy change and is not applied in
-this audit because the default production relay set currently cannot achieve
-`FULL` in this environment.
+A caller using the offline SDK with a bare `ChainResolution` (no `assurance`)
+is treated as a local proof, not a networked current-state assertion. Networked
+relying parties must pass `assurance` from `resolveIdentity`.
 
 ---
 
@@ -275,40 +298,58 @@ before claiming compatibility.
 
 ---
 
-### H-07 — Default production relay set / public retention (open)
+### H-07 — Production relay configuration / public retention (partially fixed)
 
 **Files/functions**
 
-- `apps/web/lib/config.ts` — production fallback relays
-- `vercel.json`, `docs/DEPLOYMENT.md`
+- `apps/web/lib/config.ts` — production relay fallback
+- `packages/nostr/src/relay.ts` — relay transport
+- `scripts/relay-health.mjs`, `scripts/post-deploy-smoke.mjs`
+- `docs/VERCEL_DEPLOYMENT.md`, `docs/PUBLIC_RELAY_TEST.md`
 
 **Scenario**
 
-The production fallback is `wss://relay.damus.io,wss://nos.lol`. A read-only probe
-on 2026-11-19 found Damus unreachable from this environment and `nos.lol`
-reachable. Public relay retention of kind-30078 addressable events was not
-verified end-to-end.
+The old production fallback included `relay.damus.io` and `nos.lol`. Read-only
+probing found relays fail intermittently, and a failed `wss://` connection could
+emit an unhandled WebSocket error that crashed the Node client. Public
+kind-30078 retention was not verified.
 
 **Impact**
 
-A fresh production deployment may run with `PARTIAL` assurance by default, and
-history retrieval may depend on relay-specific retention. This combines with
-H-04/H-05.
+A deployment could fail closed unexpectedly, show console errors, or rely on a
+relay that later disappears. Public history retention remains an external risk.
 
-**Evidence**
-
-Read-only probe output:
+**Evidence (read-only, 2026-11-19)**
 
 ```text
-wss://relay.damus.io  ok=false eose=false events=0 error=connection failed
-wss://nos.lol         ok=true  eose=true  events=1
+wss://nos.lol              ok=true  eose=true
+wss://relay.primal.net     ok=true  eose=true
+wss://relay.snort.social   ok=true  eose=true
+wss://offchain.pub         ok=true  eose=true
+wss://relay.damus.io       ok=true  eose=true (failed in an earlier probe)
+wss://relay.nostr.band     ok=false timeout
+wss://nostr.wine           ok=false connection failed
 ```
 
-**Recommended fix**
+The unhandled WebSocket crash was reproduced while probing the failing
+candidates and fixed with a no-op `error` listener wrapper in
+`packages/nostr/src/relay.ts` (`safeWebSocket`).
 
-Set and monitor `NEXT_PUBLIC_KYVERA_RELAYS`, prefer independent relay operators,
-verify kind-30078 retention with read-only tests, and block payment/auth when the
-configured freshness policy is not met.
+**Fix**
+
+- Production fallback is now `wss://nos.lol,wss://relay.primal.net`; both answered
+  a read-only kind-30078 probe.
+- Relay list remains configurable through `NEXT_PUBLIC_KYVERA_RELAYS`.
+- `pnpm relay:health <urls>` checks reachability and EOSE without publishing.
+- `pnpm smoke:deploy` checks deployed routes, headers, console errors and rejects
+  a bundle containing a local relay.
+- Sensitive actions fail closed unless every configured relay responds.
+
+**Residual**
+
+No public deployment or public KYVERA event exists yet, so retention over time
+and relay-set completeness remain **unverified**. Run `docs/PUBLIC_RELAY_TEST.md`
+only with explicit authorization.
 
 ---
 
@@ -388,6 +429,14 @@ A browser probe found no unnamed `button`/`a` controls on `/`, `/challenge`,
 `/merchant`, `/create`, `/pay`, `/auth-demo`, `/developers`; keyboard focus and
 reduced-motion checks pass. Full screen-reader, contrast and zoom testing was not
 performed.
+
+### M-09 — Failed relay WebSocket error crash (fixed)
+
+`packages/nostr/src/relay.ts` now installs `safeWebSocket`, a wrapper that keeps a
+no-op `error` listener on the underlying socket after nostr-tools clears its own
+`onerror` during timeout/close. A failed `wss://` probe now returns a structured
+`ok:false` report instead of crashing Node. Verified by re-running the
+multi-relay read-only probe, including failing candidates.
 
 ### L-01 — Canonical key normalization
 
@@ -515,7 +564,7 @@ return a large event set. Add a cap/timeout before production.
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm test                 # 134 tests, 13 files
+pnpm test                 # 136 tests, 13 files
 pnpm typecheck
 pnpm build                # 16 routes
 pnpm qa:browser           # 54/54, 0 console/page errors
@@ -523,7 +572,7 @@ pnpm rp:demo              # 10/10, no KYVERA API/relay
 pnpm audit --prod
 ```
 
-Fresh clone of commit `dfb0023`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 134/134, `pnpm build` pass.
+Fresh clone of commit `dfb0023`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 136/136, `pnpm build` pass.
 
 ---
 

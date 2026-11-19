@@ -58,9 +58,11 @@ export interface PayCheck {
 }
 
 /**
- * Payment policy: a destination is payable only when the verifier can assert
- * ACTIVE state on the expected network with at least one responsive relay.
- * PARTIAL sync is allowed with a warning; UNSYNCED is never payable.
+ * Payment policy: fail closed. A destination is payable only when every
+ * configured relay responded with EOSE (`FULL`), the state is ACTIVE, and the
+ * address is a valid P2PKH address on the expected network. PARTIAL/UNSYNCED
+ * states are not payable because a relay set may be withholding a newer
+ * rotation or revocation.
  */
 export function checkPayable(
   resolution: Pick<IdentityResolution, "status" | "activeBch" | "assurance" | "sync">,
@@ -106,11 +108,14 @@ export function checkPayable(
       message: "No relay responded; the destination cannot be verified. Payment blocked.",
     };
   }
-  const warning =
-    resolution.assurance === "PARTIAL"
-      ? `Only ${resolution.sync.responded}/${resolution.sync.total} relays responded. Re-verify before paying a large amount.`
-      : undefined;
-  return { ok: true, code: "OK", message: "Destination is currently authorized.", warning };
+  if (resolution.assurance !== "FULL") {
+    return {
+      ok: false,
+      code: "PARTIAL_SYNC",
+      message: `Only ${resolution.sync.responded}/${resolution.sync.total} relays responded. Payment requires full relay agreement.`,
+    };
+  }
+  return { ok: true, code: "OK", message: "Destination is currently authorized." };
 }
 
 export interface DestinationSnapshot {

@@ -17,7 +17,7 @@ implementation, test evidence, demo route, documentation and remaining limits.
 | **R2** Cryptographic BCH–Nostr binding with distinct keys | Canonical KCJ-1 records; BCH `signmessage`; BIP-340 Nostr proof; `KEY_REUSE` check | `tests/binding.test.ts`, `tests/interop.test.ts`, `tests/property.test.ts` | `/challenge` stage Bind, `/demo` | `docs/PROTOCOL.md` | P2PKH only; no multisig/CashTokens |
 | **R3** Decentralized discovery | kind 30078 events; multi-relay resolution; per-relay sync; `STALE`/`PARTIAL`/`UNSYNCED` | `tests/relay.test.ts`, `tests/chain.test.ts` | `/verify`, `/challenge` live mode | `docs/INTEGRATION.md` | Relay sets can withhold history; checkpoints detect known rollbacks only |
 | **R4** Independent verification and authentication | `@kyvera/verifier`; `/auth-demo`; standalone RP; single-use challenges; origin/session/identity/address binding | `tests/auth-request.test.ts`, `tests/security-challenge.test.ts`, `/auth-demo` browser journey | `/auth-demo`, `/challenge` stage Authenticate, `pnpm rp:demo` | `docs/PAYTACA_COMPLIANCE.md`, `docs/INTEGRATION.md` | Browser session store is in-memory; production RP must persist |
-| **R5** Working prototype, source and documentation | 16 routes; monorepo; CLI; standalone verifier | 134 tests, 54 browser checks, production build | all routes | README, `docs/`, `docs/JUDGE_3_MINUTE.md` | Repository is private; no public deployment |
+| **R5** Working prototype, source and documentation | 16 routes; monorepo; CLI; standalone verifier | 136 tests, 54 browser checks, production build | all routes | README, `docs/`, `docs/JUDGE_3_MINUTE.md` | Repository is private; no public deployment |
 
 ---
 
@@ -34,9 +34,9 @@ implementation, test evidence, demo route, documentation and remaining limits.
 | Merchant identity demonstration | Implemented | `/merchant`, deterministic verifier, browser check | `/merchant` | Self-asserted merchant; no third-party attestation |
 | Premium minimal glass interface | Implemented | `globals.css`, all routes, light/dark, reduced motion | all routes | Not independently design-reviewed |
 | Interoperability proof package | Implemented | `docs/INTEGRATION.md`, standalone RP, vectors, CLI, offline verifier | `/developers`, `pnpm rp:demo` | No third-party integration test |
-| Security challenge suite | Implemented | `tests/security-challenge.test.ts` (15), 13 test files | `/lab`, `/challenge` | No independent audit |
+| Security challenge suite | Implemented | `tests/security-challenge.test.ts` (16), 13 test files | `/lab`, `/challenge` | No independent audit |
 | Video-ready judge experience | Implemented | `docs/JUDGE_3_MINUTE.md` | `/`, `/challenge`, `/merchant`, `/pay` | Recording not produced |
-| Quality and release | Verified | 134 tests, typecheck, build, 54 browser checks, audit | — | Public deployment and real-device wallets outstanding |
+| Quality and release | Verified | 136 tests, typecheck, build, 54 browser checks, audit | — | Public deployment and real-device wallets outstanding |
 
 ---
 
@@ -61,7 +61,7 @@ implementation, test evidence, demo route, documentation and remaining limits.
 ## 4. Commands
 
 ```bash
-pnpm test          # 134 tests, 13 files
+pnpm test          # 136 tests, 13 files
 pnpm typecheck
 pnpm build
 pnpm qa:browser    # 54 checks

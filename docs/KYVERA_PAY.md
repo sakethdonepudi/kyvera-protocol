@@ -28,7 +28,7 @@ The wallet approves and broadcasts. KYVERA does not request a seed phrase or pri
 - only `ACTIVE` status is payable;
 - `REVOKED`, `CONFLICT`, `EXPIRED`, `STALE`, `SUPERSEDED`, `UNKNOWN`, `INVALID` are blocked;
 - `UNSYNCED` relay assurance is blocked;
-- `PARTIAL` assurance is allowed with a warning;
+- `PARTIAL` assurance blocks payment; sensitive payment requires `FULL` agreement from every configured relay;
 - the address must be P2PKH and match the configured network;
 - amounts are parsed as decimal strings with at most 8 places, no floats, > 0, ≤ 21M BCH;
 - the destination is snapshotted and compared after re-resolution; any address/subject/status change cancels the handoff.

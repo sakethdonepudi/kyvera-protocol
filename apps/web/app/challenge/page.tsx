@@ -132,15 +132,17 @@ export default function ChallengePage() {
         },
       };
       const verify: ChallengeResult = {
-        pass: resolution.assurance !== "UNSYNCED" && resolution.history.length > 0,
+        pass: resolution.assurance === "FULL" && resolution.history.length > 0,
         headline:
           resolution.assurance === "UNSYNCED"
             ? "No relay could confirm the current state."
-            : "Resolver reports a complete chain for the observed relays.",
+            : resolution.assurance === "PARTIAL"
+              ? "The chain is valid, but current authorization is not final without full relay agreement."
+              : "Resolver reports a complete chain for the observed relays.",
         checks: [
           {
-            label: "Not UNSYNCED",
-            ok: resolution.assurance !== "UNSYNCED",
+            label: "Full relay agreement",
+            ok: resolution.assurance === "FULL",
             detail: resolution.assurance,
           },
           {
@@ -267,7 +269,7 @@ export default function ChallengePage() {
       // A stale head would publish a competing sequence record. Re-resolve
       // immediately before signing the rotation.
       const before = await refreshIdentity(live.subject, DEFAULT_RELAYS, NETWORK);
-      if (before.status !== "ACTIVE" || !before.head) {
+      if (before.status !== "ACTIVE" || before.assurance !== "FULL" || !before.head) {
         throw new Error(`Identity is not ACTIVE (${before.status}); rotation aborted.`);
       }
       setLive(before);
@@ -514,7 +516,14 @@ export default function ChallengePage() {
               <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-ivory-muted">
                 Stage {stage + 1} / {CHALLENGE_STAGES.length}
               </div>
-              {mode === "live" && live ? <StatusBadge status={live.status} /> : null}
+              {mode === "live" && live ? (
+                <>
+                  <StatusBadge status={live.status} />
+                  {live.assurance !== "FULL" ? (
+                    <Badge tone="warn">{live.assurance} · not final</Badge>
+                  ) : null}
+                </>
+              ) : null}
               {result ? (
                 <Badge tone={result.pass ? "accent" : "danger"}>{result.pass ? "PASS" : "FAIL"}</Badge>
               ) : null}

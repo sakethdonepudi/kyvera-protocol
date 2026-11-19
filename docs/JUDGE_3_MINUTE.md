@@ -103,7 +103,7 @@ Open `/lab` or scroll to the Trust Challenge evidence.
 
 ```bash
 pnpm install
-pnpm test          # 134 tests, 13 files
+pnpm test          # 136 tests, 13 files
 pnpm typecheck
 pnpm build
 pnpm relay         # terminal 1

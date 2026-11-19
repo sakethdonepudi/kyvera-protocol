@@ -65,7 +65,7 @@ describe("payment policy", () => {
     expect(checkPayable(resolution(), "mainnet")).toMatchObject({ ok: true, code: "OK" });
   });
 
-  it("warns on partial relay synchronization but still allows", () => {
+  it("fails closed on partial relay synchronization", () => {
     const result = checkPayable(
       resolution({
         assurance: "PARTIAL",
@@ -73,8 +73,8 @@ describe("payment policy", () => {
       }),
       "mainnet",
     );
-    expect(result.ok).toBe(true);
-    expect(result.warning).toMatch(/1\/2 relays/);
+    expect(result).toMatchObject({ ok: false, code: "PARTIAL_SYNC" });
+    expect(result.message).toMatch(/1\/2 relays/);
   });
 
   it("blocks stale, revoked, conflicted, expired and unknown identities", () => {

@@ -11,7 +11,7 @@
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **134 / 134 tests pass** across 13 files |
+| `pnpm test` | **136 / 136 tests pass** across 13 files |
 | `pnpm typecheck` | **pass** for core, bch, nostr, verifier and web |
 | `pnpm build` | **pass** (Next.js production build; one third-party top-level-await warning) |
 | `pnpm demo:lifecycle` | **all assertions pass** (6 lifecycle scenarios) |
@@ -36,13 +36,13 @@ $ pnpm test
  ✓ tests/rotation.test.ts (15 tests)
  ✓ tests/interop.test.ts (2 tests)
  ✓ tests/property.test.ts (12 tests)
- ✓ tests/auth-request.test.ts (12 tests)
- ✓ tests/security-challenge.test.ts (15 tests)
+ ✓ tests/auth-request.test.ts (13 tests)
+ ✓ tests/security-challenge.test.ts (16 tests)
  ✓ tests/pay.test.ts (12 tests)
  ✓ tests/smoke.test.ts (1 test)
  ✓ tests/relay.test.ts (14 tests)
  Test Files  13 passed (13)
-      Tests  134 passed (134)
+      Tests  136 passed (136)
    Duration  ~2.7s
 ```
 
@@ -151,13 +151,13 @@ All checks passed.
 | Orphaned higher sequence | `STALE`/`CONFLICT`, no active address |
 | Publish/query | `ACTIVE`, `FULL` assurance |
 | Duplicate events | deduped |
-| One relay unreachable | `ACTIVE`, `PARTIAL` |
+| One relay unreachable | Resolution `ACTIVE`, `PARTIAL`; payment/auth blocked |
 | All relays unreachable | `STALE`, `UNSYNCED`, no address |
 | No relays configured | `STALE` |
 | Rollback with checkpoint | `STALE` (`ROLLBACK_DETECTED`) |
 | Conflicting chains on two relays | `CONFLICT` |
 | Malformed KYVERA event from hostile relay | rejected, good state retained |
-| Relay without EOSE | `ACTIVE`, `PARTIAL` |
+| Relay without EOSE | Resolution `ACTIVE`, `PARTIAL`; payment/auth blocked |
 | Address current / superseded / revoked | `ACTIVE` / `SUPERSEDED` / `REVOKED` |
 | Address with no binding | `UNKNOWN` |
 | One address, two identities | both bindings reported, `ACTIVE` |
@@ -165,7 +165,7 @@ All checks passed.
 
 ### 3.5 Authentication (`tests/auth.test.ts` — 11)
 
-The older `/auth` page tests the core challenge-response primitive. The full relying-party journey is covered separately by `tests/auth-request.test.ts` (12): origin/session/intended-identity/address binding, whole-request digest, replay, expiry, unauthorized signer, revoked/stale identity, session invalidation after rotation/revocation/logout, and the unauthorized-rotation fixture.
+The older `/auth` page tests the core challenge-response primitive. The full relying-party journey is covered separately by `tests/auth-request.test.ts` (13): origin/session/intended-identity/address binding, whole-request digest, replay, expiry, unauthorized signer, revoked/stale identity, session invalidation after rotation/revocation/logout, and the unauthorized-rotation fixture.
 
 | Case | Expected |
 | --- | --- |
@@ -181,7 +181,7 @@ The older `/auth` page tests the core challenge-response primitive. The full rel
 | Event edited after signing | `EVENT_SIGNATURE` |
 | Outside time window | `TIMESTAMP_OUT_OF_WINDOW` |
 
-### 3.6 Security challenge suite (`tests/security-challenge.test.ts` — 15)
+### 3.6 Security challenge suite (`tests/security-challenge.test.ts` — 16)
 
 Explicit adversarial cases:
 

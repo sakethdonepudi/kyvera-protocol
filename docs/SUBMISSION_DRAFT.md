@@ -53,7 +53,7 @@ Eight outcomes: `ACTIVE`, `SUPERSEDED`, `REVOKED`, `EXPIRED`, `CONFLICT`, `STALE
 
 ```bash
 pnpm install
-pnpm test        # 134 tests
+pnpm test        # 136 tests
 pnpm build
 pnpm cli <npub> --relay wss://relay.damus.io
 ```

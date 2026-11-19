@@ -481,10 +481,16 @@ function CompareView({
           )}
         >
           <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
-            Current authorization
+            {status === "ACTIVE" && resolution.assurance !== "FULL"
+              ? "Reported current · partial sync"
+              : "Current authorization"}
           </div>
           <div className="mt-2 flex items-center gap-2">
-            <StatusBadge status={status} />
+            {status === "ACTIVE" && resolution.assurance !== "FULL" ? (
+              <Badge tone="warn">ACTIVE · not final</Badge>
+            ) : (
+              <StatusBadge status={status} />
+            )}
           </div>
           <ul className="mt-3 space-y-1.5 text-[10.5px] leading-relaxed text-ivory-dim">
             <li>◆ This record is {isHead ? "the chain head" : "not the chain head"}</li>
@@ -493,9 +499,11 @@ function CompareView({
             <li>◆ Sequence {step.record.payload.sequence} of {resolution.history.length - 1}</li>
           </ul>
           <p className="mt-3 font-mono text-[9px] text-ivory-muted">
-            {status === "ACTIVE"
-              ? "This record currently authorizes payment."
-              : "This record does not authorize payment now."}
+            {status === "ACTIVE" && resolution.assurance !== "FULL"
+              ? "Partial relay agreement; do not treat this as final payment authorization."
+              : status === "ACTIVE"
+                ? "This record currently authorizes payment."
+                : "This record does not authorize payment now."}
           </p>
         </div>
       </div>

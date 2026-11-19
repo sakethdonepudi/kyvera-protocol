@@ -121,6 +121,11 @@ The SDK contains the word `privateKey` in type/function names; inspect any hit f
 
 ---
 
+## 4.5 Vercel preparation
+
+See [`VERCEL_DEPLOYMENT.md`](VERCEL_DEPLOYMENT.md) for project settings, environment
+variables, relay health checks and the post-deployment smoke test.
+
 ## 5. Deploy
 
 1. Import repository into Vercel.

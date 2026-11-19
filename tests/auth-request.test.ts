@@ -93,6 +93,29 @@ describe("relying-party authentication request", () => {
     });
   });
 
+  it("requires FULL relay agreement for authentication and session validation", async () => {
+    const identity = await makeIdentity("auth-partial");
+    const base = resolutionFor(identity);
+    const partial = {
+      ...base,
+      assurance: "PARTIAL",
+      sync: { ...base.sync, assurance: "PARTIAL" },
+    } as never;
+    const rp = service();
+    const request = rp.issue({ expectedSubject: identity.subject });
+    const event = await buildAuthRequestEvent({ request, signer: identity.signer, createdAt: T });
+    expect(rp.verify(event, partial).check).toMatchObject({
+      authenticated: false,
+      code: "IDENTITY_PARTIAL",
+    });
+
+    const full = await login(identity);
+    expect(validateAppSession(full.result.session!, partial, T)).toMatchObject({
+      valid: false,
+      code: "SESSION_PARTIAL",
+    });
+  });
+
   it("rejects a different origin or session context", async () => {
     const rp = service();
     const request = rp.issue({ expectedSubject: identity.subject });

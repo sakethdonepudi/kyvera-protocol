@@ -29,6 +29,9 @@
     "qa:browser": "node scripts/qa-browser.mjs",
     "wallet:verify": "node scripts/verify-wallet-signature.mjs",
     "rp:demo": "pnpm -r --filter \"./packages/*\" build && node examples/relying-party/demo.mjs",
+    "relay:health": "pnpm -r --filter \"./packages/*\" build && node scripts/relay-health.mjs",
+    "smoke:deploy": "node scripts/post-deploy-smoke.mjs",
+    "test:public-relay": "node scripts/public-relay-identity-test.mjs",
     "cli": "pnpm -r --filter \"./packages/*\" build && node packages/verifier/dist/cli.js"
   },
   "devDependencies": {

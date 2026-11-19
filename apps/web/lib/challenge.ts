@@ -121,13 +121,20 @@ export function proveSuperseded(
       ok: resolution.status === "ACTIVE",
       detail: `${resolution.status} · ${resolution.reason}`,
     },
+    {
+      label: "Full relay agreement for current state",
+      ok: resolution.assurance === "FULL",
+      detail: resolution.assurance,
+    },
   ];
   return {
     pass: checks.every((check) => check.ok),
     headline:
-      checks.every((check) => check.ok)
-        ? "Historical proof valid. Current authorization moved."
-        : "This chain does not yet demonstrate supersession.",
+      resolution.assurance !== "FULL"
+        ? "Historical proof is valid, but current authorization is not established under partial relay agreement."
+        : checks.every((check) => check.ok)
+          ? "Historical proof valid. Current authorization moved."
+          : "This chain does not yet demonstrate supersession.",
     checks,
     evidence: {
       oldAddress,

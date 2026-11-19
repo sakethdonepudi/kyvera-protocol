@@ -49,6 +49,8 @@ Do not mark a wallet "confirmed" until the identity flow below passes on that wa
 
 ## 4. Paytaca procedure
 
+A focused checklist is in [`PAYTACA_WALLET_CHECKLIST.md`](PAYTACA_WALLET_CHECKLIST.md). It requires no private-key exposure.
+
 ### 4.1 Connect and derive
 
 1. Click **Connect Wallet**. Confirm the QR dialog says *Scan with Paytaca or Cashonize*.

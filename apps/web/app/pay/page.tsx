@@ -235,6 +235,7 @@ function PayInner() {
                   <Badge tone={resolution.assurance === "FULL" ? "accent" : "warn"}>
                     {resolution.assurance} sync
                   </Badge>
+                  {payCheck && !payCheck.ok ? <Badge tone="danger">not payable</Badge> : null}
                   <span className="font-mono text-[9px] text-ivory-muted">
                     {resolution.sync.responded}/{resolution.sync.total} relays
                   </span>
@@ -242,7 +243,7 @@ function PayInner() {
                 <div className="break-all font-mono text-[11px] text-ivory-dim">{toNpub(resolution.subject)}</div>
                 <div className="rounded-lg border border-ivory/[0.1] bg-charcoal-950/40 p-3">
                   <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
-                    current payment address
+                    {payCheck?.ok ? "current payment address" : "reported address — not payable"}
                   </div>
                   <div className="mt-1 break-all font-mono text-[12px] text-ivory">
                     {resolution.activeBch?.address ?? "none asserted"}

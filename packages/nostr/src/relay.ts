@@ -36,18 +36,33 @@ const DEFAULTS: Required<RelayOptions> = {
 let websocketReady: Promise<void> | null = null;
 
 /**
+ * nostr-tools detaches its own `onerror` handler while closing a socket after
+ * a timeout. Node's `ws` then emits an unhandled `error` event. Add a no-op
+ * listener that survives the `onerror = null` assignment so an unreachable
+ * relay is reported as a failed query instead of crashing the process.
+ */
+function safeWebSocket(Ctor: any): any {
+  return class SafeWebSocket extends Ctor {
+    constructor(...args: any[]) {
+      super(...args);
+      this.addEventListener?.("error", () => {});
+    }
+  };
+}
+
+/**
  * Node 20 has no global WebSocket; browsers do. nostr-tools lets us install a
  * WebSocket implementation once, so this stays a single code path for the CLI,
  * the SDK and the web app.
  */
 function ensureWebSocket(): Promise<void> {
-  if (typeof (globalThis as { WebSocket?: unknown }).WebSocket !== "undefined") {
-    return Promise.resolve();
-  }
   if (!websocketReady) {
-    websocketReady = import(/* webpackIgnore: true */ "ws").then((module) => {
-      useWebSocketImplementation(module.WebSocket);
-    });
+    websocketReady = (async () => {
+      const Native =
+        (globalThis as { WebSocket?: any }).WebSocket ??
+        (await import(/* webpackIgnore: true */ "ws")).WebSocket;
+      useWebSocketImplementation(safeWebSocket(Native));
+    })();
   }
   return websocketReady;
 }

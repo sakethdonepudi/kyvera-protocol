@@ -1,8 +1,11 @@
 import type { BchNetwork } from "@kyvera/core";
 
+// Production fallback: two independently operated relays that answered a
+// read-only kind-30078 probe on 2026-11-19. Set NEXT_PUBLIC_KYVERA_RELAYS to
+// your own audited relay set; sensitive actions require FULL agreement.
 const fallbackRelays =
   process.env.NODE_ENV === "production"
-    ? "wss://relay.damus.io,wss://nos.lol"
+    ? "wss://nos.lol,wss://relay.primal.net"
     : "ws://127.0.0.1:7777";
 
 export const DEFAULT_RELAYS = (

@@ -206,7 +206,7 @@ function AuthDemoInner() {
     setSessionNotice("");
     try {
       const freshHead = await refreshIdentity(subject, relays, NETWORK);
-      if (freshHead.status !== "ACTIVE" || !freshHead.head) {
+      if (freshHead.status !== "ACTIVE" || freshHead.assurance !== "FULL" || !freshHead.head) {
         throw new Error(`Identity is not ACTIVE (${freshHead.status}); revocation aborted.`);
       }
       await revokeDemoIdentity(stored, freshHead.head.record, relays);
@@ -235,7 +235,7 @@ function AuthDemoInner() {
     setSessionNotice("");
     try {
       const freshHead = await refreshIdentity(subject, relays, NETWORK);
-      if (freshHead.status !== "ACTIVE" || !freshHead.head) {
+      if (freshHead.status !== "ACTIVE" || freshHead.assurance !== "FULL" || !freshHead.head) {
         throw new Error(`Identity is not ACTIVE (${freshHead.status}); rotation aborted.`);
       }
       const result = await rotateDemoIdentity(stored, freshHead.head.record, relays, NETWORK);

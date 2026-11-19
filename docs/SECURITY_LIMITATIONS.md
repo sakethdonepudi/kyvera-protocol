@@ -99,7 +99,7 @@ NIP-07 and external-wallet modes avoid storage; the demo mode is clearly labelle
 
 ### 2.4 No audit
 
-No independent security review, formal verification or external fuzzing campaign has been performed. The chain state machine has 134 automated tests, including property-based canonicalization/chain fuzzing and adversarial cases, but tests cannot prove the absence of bugs.
+No independent security review, formal verification or external fuzzing campaign has been performed. The chain state machine has 136 automated tests, including property-based canonicalization/chain fuzzing and adversarial cases, but tests cannot prove the absence of bugs.
 
 ### 2.5 Dependency risk
 

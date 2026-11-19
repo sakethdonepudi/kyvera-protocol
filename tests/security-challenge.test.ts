@@ -230,6 +230,25 @@ describe("security challenge suite", () => {
     expect(latestOnly.activeBch).toBeNull();
   });
 
+  it("keeps historical proof verification available when current state is STALE", async () => {
+    const identity = await makeIdentity("sc-historical-stale");
+    const rotateB = await rotate(identity, identity.bind, identity.bchA, identity.bchB, T0 + 60);
+    const rotateC = await rotate(identity, rotateB, identity.bchB, identity.bchC, T0 + 120);
+    const stale = resolutionOf([identity.bind.event, rotateC.event]);
+    expect(stale.status).toBe("STALE");
+    expect(verifyAt(identity.bind.event).ok).toBe(true);
+    expect(
+      checkPayable(
+        {
+          ...stale,
+          assurance: "FULL",
+          sync: { relays: [], responded: 1, total: 1, assurance: "FULL" },
+        } as never,
+        "mainnet",
+      ).ok,
+    ).toBe(false);
+  });
+
   it("detects conflicting authorization branches", async () => {
     const identity = await makeIdentity("sc-conflict");
     const toB = await rotate(identity, identity.bind, identity.bchA, identity.bchB, T0 + 60);

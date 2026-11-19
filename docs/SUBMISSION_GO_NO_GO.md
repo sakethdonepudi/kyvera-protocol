@@ -27,7 +27,7 @@ those capabilities.
 
 | Environment | Status | What was actually verified |
 | --- | --- | --- |
-| **Verified locally** | ✅ | 134/134 tests across 13 files; strict typecheck; production build (16 routes); 54/54 browser checks; `pnpm rp:demo` 10/10; local relay discovery tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
+| **Verified locally** | ✅ | 136/136 tests across 13 files; strict typecheck; production build (16 routes); 54/54 browser checks; `pnpm rp:demo` 10/10; local relay discovery tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
 | **Verified with real wallets** | ❌ | No Paytaca, Cashonize or Selene installation was available. No wallet pairing, wallet-produced message signature, account switch, wrong network, rejection or disconnect was recorded |
 | **Verified on public relays** | ◐ | Read-only probe only: `wss://relay.damus.io` failed from this environment; `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published; retention was not tested |
 | **Verified in production** | ❌ | No public deployment. `next start` works locally, but no domain, TLS, Vercel deployment or production relay behavior was verified |
@@ -39,10 +39,10 @@ those capabilities.
 
 | Requirement | Local status | Evidence | Submission claim |
 | --- | --- | --- | --- |
-| **R1** Self-held identity creation/management | ✅ | `/create`, 134 tests, browser QA | Local prototype |
+| **R1** Self-held identity creation/management | ✅ | `/create`, 136 tests, browser QA | Local prototype |
 | **R2** Dual-key BCH–Nostr binding | ✅ | Canonical records, proof verification, key-reuse tests | Local prototype |
 | **R3** Decentralized discovery | ✅ local / ◐ public | Multi-relay tests, `STALE`/`PARTIAL`; no public KYVERA event | Do not claim public retention |
-| **R4** Independent verification and authentication | ✅ | `@kyvera/verifier`, `/auth-demo`, `/challenge`, `pnpm rp:demo` 10/10 | Strong local evidence |
+| **R4** Independent verification and authentication | ✅ local | `@kyvera/verifier`, `/auth-demo`, `/challenge`, `pnpm rp:demo` 10/10; fail-closed on PARTIAL | Strong local evidence |
 | **R5** Working prototype + documentation | ◐ | App, SDK, CLI, standalone verifier, docs; no public deployment | Local/demo only |
 | Rotation stretch goal | ✅ | Rotation, revocation, Time Machine, challenge stage | Local prototype |
 | Payment stretch goal | ◐ | BIP21 handoff only; no transaction or txid | **Do not claim completed payment** |
@@ -54,7 +54,7 @@ those capabilities.
 
 ```text
 pnpm install --frozen-lockfile   PASS (fresh clone)
-pnpm test                        PASS 134/134, 13 files
+pnpm test                        PASS 136/136, 13 files
 pnpm typecheck                   PASS
 pnpm build                       PASS, 16 routes
 pnpm qa:browser                  PASS 54/54, 0 console/page errors
@@ -63,7 +63,7 @@ pnpm audit --prod                PASS, 0 known vulnerabilities
 ```
 
 Fresh clone: `git clone` of `dfb0023`, `pnpm install --frozen-lockfile`,
-`pnpm test` (134/134) and `pnpm build` passed. The install emits a non-fatal warning that
+`pnpm test` (136/136) and `pnpm build` passed. The install emits a non-fatal warning that
 the `kyvera-verify` bin points to an unbuilt `dist/cli.js`; it resolves after
 `pnpm build` or `pnpm cli`.
 
@@ -89,17 +89,22 @@ reduced-motion checks pass in browser QA. This is not a full WCAG audit.
 2. **Do not claim payment completion.** `/pay` is a BIP21 handoff. Either present
    it as such, or integrate a wallet-approved transaction with source outputs and
    display a real txid/result. Do not fabricate one.
-3. **Address residual freshness risks.** For payment and sessions, decide whether
-   `PARTIAL` relay sync is acceptable. Recommended: require `FULL` or an explicit
-   independent-relay policy. Persist checkpoints; use multiple operators.
-4. **Production deployment.** Set `NEXT_PUBLIC_KYVERA_RELAYS` and
-   `NEXT_PUBLIC_KYVERA_DOMAIN`, deploy, verify headers/routes, and repeat browser
-   QA against the deployed origin.
-5. **Public-relay retention.** Publish a disposable test identity only with
-   authorization, then verify kind-30078 retention and discovery over time.
+3. **Retain the fail-closed policy.** Payment, authentication and session
+   validation now require `FULL` relay agreement. Monitor the configured relay
+   set; one failing relay will (by design) block sensitive actions. Persist
+   checkpoints for known rollbacks.
+4. **Production deployment.** Follow `docs/VERCEL_DEPLOYMENT.md`, set
+   `NEXT_PUBLIC_KYVERA_RELAYS` and `NEXT_PUBLIC_KYVERA_DOMAIN`, deploy, then run
+   `BASE=https://… pnpm smoke:deploy`. Confirm the relay health check before and
+   after deployment.
+5. **Public-relay retention.** Only with explicit authorization, run
+   `docs/PUBLIC_RELAY_TEST.md` and `scripts/public-relay-identity-test.mjs`; verify
+   kind-30078 retention and discovery over time.
 6. **Licensing.** Review `THIRD_PARTY_NOTICES.md`; confirm the LGPL-3.0-or-later
    status of `@wizardconnect/*` for the exact versions distributed.
-7. **Independent review.** This audit is internal. Obtain a separate review before
+7. **Real Paytaca test.** Follow `docs/PAYTACA_WALLET_CHECKLIST.md`; never expose
+   a seed phrase or private key.
+8. **Independent review.** This audit is internal. Obtain a separate review before
    protecting real funds or making security guarantees.
 
 ---
@@ -111,7 +116,7 @@ reduced-motion checks pass in browser QA. This is not a full WCAG audit.
   authorization chain and rejects unauthorized transitions.
 - It demonstrates rotation, revocation, conflicts, stale history and independent
   relying-party authentication.
-- It has 134 automated tests, 54 browser checks and a 10/10 standalone relying
+- It has 136 automated tests, 54 browser checks and a 10/10 standalone relying
   party demonstration.
 - It is honest about wallet and payment limitations.
 

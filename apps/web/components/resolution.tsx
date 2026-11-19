@@ -51,13 +51,18 @@ export function ResolutionPanel({
 }) {
   const status = resolution.status;
   const active = resolution.activeBch;
+  const partial = status === "ACTIVE" && resolution.assurance !== "FULL";
   return (
     <div className="space-y-4 animate-fade">
       <Card className="overflow-hidden">
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-ivory/[0.06] p-5">
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-2">
-              <StatusBadge status={status} />
+              {partial ? (
+                <Badge tone="warn">ACTIVE · not final</Badge>
+              ) : (
+                <StatusBadge status={status} />
+              )}
               <Badge tone={resolution.assurance === "FULL" ? "accent" : resolution.assurance === "PARTIAL" ? "warn" : "danger"}>
                 {resolution.assurance} sync
               </Badge>
@@ -69,7 +74,7 @@ export function ResolutionPanel({
           </div>
           <div className="text-right">
             <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
-              {CATEGORY[status]}
+              {partial ? "Partial relay agreement" : CATEGORY[status]}
             </div>
             <div className="mt-1 font-mono text-[11px] text-ivory-muted">{resolution.reasonCode}</div>
           </div>
@@ -79,7 +84,11 @@ export function ResolutionPanel({
           <div className="grid gap-4 border-b border-ivory/[0.06] bg-accent/[0.025] p-5 sm:grid-cols-[1fr_auto] sm:items-center">
             <div>
               <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-accent/80">
-                {status === "EXPIRED" ? "Last authorized BCH identity (expired)" : "Currently authorized BCH identity"}
+                {status === "EXPIRED"
+                  ? "Last authorized BCH identity (expired)"
+                  : partial
+                    ? "Reported current under partial sync — re-verify before paying"
+                    : "Currently authorized BCH identity"}
               </div>
               <div className="mt-1.5 break-all font-mono text-[15px] text-ivory">{active.address}</div>
               <div className="mt-1 text-[11px] text-muted">{active.network} · P2PKH</div>
