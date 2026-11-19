@@ -18,7 +18,7 @@ No mainnet transaction was broadcast and no external Nostr event was published.
 | **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 56 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `02c2512` with `--frozen-lockfile`, test and build |
 | **Verified with real wallets** | No | No Paytaca, Cashonize or Selene device/extension was available; no wallet-produced signature was recorded |
 | **Verified on public relays** | Partial | Read-only probe: `wss://relay.damus.io` failed, `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published |
-| **Verified in production** | No | `next start` works locally; no public deployment exists |
+| **Verified in production** | Yes, limited | Public Vercel deployment at https://kyvera-alpha.vercel.app; HTTPS smoke covers routes, headers, video and bundle. No real-wallet or public-relay publication. |
 | **Untested / blocked** | Yes | Wallet pairing, message signing, account switching, wrong network, rejection, mainnet payment, public-relay retention, third-party integration |
 
 ---
@@ -347,8 +347,7 @@ candidates and fixed with a no-op `error` listener wrapper in
 
 **Residual**
 
-No public deployment or public KYVERA event exists yet, so retention over time
-and relay-set completeness remain **unverified**. Run `docs/PUBLIC_RELAY_TEST.md`
+A public deployment now exists, but no public KYVERA event was published, so retention over time and relay-set completeness remain **unverified**. Run `docs/PUBLIC_RELAY_TEST.md`
 only with explicit authorization.
 
 ---
@@ -548,7 +547,7 @@ return a large event set. Add a cap/timeout before production.
 
 ## 10. Production, privacy and supply chain
 
-- Local production build and `next start` pass; no public deployment.
+- Public Vercel deployment is live at https://kyvera-alpha.vercel.app; HTTPS smoke passes. No real-wallet or public-relay publication was performed.
 - Security headers exist in `next.config.mjs`; CSP allows inline scripts and
   broad `ws:`/`wss:` connections. Demo-only keys make this a demo risk, not a
   production key risk.

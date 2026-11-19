@@ -3,7 +3,7 @@
 **Date:** 2026-11-18
 **Candidate:** `82a3e1b` + KYVERA 3.0 working tree
 **Target:** BCH Blaze 2026 · Paytaca Decentralized Identity bounty
-**Status:** local release candidate; **not deployed, not submitted**.
+**Status:** public demo deployed; repository private; bounty not submitted.
 
 ---
 

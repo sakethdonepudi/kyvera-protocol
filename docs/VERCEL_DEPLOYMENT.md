@@ -29,7 +29,10 @@ Preview:
 NEXT_PUBLIC_KYVERA_RELAYS=wss://nos.lol,wss://relay.primal.net
 NEXT_PUBLIC_KYVERA_NETWORK=mainnet
 NEXT_PUBLIC_KYVERA_DOMAIN=<deployed-host>
+NEXT_PUBLIC_KYVERA_COMMIT=<git-commit-sha>
 ```
+
+`NEXT_PUBLIC_KYVERA_COMMIT` is emitted as `<meta name="kyvera-commit">` and checked by the post-deployment smoke test.
 
 Notes:
 
@@ -96,7 +99,7 @@ It is read-only: no relay publication, wallet or transaction.
 
 ## 7. Remaining deployment risk
 
-- No public deployment has been performed.
+- Public deployment is live. Real-wallet and public-relay retention evidence are still missing.
 - Public-relay retention is not verified.
 - Real-wallet pairing/signing is not verified.
 - Payment remains a BIP21 handoff, not a transaction receipt.

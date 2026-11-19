@@ -118,7 +118,7 @@ The compliance gate is implemented at `/auth-demo` and `packages/verifier/src/au
 | Independent RP | `examples/relying-party/demo.mjs`, `docs/INTEGRATION.md` |
 | Independent offline demo | `demo/kyvera-standalone.html` |
 
-**Status: demonstrated locally; public deployment pending.**
+**Status: demonstrated locally and deployed at https://kyvera-alpha.vercel.app; real-wallet evidence still pending.**
 
 ---
 

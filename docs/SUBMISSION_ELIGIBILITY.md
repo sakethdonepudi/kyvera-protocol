@@ -120,4 +120,4 @@ The Details page also warns judges will look at projects in a low-priority queue
 | Mainnet M6 WizardConnect/XO | ◐ WizardConnect adapter, untested with wallet; no XO |
 | Mainnet M7/M8 roll call/Telegram | ❌ unverified |
 
-**Eligibility verdict:** KYVERA is technically strong for the Paytaca bounty's five requirements but **not currently eligible for the Mainnet Track as-is**. Bounty-only eligibility is **unresolved** and must be confirmed with the sponsor/organizers. Do not submit claiming Mainnet Track eligibility without a public deployment, a wallet-tested WizardConnect/XO integration, and a confirmed mainnet transaction flow.
+**Eligibility verdict:** KYVERA is technically strong for the Paytaca bounty's five requirements but **not currently eligible for the Mainnet Track as-is**. Bounty-only eligibility is **unresolved** and must be confirmed with the sponsor/organizers. Do not submit claiming Mainnet Track eligibility without a wallet-tested WizardConnect/XO integration and a confirmed mainnet transaction flow (the public demo is now deployed).

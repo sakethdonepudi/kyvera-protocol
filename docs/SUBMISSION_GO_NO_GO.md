@@ -9,11 +9,9 @@
 
 ## Verdict
 
-# CONDITIONAL GO
+# Public demo: GO · Production/real funds: NO-GO
 
-**GO** for a local judge demonstration and a bounty submission that is explicitly
-scoped to the identity, authentication, rotation, revocation and interoperability
-prototype.
+**GO** for the public hackathon demonstration at https://kyvera-alpha.vercel.app.
 
 **NO-GO** for any claim of real-wallet interoperability, production readiness,
 real-funds safety, Mainnet Track eligibility, or a completed on-chain payment.
@@ -30,7 +28,7 @@ those capabilities.
 | **Verified locally** | ✅ | 136/136 tests across 13 files; strict typecheck; production build (17 routes); 56/56 browser checks; `pnpm rp:demo` 10/10; local relay discovery tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
 | **Verified with real wallets** | ❌ | No Paytaca, Cashonize or Selene installation was available. No wallet pairing, wallet-produced message signature, account switch, wrong network, rejection or disconnect was recorded |
 | **Verified on public relays** | ◐ | Read-only probe only: `wss://relay.damus.io` failed from this environment; `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published; retention was not tested |
-| **Verified in production** | ❌ | No public deployment. `next start` works locally, but no domain, TLS, Vercel deployment or production relay behavior was verified |
+| **Verified in production** | ✅ limited | Public Vercel deployment at https://kyvera-alpha.vercel.app; HTTPS routes, headers, video and bundle smoke pass. Full production auth/payment behavior still depends on external relays |
 | **Untested / blocked** | ❌ | Real-wallet signing, public-relay retention, mainnet transaction, txid receipt, third-party attestation, full accessibility audit, independent security review |
 
 ---
@@ -43,7 +41,7 @@ those capabilities.
 | **R2** Dual-key BCH–Nostr binding | ✅ | Canonical records, proof verification, key-reuse tests | Local prototype |
 | **R3** Decentralized discovery | ✅ local / ◐ public | Multi-relay tests, `STALE`/`PARTIAL`; no public KYVERA event | Do not claim public retention |
 | **R4** Independent verification and authentication | ✅ local | `@kyvera/verifier`, `/auth-demo`, `/challenge`, `pnpm rp:demo` 10/10; fail-closed on PARTIAL | Strong local evidence |
-| **R5** Working prototype + documentation | ◐ | App, SDK, CLI, standalone verifier, docs; no public deployment | Local/demo only |
+| **R5** Working prototype + documentation | ✅ | Live Vercel app, SDK, CLI, standalone verifier, videos, docs; repository remains private | Public demo ready |
 | Rotation stretch goal | ✅ | Rotation, revocation, Time Machine, challenge stage | Local prototype |
 | Payment stretch goal | ◐ | BIP21 handoff only; no transaction or txid | **Do not claim completed payment** |
 | Mainnet Track | ❌ | No wallet-tested integration, no mainnet tx, no deployment | **No claim** |
@@ -93,10 +91,9 @@ reduced-motion checks pass in browser QA. This is not a full WCAG audit.
    validation now require `FULL` relay agreement. Monitor the configured relay
    set; one failing relay will (by design) block sensitive actions. Persist
    checkpoints for known rollbacks.
-4. **Production deployment.** Follow `docs/VERCEL_DEPLOYMENT.md`, set
-   `NEXT_PUBLIC_KYVERA_RELAYS` and `NEXT_PUBLIC_KYVERA_DOMAIN`, deploy, then run
-   `BASE=https://… pnpm smoke:deploy`. Confirm the relay health check before and
-   after deployment.
+4. **Production monitoring.** The Vercel deployment is live. Monitor the relay
+   health check; one failing relay blocks sensitive actions by design. Redeploy
+   after relay or domain changes and rerun `smoke:deploy`.
 5. **Public-relay retention.** Only with explicit authorization, run
    `docs/PUBLIC_RELAY_TEST.md` and `scripts/public-relay-identity-test.mjs`; verify
    kind-30078 retention and discovery over time.
@@ -138,5 +135,6 @@ standalone relying party, merchant demonstration and explicit limitations. Treat
 the missing real-wallet and transaction evidence as disclosed gaps rather than
 completed features.
 
-**CONDITIONAL GO** for that scope. **NO-GO** for production, real-funds or
-Mainnet claims until the conditions above are met.
+**GO** for the public identity-prototype demonstration. **NO-GO** for production
+authentication, real-funds payments or Mainnet Track claims until the remaining
+conditions are met.

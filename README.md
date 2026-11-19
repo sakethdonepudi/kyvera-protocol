@@ -5,6 +5,8 @@
 
 KYVERA is an open-source decentralized identity lifecycle protocol connecting Bitcoin Cash wallets with Nostr identities. It is a BCH Blaze 2026 submission for the Paytaca Decentralized Identity bounty.
 
+**Live:** https://kyvera-alpha.vercel.app · **Watch:** https://kyvera-alpha.vercel.app/tutorial · **Submission package:** [`docs/SUBMISSION_PACKAGE.md`](docs/SUBMISSION_PACKAGE.md)
+
 The project answers a question that existing BCH↔Nostr bindings do not:
 
 > After a wallet is rotated, revoked or compromised, how can an independent verifier determine which identity binding is authorized **now**?
@@ -344,13 +346,15 @@ Honest status as of 2026-11-19:
 - [x] Competitive audit of Kola Link, CashLink ID, BCH Identity Bridge and prior art
 - [x] Submission eligibility analysis, deployment guide, release checklist, judge script and submission draft
 - [ ] Live wallet interoperability test (Electron Cash / Cashonize / Paytaca)
-- [ ] Public GitHub push, deployment, demo video, bounty submission
+- [x] GitHub main push, public Vercel deployment, MP4 demos and embedded tutorial
+- [ ] Repository visibility public (requires owner confirmation)
+- [ ] Bounty submission
 - [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review
 
 **License:** MIT (see `LICENSE`). Third-party notices: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
-**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`REQUIREMENTS_MATRIX.md`](docs/REQUIREMENTS_MATRIX.md) · [`PAYTACA_COMPLIANCE.md`](docs/PAYTACA_COMPLIANCE.md) · [`TRUST_CHALLENGE.md`](docs/TRUST_CHALLENGE.md) · [`INTEGRATION.md`](docs/INTEGRATION.md) · [`JUDGE_3_MINUTE.md`](docs/JUDGE_3_MINUTE.md) · [`WALLET_UX_AUDIT.md`](docs/WALLET_UX_AUDIT.md) · [`WALLET_DEVICE_TEST.md`](docs/WALLET_DEVICE_TEST.md) · [`PAYTACA_WALLET_CHECKLIST.md`](docs/PAYTACA_WALLET_CHECKLIST.md) · [`WALLET_RELEASE_READINESS.md`](docs/WALLET_RELEASE_READINESS.md) · [`FINAL_SECURITY_AUDIT.md`](docs/FINAL_SECURITY_AUDIT.md) · [`SUBMISSION_GO_NO_GO.md`](docs/SUBMISSION_GO_NO_GO.md) · [`VERCEL_DEPLOYMENT.md`](docs/VERCEL_DEPLOYMENT.md) · [`PUBLIC_RELAY_TEST.md`](docs/PUBLIC_RELAY_TEST.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
+**Release documents:** [`SUBMISSION_ELIGIBILITY.md`](docs/SUBMISSION_ELIGIBILITY.md) · [`REQUIREMENTS_MATRIX.md`](docs/REQUIREMENTS_MATRIX.md) · [`PAYTACA_COMPLIANCE.md`](docs/PAYTACA_COMPLIANCE.md) · [`TRUST_CHALLENGE.md`](docs/TRUST_CHALLENGE.md) · [`INTEGRATION.md`](docs/INTEGRATION.md) · [`JUDGE_3_MINUTE.md`](docs/JUDGE_3_MINUTE.md) · [`WALLET_UX_AUDIT.md`](docs/WALLET_UX_AUDIT.md) · [`WALLET_DEVICE_TEST.md`](docs/WALLET_DEVICE_TEST.md) · [`PAYTACA_WALLET_CHECKLIST.md`](docs/PAYTACA_WALLET_CHECKLIST.md) · [`WALLET_RELEASE_READINESS.md`](docs/WALLET_RELEASE_READINESS.md) · [`FINAL_SECURITY_AUDIT.md`](docs/FINAL_SECURITY_AUDIT.md) · [`SUBMISSION_GO_NO_GO.md`](docs/SUBMISSION_GO_NO_GO.md) · [`SUBMISSION_PACKAGE.md`](docs/SUBMISSION_PACKAGE.md) · [`VERCEL_DEPLOYMENT.md`](docs/VERCEL_DEPLOYMENT.md) · [`PUBLIC_RELAY_TEST.md`](docs/PUBLIC_RELAY_TEST.md) · [`DEPLOYMENT.md`](docs/DEPLOYMENT.md) · [`RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md) · [`RELEASE_SECURITY_AUDIT.md`](docs/RELEASE_SECURITY_AUDIT.md) · [`JUDGE_DEMO_SCRIPT.md`](docs/JUDGE_DEMO_SCRIPT.md) · [`SUBMISSION_DRAFT.md`](docs/SUBMISSION_DRAFT.md) · [`KYVERA_PAY.md`](docs/KYVERA_PAY.md) · [`KYVERA_3_COMPETITIVE_ANALYSIS.md`](docs/KYVERA_3_COMPETITIVE_ANALYSIS.md)
 
 Deadline note: DoraHacks lists **22 November 2026, 14:00 UTC (19:30 IST)**. The BCH Blaze site footer still says 14–28 November; DoraHacks is authoritative. The Mainnet Track separately requires a live demo, WizardConnect/XO and at least one mainnet transaction; confirm with organizers whether those apply to a bounty-only entry.
 

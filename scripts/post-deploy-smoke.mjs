@@ -51,6 +51,13 @@ if (!/max-age=/.test(headers["strict-transport-security"] ?? "")) {
   failures.push("HSTS header is present but has no max-age");
 }
 
+const rootHtml = await response.text();
+const commitMeta = rootHtml.match(/<meta name="kyvera-commit" content="([^"]+)"/)?.[1];
+if (!commitMeta) failures.push("missing kyvera-commit meta tag");
+if (process.env.EXPECTED_COMMIT && commitMeta !== process.env.EXPECTED_COMMIT) {
+  failures.push(`deployed commit ${commitMeta ?? "missing"} does not match ${process.env.EXPECTED_COMMIT}`);
+}
+
 for (const [path, text] of routes) {
   const res = await page.request.get(`${BASE}${path}`);
   if (!res.ok()) failures.push(`${path} returned HTTP ${res.status()}`);

@@ -12,6 +12,9 @@ export const metadata: Metadata = {
       "Verifiable BCH + Nostr identity lifecycle: rotation, revocation, stale-state and equivocation detection without a central authority.",
     type: "website",
   },
+  other: {
+    "kyvera-commit": process.env.NEXT_PUBLIC_KYVERA_COMMIT ?? "dev",
+  },
 };
 
 const themeScript = `try{var t=localStorage.getItem("kyvera-theme");document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){document.documentElement.dataset.theme="dark"}`;
