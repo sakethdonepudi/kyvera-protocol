@@ -111,7 +111,7 @@ The Details page also warns judges will look at projects in a low-priority queue
 | Bounty R1 creation/management | ✅ self-custodial demo/NIP-07/external wallet flows |
 | Bounty R2 dual-key binding | ✅ tests + independent vector |
 | Bounty R3 discovery | ✅ Nostr relays, multi-relay |
-| Bounty R4 verification/auth | ✅ SDK, CLI, `/auth-demo` relying-party session journey (136 tests, 56 browser checks) |
+| Bounty R4 verification/auth | ✅ SDK, CLI, `/auth-demo` relying-party session journey (136 tests, 57 browser checks) |
 | Bounty R5 demonstration/docs | ✅ locally; no hosted URL |
 | Rotation stretch goal | ✅ rotation; recovery explicitly not claimed |
 | Mainnet M2 mainnet transaction | ◐ BIP21 handoff only; no in-app broadcast/txid |

@@ -25,7 +25,7 @@ those capabilities.
 
 | Environment | Status | What was actually verified |
 | --- | --- | --- |
-| **Verified locally** | ✅ | 136/136 tests across 13 files; strict typecheck; production build (17 routes); 56/56 browser checks; `pnpm rp:demo` 10/10; local relay discovery tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
+| **Verified locally** | ✅ | 136/136 tests across 13 files; strict typecheck; production build (17 routes); 57/57 browser checks; `pnpm rp:demo` 10/10; local relay discovery tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
 | **Verified with real wallets** | ❌ | No Paytaca, Cashonize or Selene installation was available. No wallet pairing, wallet-produced message signature, account switch, wrong network, rejection or disconnect was recorded |
 | **Verified on public relays** | ◐ | Read-only probe only: `wss://relay.damus.io` failed from this environment; `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published; retention was not tested |
 | **Verified in production** | ✅ limited | Public Vercel deployment at https://kyvera-alpha.vercel.app; HTTPS routes, headers, video and bundle smoke pass. Full production auth/payment behavior still depends on external relays |
@@ -55,7 +55,7 @@ pnpm install --frozen-lockfile   PASS (fresh clone)
 pnpm test                        PASS 136/136, 13 files
 pnpm typecheck                   PASS
 pnpm build                       PASS, 17 routes
-pnpm qa:browser                  PASS 56/56, 0 console/page errors
+pnpm qa:browser                  PASS 57/57, 0 console/page errors
 pnpm rp:demo                     PASS 10/10, no KYVERA API/relay
 pnpm audit --prod                PASS, 0 known vulnerabilities
 ```
@@ -113,7 +113,7 @@ reduced-motion checks pass in browser QA. This is not a full WCAG audit.
   authorization chain and rejects unauthorized transitions.
 - It demonstrates rotation, revocation, conflicts, stale history and independent
   relying-party authentication.
-- It has 136 automated tests, 56 browser checks and a 10/10 standalone relying
+- It has 136 automated tests, 57 browser checks and a 10/10 standalone relying
   party demonstration.
 - It is honest about wallet and payment limitations.
 

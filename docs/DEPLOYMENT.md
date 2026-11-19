@@ -102,7 +102,7 @@ Smoke-test:
 | `/developers` | SDK docs and vector download |
 | `/kyvera-standalone.html` | Single-file demo loads from the host |
 | `/vectors.json` | Deterministic vectors served |
-| `/icon.svg` | Icon served |
+| `/favicon.ico`, `/icon.png`, `/apple-icon.png` | Approved K emblem icons |
 
 Relay-unavailable behavior:
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { LifecycleDemo } from "@/components/lifecycle-demo";
 
@@ -17,13 +18,27 @@ export default function LandingPage() {
     <div>
       <section className="border-b border-ivory/[0.1]">
         <div className="mx-auto max-w-[1240px] px-5 pb-16 pt-14 sm:pb-24 sm:pt-20">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2 font-mono text-[9.5px] uppercase tracking-[0.18em] text-ivory-muted">
-              <span className="h-1.5 w-1.5 bg-signal" />
-              BCH Blaze 2026 · Paytaca identity bounty
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/brand/kyvera-icon-256.png"
+                alt=""
+                width={48}
+                height={48}
+                priority
+                className="h-11 w-11 rounded-lg object-cover"
+              />
+              <div>
+                <div className="font-display text-[21px] leading-none tracking-[0.26em] text-ivory">KYVERA</div>
+                <div className="mt-1 font-mono text-[8px] uppercase tracking-[0.16em] text-ivory-muted">
+                  Identity continuity protocol
+                </div>
+              </div>
             </div>
-            <div className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-ivory-muted">
-              The identity continuity protocol
+            <div className="text-right font-mono text-[9px] uppercase leading-relaxed tracking-[0.16em] text-ivory-muted">
+              BCH Blaze 2026
+              <br />
+              Paytaca identity bounty
             </div>
           </div>
 

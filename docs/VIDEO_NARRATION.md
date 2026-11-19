@@ -115,24 +115,26 @@ KYVERA application.
 
 | Property | Explainer | Judge demo |
 | --- | --- | --- |
-| Duration | **92.13s** | **183.73s** |
+| Duration | **96.93s** (2.4s logo reveal at both ends) | **188.53s** (2.4s logo reveal at both ends) |
 | Resolution | 1920×1080 | 1920×1080 |
 | Frame rate | 30 fps | 30 fps |
 | Video | H.264 High, yuv420p | H.264 High, yuv420p |
 | Audio | AAC-LC, 48 kHz, mono | AAC-LC, 48 kHz, mono |
-| Mean volume | **-16.8 dB** | **-16.6 dB** |
+| Mean volume | **-17.3 dB** | **-16.8 dB** |
 | Peak volume | **-1.5 dB** | **-1.4 dB** |
 | Black frames >0.6s | none detected | none detected |
 | Captions | 19 WebVTT cues | 36 WebVTT cues |
-| Last caption | 01:26.352 | 02:58.939 |
+| Last caption | 01:28.752 | 03:01.339 |
 
 Audio was normalized with `loudnorm=I=-16:TP=-1.5:LRA=11`; no clipping was
 observed. Captions are generated from the TTS cue timings and shifted per scene,
 then served as a WebVTT `<track>`; they are not a replacement for the accessible
 subtitle track.
 
-The films use actual deployed screens. Demo fixtures are labelled on-screen. No
-wallet approval, transaction, txid or confirmation is simulated.
+Both films open and close with a 2.4-second reveal of the approved raster primary
+logo (opacity and scale, no stretching, no recoloring), then use actual deployed
+screens. Demo fixtures are labelled on-screen. No wallet approval, transaction,
+txid or confirmation is simulated.
 
 ---
 

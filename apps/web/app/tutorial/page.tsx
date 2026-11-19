@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Badge, Card, SectionLabel } from "@/components/ui";
 
@@ -33,7 +34,17 @@ export default function TutorialPage() {
   return (
     <div className="mx-auto max-w-[1180px] px-5 py-10">
       <div className="max-w-2xl">
-        <div className="kicker text-signal">Watch KYVERA</div>
+        <div className="inline-flex rounded-xl border border-ivory/10 bg-black p-1.5">
+          <Image
+            src="/brand/kyvera-primary-logo.png"
+            alt="KYVERA — Keys change. Trust continues."
+            width={1774}
+            height={887}
+            priority
+            className="h-auto w-[280px] rounded-lg object-contain"
+          />
+        </div>
+        <div className="kicker mt-5 text-signal">Watch KYVERA</div>
         <h1 className="mt-3 font-display text-[38px] leading-[1.04] tracking-editorial text-ivory sm:text-[50px]">
           Two minutes.
           <br />

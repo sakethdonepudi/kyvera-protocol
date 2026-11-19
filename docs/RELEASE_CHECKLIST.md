@@ -15,11 +15,11 @@
 | Unit/integration/security tests | `pnpm test` | **136/136 pass**, 13 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 17 routes |
-| Browser QA | `pnpm qa:browser` | **56/56**, 0 console/page errors |
+| Browser QA | `pnpm qa:browser` | **57/57**, 0 console/page errors |
 | Independent relying party | `pnpm rp:demo` | **10/10**, no KYVERA API/relay |
 | Relay health | `pnpm relay:health <urls>` | read-only EOSE check; 2/2 for defaults |
 | Post-deployment smoke | `BASE=https://… pnpm smoke:deploy` | routes, headers, bundle, console errors |
-| Narrated demo films | `/tutorial` | 92s + 184s MP4, H.264/AAC 30fps, posters, WebVTT captions, native controls; audio mean -16.7 dB |
+| Narrated demo films | `/tutorial` | 97s + 189s MP4, H.264/AAC 30fps, posters, WebVTT captions, native controls; audio mean -16.7 dB |
 | History-wide secret scan | manual scan across 32 commits | no tracked keys/env secrets |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |
@@ -129,7 +129,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (12) |
 | WizardConnect pairing | ✅ dialog opens; ❌ untested with a physical wallet |
 | Theme / glass system | ✅ dark + warm light, reduced motion, mobile |
-| Browser QA | ✅ **56/56**, challenge/merchant/tutorial/pay/theme/auth-demo included |
+| Browser QA | ✅ **57/57**, challenge/merchant/tutorial/pay/theme/auth-demo included |
 | CSP + WASM | ✅ fixed and smoke-tested |
 | No secrets in client bundle | ✅ scanned |
 | Demo/lab/standalone work without relay | ✅ |

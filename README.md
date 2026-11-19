@@ -1,5 +1,7 @@
 # KYVERA
 
+<img src="apps/web/public/brand/kyvera-primary-logo.png" alt="KYVERA — Keys change. Trust continues." width="380" />
+
 **The Identity Continuity Protocol**
 **Keys change. Trust shouldn't disappear.**
 
@@ -351,6 +353,8 @@ Honest status as of 2026-11-19:
 - [ ] Bounty submission
 - [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review
+
+**Brand:** approved raster identity in `apps/web/public/brand` (black-background artwork; not vector). K emblem + text wordmark: navigation, footer, hero. Primary logo: tutorial, Open Graph, video intro/outro. Favicon/app icons: supplied K emblem.
 
 **License:** MIT (see `LICENSE`). Third-party notices: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 

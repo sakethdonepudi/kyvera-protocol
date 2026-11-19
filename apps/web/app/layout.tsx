@@ -3,6 +3,7 @@ import "./globals.css";
 import { Footer, Header } from "@/components/chrome";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://kyvera-alpha.vercel.app"),
   title: "KYVERA — Identity continuity protocol",
   description:
     "Your keys change. Your identity continues. Cryptographically verify Bitcoin Cash and Nostr identities across wallet rotation, revocation, and decentralized discovery.",
@@ -11,6 +12,21 @@ export const metadata: Metadata = {
     description:
       "Verifiable BCH + Nostr identity lifecycle: rotation, revocation, stale-state and equivocation detection without a central authority.",
     type: "website",
+    images: [
+      {
+        url: "/brand/kyvera-og-1200x630.png",
+        width: 1200,
+        height: 630,
+        alt: "KYVERA — Keys change. Trust continues.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KYVERA — Identity continuity protocol",
+    description:
+      "Verifiable BCH + Nostr identity lifecycle without a central authority.",
+    images: ["/brand/kyvera-og-1200x630.png"],
   },
   other: {
     "kyvera-commit": process.env.NEXT_PUBLIC_KYVERA_COMMIT ?? "dev",

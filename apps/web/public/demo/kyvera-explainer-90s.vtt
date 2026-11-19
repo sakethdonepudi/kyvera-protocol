@@ -1,77 +1,77 @@
 WEBVTT
 
 1
-00:00:00.400 --> 00:00:02.192
+00:00:02.800 --> 00:00:04.592
 A wallet address can change.
 
 2
-00:00:02.192 --> 00:00:05.323
+00:00:04.592 --> 00:00:07.723
 But the identity behind it shouldn't have to disappear.
 
 3
-00:00:05.323 --> 00:00:10.784
+00:00:07.723 --> 00:00:13.184
 In decentralized systems, proving who controls an address is only the beginning.
 
 4
-00:00:10.784 --> 00:00:14.257
+00:00:13.184 --> 00:00:16.657
 The harder question is what happens when that address changes.
 
 5
-00:00:17.800 --> 00:00:18.894
+00:00:20.200 --> 00:00:21.294
 Meet KYVERA.
 
 6
-00:00:18.894 --> 00:00:26.644
+00:00:21.294 --> 00:00:29.044
 An open-source identity continuity protocol connecting Bitcoin Cash and Nostr through independent cryptographic proofs.
 
 7
-00:00:26.644 --> 00:00:28.394
+00:00:29.044 --> 00:00:30.794
 No shared private keys.
 
 8
-00:00:28.394 --> 00:00:30.894
+00:00:30.794 --> 00:00:33.294
 No centralized identity provider.
 
 9
-00:00:34.400 --> 00:00:37.415
+00:00:36.800 --> 00:00:39.815
 Each binding is cryptographically verified.
 
 10
-00:00:37.415 --> 00:00:43.665
+00:00:39.815 --> 00:00:46.065
 Independent applications can inspect the evidence and determine whether an authorization chain is valid.
 
 11
-00:00:47.200 --> 00:00:51.426
+00:00:49.600 --> 00:00:53.826
 When a wallet changes, KYVERA preserves the authorization history.
 
 12
-00:00:51.426 --> 00:00:58.597
+00:00:53.826 --> 00:01:00.997
 The old proof remains historically valid, but the old wallet is no longer the currently authorized destination.
 
 13
-00:01:02.200 --> 00:01:10.860
+00:01:04.600 --> 00:01:13.260
 KYVERA also supports challenge-response authentication, revocation, and explicit detection of conflicting or incomplete evidence.
 
 14
-00:01:10.860 --> 00:01:15.584
+00:01:13.260 --> 00:01:17.984
 When the available information is uncertain, sensitive actions are blocked.
 
 15
-00:01:19.100 --> 00:01:20.484
+00:01:21.500 --> 00:01:22.884
 Your keys change.
 
 16
-00:01:20.484 --> 00:01:22.563
+00:01:22.884 --> 00:01:24.963
 Your identity continues.
 
 17
-00:01:22.563 --> 00:01:23.378
+00:01:24.963 --> 00:01:25.778
 KYVERA.
 
 18
-00:01:23.378 --> 00:01:24.576
+00:01:25.778 --> 00:01:26.976
 Keys change.
 
 19
-00:01:24.576 --> 00:01:26.352
+00:01:26.976 --> 00:01:28.752
 Trust shouldn't disappear.

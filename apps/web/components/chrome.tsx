@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "./ui";
@@ -14,14 +15,16 @@ const NAV = [
   { href: "/developers", label: "Developers" },
 ];
 
-function Mark({ size = 26 }: { size?: number }) {
+function Mark({ size = 32 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 26 26" fill="none" aria-hidden="true">
-      <rect x="1.5" y="1.5" width="23" height="23" stroke="currentColor" strokeWidth="1" />
-      <circle cx="13" cy="10.5" r="3.2" stroke="currentColor" strokeWidth="1.2" />
-      <path d="M13 13.7v6.1M10.3 17h5.4" stroke="currentColor" strokeWidth="1.2" />
-      <path d="M5.5 6.5h2M18.5 6.5h2M5.5 19.5h2M18.5 19.5h2" stroke="currentColor" strokeWidth="1" />
-    </svg>
+    <Image
+      src="/brand/kyvera-icon-256.png"
+      alt=""
+      width={size}
+      height={size}
+      className="rounded-[7px] object-cover"
+      priority={size >= 32}
+    />
   );
 }
 
@@ -31,8 +34,8 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-ivory/[0.12] bg-charcoal-950/70 shadow-[0_12px_40px_-30px_rgba(0,0,0,0.8)] backdrop-blur-glass">
       <div className="mx-auto flex h-[68px] max-w-[1240px] items-center justify-between px-5">
         <Link href="/" className="group flex items-center gap-3">
-          <span className="text-ivory transition-colors group-hover:text-signal">
-            <Mark />
+          <span className="transition-opacity group-hover:opacity-85">
+            <Mark size={34} />
           </span>
           <span>
             <span className="block text-[15px] font-semibold tracking-[0.26em] text-ivory">KYVERA</span>
@@ -108,8 +111,8 @@ export function Footer() {
     <footer className="mt-24 border-t border-ivory/[0.1] py-10">
       <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-5 text-[11px] text-ivory-muted sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
-          <span className="mt-0.5 text-ivory/70">
-            <Mark size={22} />
+          <span className="mt-0.5">
+            <Mark size={24} />
           </span>
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-ivory">

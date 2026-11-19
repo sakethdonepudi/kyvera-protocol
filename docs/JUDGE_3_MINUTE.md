@@ -108,7 +108,7 @@ pnpm typecheck
 pnpm build
 pnpm relay         # terminal 1
 pnpm dev           # terminal 2
-pnpm qa:browser    # 56 browser checks
+pnpm qa:browser    # 57 browser checks
 pnpm rp:demo       # 10/10 independent RP checks
 ```
 

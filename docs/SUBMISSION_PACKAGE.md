@@ -6,14 +6,16 @@
 
 ---
 
+![KYVERA](../apps/web/public/brand/kyvera-primary-logo.png)
+
 ## 1. Public links
 
 | Item | URL |
 | --- | --- |
 | **Live website** | https://kyvera-alpha.vercel.app |
 | **Three-minute judge walkthrough** | https://kyvera-alpha.vercel.app/tutorial |
-| **90-second explainer** | https://kyvera-alpha.vercel.app/demo/kyvera-explainer-90s.mp4 (92s, narrated, AAC) |
-| **Three-minute MP4** | https://kyvera-alpha.vercel.app/demo/kyvera-judge-demo-3min.mp4 (184s, narrated, AAC) |
+| **90-second explainer** | https://kyvera-alpha.vercel.app/demo/kyvera-explainer-90s.mp4 (97s, narrated, AAC, logo reveal) |
+| **Three-minute MP4** | https://kyvera-alpha.vercel.app/demo/kyvera-judge-demo-3min.mp4 (189s, narrated, AAC, logo reveal) |
 | **Trust Challenge** | https://kyvera-alpha.vercel.app/challenge |
 | **Standalone verifier** | https://kyvera-alpha.vercel.app/kyvera-standalone.html |
 | **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol (public) |
@@ -140,7 +142,7 @@ responds. Missing history returns `STALE`; conflicting branches return `CONFLICT
 | Check | Result |
 | --- | --- |
 | Unit / integration / security | **136/136**, 13 files |
-| Browser QA | **56/56**, 0 console/page errors |
+| Browser QA | **57/57**, 0 console/page errors |
 | Production build | pass, 17 routes |
 | Standalone relying party | **10/10** |
 | Production HTTPS smoke | pass, 9 routes, headers, bundle, video |
@@ -214,8 +216,9 @@ pnpm rp:demo
 
 ## 15. Video files
 
-- `apps/web/public/demo/kyvera-explainer-90s.mp4` — 1920×1080, H.264, AAC, 30fps, 92s
-- `apps/web/public/demo/kyvera-judge-demo-3min.mp4` — 1920×1080, H.264, AAC, 30fps, 184s
+- `apps/web/public/demo/kyvera-explainer-90s.mp4` — 1920×1080, H.264, AAC, 30fps, 97s
+- `apps/web/public/demo/kyvera-judge-demo-3min.mp4` — 1920×1080, H.264, AAC, 30fps, 189s
+- Both open and close with a 2.4s reveal of the approved primary logo.
 - Narration: Microsoft Edge Neural TTS, `en-US-AndrewNeural`; scripts and audio evidence in [`VIDEO_NARRATION.md`](VIDEO_NARRATION.md).
 - Posters and WebVTT captions are in the same directory.
 - Embedded with native controls at `/tutorial`; no autoplay with sound.

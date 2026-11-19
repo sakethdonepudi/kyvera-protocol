@@ -1,145 +1,145 @@
 WEBVTT
 
 1
-00:00:00.400 --> 00:00:04.639
+00:00:02.800 --> 00:00:07.039
 KYVERA solves a problem that simple wallet-to-profile links cannot.
 
 2
-00:00:04.639 --> 00:00:07.744
+00:00:07.039 --> 00:00:10.144
 A signature can prove ownership at one moment.
 
 3
-00:00:07.744 --> 00:00:15.521
+00:00:10.144 --> 00:00:17.921
 But after a wallet is rotated, compromised, or revoked, how does another application know which wallet remains authorized?
 
 4
-00:00:15.521 --> 00:00:18.086
+00:00:17.921 --> 00:00:20.486
 That is the identity-continuity problem.
 
 5
-00:00:18.086 --> 00:00:22.192
+00:00:20.486 --> 00:00:24.592
 KYVERA makes current authorization independently verifiable.
 
 6
-00:00:25.400 --> 00:00:32.047
+00:00:27.800 --> 00:00:34.447
 KYVERA binds a Bitcoin Cash wallet and a Nostr identity using separate cryptographic proofs.
 
 7
-00:00:32.047 --> 00:00:34.823
+00:00:34.447 --> 00:00:37.223
 The Nostr key signs the identity record.
 
 8
-00:00:34.823 --> 00:00:40.152
+00:00:37.223 --> 00:00:42.552
 The BCH wallet signs a domain-separated message containing the record digest.
 
 9
-00:00:40.152 --> 00:00:42.192
+00:00:42.552 --> 00:00:44.592
 Both signatures are verified.
 
 10
-00:00:42.192 --> 00:00:47.573
+00:00:44.592 --> 00:00:49.973
 The verifier never trusts a profile field, a server, or a single signature.
 
 11
-00:00:50.700 --> 00:00:55.623
+00:00:53.100 --> 00:00:58.023
 The binding and every later transition are canonical, hash-linked records.
 
 12
-00:00:55.623 --> 00:01:03.860
+00:00:58.023 --> 00:01:06.260
 KYVERA checks sequence numbers, previous-record references, and the authorization rules for bind, rotate, and revoke.
 
 13
-00:01:03.860 --> 00:01:06.452
+00:01:06.260 --> 00:01:08.852
 Discovery happens through Nostr relays.
 
 14
-00:01:06.452 --> 00:01:14.018
+00:01:08.852 --> 00:01:16.418
 The verifier reports per-relay freshness, and it refuses to invent a current state when history is incomplete.
 
 15
-00:01:17.200 --> 00:01:26.005
+00:01:19.600 --> 00:01:28.405
 A relying application issues a fresh, single-use challenge bound to its origin, session, intended identity, and address.
 
 16
-00:01:26.005 --> 00:01:28.557
+00:01:28.405 --> 00:01:30.957
 The user signs it with the identity key.
 
 17
-00:01:28.557 --> 00:01:33.031
+00:01:30.957 --> 00:01:35.431
 KYVERA verifies the response against freshly resolved authorization.
 
 18
-00:01:33.031 --> 00:01:38.571
+00:01:35.431 --> 00:01:40.971
 Replayed challenges, expired challenges, and unauthorized signers are rejected.
 
 19
-00:01:38.571 --> 00:01:41.663
+00:01:40.971 --> 00:01:44.063
 A session is issued only after verification.
 
 20
-00:01:44.800 --> 00:01:48.750
+00:01:47.200 --> 00:01:51.150
 Now the original wallet is replaced through an authorized rotation.
 
 21
-00:01:48.750 --> 00:01:55.710
+00:01:51.150 --> 00:01:58.110
 The current wallet authorizes leaving, the new wallet proves control, and the Nostr key binds the transition.
 
 22
-00:01:55.710 --> 00:01:59.513
+00:01:58.110 --> 00:02:01.913
 Wallet A's historical signature remains valid forever.
 
 23
-00:01:59.513 --> 00:02:02.039
+00:02:01.913 --> 00:02:04.439
 But it is no longer the current destination.
 
 24
-00:02:02.039 --> 00:02:08.276
+00:02:04.439 --> 00:02:10.676
 The Time Machine shows that distinction explicitly, and the old application session is invalidated.
 
 25
-00:02:11.400 --> 00:02:15.507
+00:02:13.800 --> 00:02:17.907
 The same model can resolve an identity-linked payment destination.
 
 26
-00:02:15.507 --> 00:02:17.705
+00:02:17.907 --> 00:02:20.105
 A merchant boots from a signed binding.
 
 27
-00:02:17.705 --> 00:02:25.428
+00:02:20.105 --> 00:02:27.828
 After an authorized rotation, the destination moves to the new wallet, and the old wallet is reported as superseded.
 
 28
-00:02:25.428 --> 00:02:31.007
+00:02:27.828 --> 00:02:33.407
 If the identity is stale, conflicted, or revoked, payment handoff is blocked.
 
 29
-00:02:34.200 --> 00:02:39.728
+00:02:36.600 --> 00:02:42.128
 The verifier and relying-party example can run independently of KYVERA's website.
 
 30
-00:02:39.728 --> 00:02:47.663
+00:02:42.128 --> 00:02:50.063
 This is a working open-source prototype with documented limitations, not a claim of production-grade wallet interoperability.
 
 31
-00:02:47.663 --> 00:02:49.097
+00:02:50.063 --> 00:02:51.497
 Your keys change.
 
 32
-00:02:49.097 --> 00:02:51.176
+00:02:51.497 --> 00:02:53.576
 Your identity continues.
 
 33
-00:02:51.176 --> 00:02:51.992
+00:02:53.576 --> 00:02:54.392
 KYVERA.
 
 34
-00:02:55.200 --> 00:02:55.965
+00:02:57.600 --> 00:02:58.365
 KYVERA.
 
 35
-00:02:55.965 --> 00:02:57.163
+00:02:58.365 --> 00:02:59.563
 Keys change.
 
 36
-00:02:57.163 --> 00:02:58.939
+00:02:59.563 --> 00:03:01.339
 Trust shouldn't disappear.
