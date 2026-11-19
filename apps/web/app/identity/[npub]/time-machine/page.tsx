@@ -67,13 +67,13 @@ export default function TimeMachinePage() {
         <div className="flex flex-wrap gap-2">
           <Link
             href={`/identity/${encodeURIComponent(raw ?? subject)}`}
-            className="rounded-[2px] border border-ivory/20 px-3.5 py-2 text-[12px] text-ivory-dim hover:border-ivory/45 hover:text-ivory"
+            className="rounded-full border border-ivory/20 px-3.5 py-2 text-[12px] text-ivory-dim hover:border-ivory/45 hover:text-ivory"
           >
             ← Dashboard
           </Link>
           <Link
             href={`/verify?npub=${encodeURIComponent(raw ?? subject)}`}
-            className="rounded-[2px] border border-ivory/20 px-3.5 py-2 text-[12px] text-ivory-dim hover:border-ivory/45 hover:text-ivory"
+            className="rounded-full border border-ivory/20 px-3.5 py-2 text-[12px] text-ivory-dim hover:border-ivory/45 hover:text-ivory"
           >
             Public verifier
           </Link>

@@ -13,12 +13,12 @@ The interface is designed to make cryptographic state legible without turning ev
 | --- | --- | --- |
 | Display | Iowan Old Style / Palatino / Georgia / serif | Page titles and section statements. Editorial, not decorative. |
 | Sans | Helvetica Neue / Helvetica / Arial / system | Controls, body copy, status text. |
-| Mono | SF Mono / Menlo / Consolas | Addresses, digests, signatures, timestamps, micro-labels. |
+| Mono | SF Mono / Menlo / Consolas | Addresses, digests, signatures, record identifiers and technical evidence only. |
 
 Rules:
 
-- Display headings use tight leading (`0.98–1.1`) and slight negative tracking.
-- Micro-labels are 9–10px mono, uppercase, 0.12–0.2em tracking.
+- Display headings use tight leading (`0.96–1.1`) and slight negative tracking.
+- Labels are sans, sentence case and 10–12px. Uppercase mono is reserved for identifiers.
 - Body copy is 11–14px with generous line-height.
 - No display font inside dense data tables.
 - Numbers and identifiers are always monospaced.
@@ -60,14 +60,15 @@ Theme switching:
 
 ## 3. Glass material
 
-`GlassPanel` / `.glass` / `.glass-strong`:
+`GlassPanel` / `.glass` / `.glass-strong` / `.glass-nav`:
 
-- translucent surface, 20–26px backdrop blur, thin border, directional shadow;
+- layered translucent gradient, 24–26px backdrop blur with saturation lift, fine border, inset top highlight and directional shadow;
+- body carries restrained warm/mint/ice diffusion plus a faint grid so the blur has real texture to refract;
 - fallback to an opaque surface when `backdrop-filter` is unsupported;
-- used for navigation, hero instrument, identity summary, payment handoff, Time Machine inspection and dialogs;
+- used for navigation, the landing lifecycle instrument, main interactive panels, selected verification panels, payment destination, video container and dialogs;
 - **not** used for long proof text, dense tables or nested glass-on-glass.
 
-Glass radius is 22px; technical cards remain 2px and solid for readability.
+Glass surfaces use 22–26px radii. Ordinary content stays on flat graphite surfaces with the same radius family.
 
 ---
 
@@ -75,10 +76,10 @@ Glass radius is 22px; technical cards remain 2px and solid for readability.
 
 - Max content width: 1240px.
 - Hairline borders: 1px `var(--glass-border)`.
-- Glass surfaces: 22px radius; technical cards: 2px.
+- Glass surfaces: 22–26px radius; flat cards share the same radius family.
 - Grid: asymmetric editorial split; 12-column rhythm where useful.
-- Background: obsidian or warm white, faint 48px grid, three restrained aurora fields.
-- Negative space is deliberate; dense cryptographic detail lives in inspectable panels.
+- Background: obsidian or warm white with three restrained diffusion fields and a faint 48px grid behind the top of the page.
+- Negative space is deliberate; dense cryptographic detail lives in inspectable panels and disclosures.
 
 ---
 
@@ -87,11 +88,12 @@ Glass radius is 22px; technical cards remain 2px and solid for readability.
 | Component | Rule |
 | --- | --- |
 | `GlassPanel` | Translucent 22px surface for navigation/summary/inspection/dialogs. |
-| `Card` | Solid 2px technical surface for dense data. |
+| `Card` | Flat graphite surface for ordinary content and dense data. |
 | `Button` primary | Signal fill, charcoal text, rounded-full for primary actions. Disabled becomes a hairline ghost. |
 | `Button` secondary | Transparent with an ivory hairline. |
 | `StatusBadge` / `VerificationBadge` | The only status-colour chip; label always present. |
 | `CopyableHash` | Monospace value + copy control. |
+| `Lifecycle timeline` | Verifier-driven BIND → ROTATE → REVOKE timeline; horizontal on desktop, vertical on mobile; short addresses with copy/full-address disclosure. |
 | `Time Machine` | Solid timeline; glass detail drawer; Compare mode separates historical validity from current authorization. |
 | `RelayStatus` | Dot + URL + events/latency/EOSE; colour reflects actual reachability. |
 | `WalletConnect` | WizardConnect state, QR pairing, wallet name and derived address. |
@@ -100,8 +102,8 @@ Glass radius is 22px; technical cards remain 2px and solid for readability.
 
 ## 6. Motion
 
-- One short fade (`160ms`) for resolved content.
-- No looping animation, no parallax, no ambient glow.
+- Standard interactions use 150–250ms colour, border, opacity and small position transitions.
+- Short fade/rise for resolved content; no bounce, parallax or looping decoration.
 - Progress bars animate only when a real action is running.
 - `prefers-reduced-motion: reduce` reduces all animation and transition durations to ~0ms.
 
@@ -115,7 +117,7 @@ Glass radius is 22px; technical cards remain 2px and solid for readability.
 - Toggle groups use `aria-pressed`.
 - Status meaning is never conveyed by colour alone: the label is always present.
 - Keyboard-only navigation is tested in `scripts/qa-browser.mjs`.
-- Mobile layouts are checked for horizontal overflow at 390px.
+- Mobile layouts are checked for horizontal overflow at 375px, 390px and 768px, and desktop at 1440px.
 - Long identifiers use `break-all` or scroll containers; they never force page-level overflow.
 - Reduced-motion is tested.
 
@@ -128,6 +130,7 @@ Glass radius is 22px; technical cards remain 2px and solid for readability.
 - Never show a fake transaction hash, address or success badge.
 - Prefer a precise limitation sentence over a marketing adjective.
 - Use "the verifier refuses to fall back" / "no address asserted" rather than implying safety.
+- Show the product; do not repeatedly explain it. Long evidence belongs in disclosure, not in the primary reading path.
 - Competitor comparisons are design/scope differences, not vulnerability claims.
 
 ---

@@ -430,7 +430,7 @@ function PayInner() {
                 </div>
                 <a
                   href={uri}
-                  className="mt-3 block rounded-[2px] bg-signal px-4 py-2.5 text-center text-[13px] font-semibold text-charcoal-950 hover:bg-signal-bright"
+                  className="mt-3 block rounded-full bg-signal px-4 py-2.5 text-center text-[13px] font-semibold text-charcoal-950 hover:bg-signal-bright"
                 >
                   Open in BCH wallet
                 </a>

@@ -25,6 +25,7 @@ import {
   Button,
   Card,
   CopyButton,
+  GlassPanel,
   SectionLabel,
   Spinner,
   StatusBadge,
@@ -34,11 +35,11 @@ import {
 type Mode = "demo" | "live";
 
 const STAGE_COPY: Record<ChallengeStage, string> = {
-  Bind: "Wallet A and the Nostr key sign one canonical genesis record.",
-  Verify: "Resolve the chain and verify both independent signatures.",
-  Authenticate: "A relying party issues a single-use challenge and a short session.",
-  Rotate: "Wallet A authorizes wallet B. The chain moves forward.",
-  Prove: "Wallet A's proof stays valid, but it is no longer current.",
+  Bind: "Wallet A and the Nostr key sign the genesis record.",
+  Verify: "Verify both signatures and the authorization chain.",
+  Authenticate: "A relying party issues a single-use challenge.",
+  Rotate: "Wallet A authorizes wallet B.",
+  Prove: "Wallet A's proof stays valid. Its authorization does not.",
 };
 
 export default function ChallengePage() {
@@ -369,14 +370,13 @@ export default function ChallengePage() {
     <div className="mx-auto max-w-[1240px] px-5 py-10">
       <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
         <div className="max-w-2xl">
-          <div className="kicker text-signal">KYVERA Trust Challenge</div>
-          <h1 className="mt-3 font-display text-[36px] leading-[1.04] tracking-editorial text-ivory sm:text-[48px]">
+          <h1 className="font-display text-[38px] leading-[1.04] tracking-editorial text-ivory sm:text-[50px]">
             Five stages.
             <br />
             One verifiable identity.
           </h1>
           <p className="mt-3 max-w-xl text-[12.5px] leading-relaxed text-ivory-dim">
-            Bind, verify, authenticate, rotate, prove. Every verdict is produced by the real verifier.
+            Bind, verify, authenticate, rotate, prove.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -386,7 +386,7 @@ export default function ChallengePage() {
               onClick={() => switchMode(value)}
               aria-pressed={mode === value}
               className={cn(
-                "rounded-full border px-3.5 py-2 font-mono text-[9.5px] uppercase tracking-[0.12em] transition-colors",
+                "rounded-full border px-3.5 py-2 text-[11px] transition-colors duration-200",
                 mode === value
                   ? "border-signal bg-signal text-charcoal-950"
                   : "border-ivory/15 text-ivory-muted hover:border-ivory/35 hover:text-ivory",
@@ -439,15 +439,10 @@ export default function ChallengePage() {
                 })}
               </ol>
             </div>
-            <div className="p-4">
-              <div className="font-mono text-[8.5px] uppercase tracking-[0.12em] text-ivory-muted">
-                {mode === "demo" ? "Deterministic fixture" : "Public relay mode"}
-              </div>
-              <div className="mt-1 text-[11px] text-ivory-dim">
-                {mode === "demo"
-                  ? "Unspendable keys. No network."
-                  : "Stored identity. Real relays."}
-              </div>
+            <div className="px-4 py-3 text-[10.5px] text-ivory-muted">
+              {mode === "demo"
+                ? "Deterministic fixtures · unspendable keys"
+                : "Stored identity · real relays"}
             </div>
           </Card>
 
@@ -502,7 +497,7 @@ export default function ChallengePage() {
               )}
               <Link
                 href="/create"
-                className="mt-3 inline-block font-mono text-[9px] uppercase tracking-[0.1em] text-signal hover:text-signal-bright"
+                className="mt-3 inline-block text-[11px] text-signal transition-colors hover:text-signal-bright"
               >
                 Create identity →
               </Link>
@@ -511,9 +506,9 @@ export default function ChallengePage() {
         </div>
 
         <div className="min-w-0 space-y-4">
-          <Card className="p-5">
+          <GlassPanel className="p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-ivory-muted">
+              <div className="text-[10.5px] text-ivory-muted">
                 Stage {stage + 1} / {CHALLENGE_STAGES.length}
               </div>
               {mode === "live" && live ? (
@@ -570,7 +565,7 @@ export default function ChallengePage() {
                 />
               )}
             </div>
-          </Card>
+          </GlassPanel>
 
           {mode === "live" && live ? (
             <Card className="p-5">
@@ -681,12 +676,14 @@ function ResultPanel({ result }: { result: ChallengeResult }) {
       <div className="text-[12px] font-medium text-ivory">{result.headline}</div>
       <ul className="space-y-2">
         {result.checks.map((check) => (
-          <li key={check.label} className="flex items-start gap-2 text-[11px]">
-            <span className={check.ok ? "text-accent-bright" : "text-danger"}>
-              {check.ok ? "✓" : "✕"}
+          <li key={check.label} className="flex flex-col gap-0.5 text-[11px] sm:flex-row sm:items-start sm:gap-2">
+            <span className="flex items-start gap-2">
+              <span className={check.ok ? "text-accent-bright" : "text-danger"}>
+                {check.ok ? "✓" : "✕"}
+              </span>
+              <span className={check.ok ? "text-ivory-dim" : "text-ivory"}>{check.label}</span>
             </span>
-            <span className={check.ok ? "text-ivory-dim" : "text-ivory"}>{check.label}</span>
-            <span className="ml-auto max-w-[48%] break-all text-right font-mono text-[9px] text-ivory-muted">
+            <span className="break-all pl-5 font-mono text-[9px] text-ivory-muted sm:ml-auto sm:max-w-[48%] sm:pl-0 sm:text-right">
               {check.detail}
             </span>
           </li>
@@ -694,7 +691,7 @@ function ResultPanel({ result }: { result: ChallengeResult }) {
       </ul>
       {result.evidence ? (
         <details className="rounded-lg border border-ivory/[0.08] bg-charcoal-950/40 p-3">
-          <summary className="cursor-pointer font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-muted">
+          <summary className="cursor-pointer text-[10px] text-ivory-muted transition-colors hover:text-ivory-dim">
             Evidence
           </summary>
           <div className="mt-2 flex items-start gap-2">
@@ -712,7 +709,7 @@ function ResultPanel({ result }: { result: ChallengeResult }) {
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 border-b border-ivory/[0.06] pb-1.5 last:border-0">
-      <div className="font-mono text-[8px] uppercase tracking-[0.14em] text-ivory-muted">{label}</div>
+      <div className="text-[10px] text-ivory-muted">{label}</div>
       <div className="mt-0.5 break-all font-mono text-[9.5px] text-ivory-dim">{value || "—"}</div>
     </div>
   );

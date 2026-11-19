@@ -95,7 +95,7 @@ export function TimeMachine({
               observations.
             </p>
           </div>
-          <div className="flex rounded-[2px] border border-ivory/15 p-0.5" role="group" aria-label="Detail mode">
+          <div className="flex rounded-lg border border-ivory/15 p-0.5" role="group" aria-label="Detail mode">
             {(["plain", "compare", "crypto"] as const).map((value) => (
               <button
                 key={value}

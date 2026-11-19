@@ -116,13 +116,8 @@ const html = `<!doctype html>
     <div>
       <div class="micro" style="color:#f05a28">BCH Blaze 2026 · Paytaca identity bounty</div>
       <h1>Keys change.<br/>Trust shouldn’t<br/><em>disappear.</em></h1>
-      <p class="lede">A self-contained demonstration of identity continuity. Every verdict below is computed in this page by the real KYVERA verifier, using deterministic unspendable keys. No wallet, account, relay or install.</p>
-      <div class="meta">
-        <span class="chip green">real verifier</span>
-        <span class="chip">deterministic fixtures</span>
-        <span class="chip">no network</span>
-        <span class="chip orange">open source</span>
-      </div>
+      <p class="lede">Explore identity continuity.</p>
+      <p class="micro dim">Deterministic fixtures · verified locally</p>
     </div>
     <div>
       <div class="micro">Lifecycle</div>

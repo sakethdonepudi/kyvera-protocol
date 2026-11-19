@@ -54,6 +54,7 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 
 ## 2.1 What is new in this iteration
 
+- **4.3 premium interface** ([`docs/UI_UX_43.md`](docs/UI_UX_43.md)): reduced documentation-style copy, a verifier-driven BIND → ROTATE → REVOKE timeline, a minimal tutorial cinema selector, visible glass surfaces and 375–1440px visual QA. Protocol and security behavior unchanged.
 - **Trust Challenge** (`/challenge`): five executable stages — Bind, Verify, Authenticate, Rotate, Prove — in a deterministic guided demo or against a live stored identity. The final stage shows a historically valid wallet that is no longer authorized.
 - **Merchant example** (`/merchant`): a self-asserted demo merchant whose payment destination unlocks only after verification, then moves to the new wallet after an authorized rotation.
 - **Standalone relying party** (`pnpm rp:demo`): a framework-independent Node app that authenticates, rejects replay and verifies rotation/revocation without the KYVERA website, API or relay.
@@ -65,7 +66,7 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 - **KYVERA Pay** (`/pay`): resolve an identity, enforce ACTIVE/network/freshness policy, re-resolve before handoff, and generate a BIP21/QR payment for Paytaca, Selene, Cashonize or Electron Cash. WizardConnect pairing is implemented for Paytaca and Cashonize.
 - **Independent relying-party auth** (`/auth-demo`): origin/session/identity/address-bound single-use challenges, short-lived sessions, replay/expiry rejection, logout and revocation/rotation invalidation.
 - **Automatic wallet connection** (`/create`): Create Identity defaults to Connect Wallet and exposes Connect → Sign → Verified → Publish states. WizardConnect retrieves the BCH address automatically; the wallet signs the proof message and KYVERA verifies the pasted signature immediately, enabling publishing only after it matches. WizardConnect does not expose arbitrary message signing, so this remains an explicit two-step proof. Not yet tested with a physical wallet.
-- **Glass design system**: translucent navigation/summary surfaces, warm-light theme, reduced-motion support, and a single dark/light token set.
+- **Glass design system**: layered translucent navigation and interactive surfaces over restrained light diffusion, warm-light theme, reduced-motion support, opaque fallback and a single dark/light token set.
 - **Identity Time Machine 3.0**: Compare mode separates historical proof validity from current authorization; proof inspection remains per-record.
 - **Security laboratory 3.0**: split view, transition strip, replay/reset controls, real verifier output.
 - **Editorial design system** (`docs/DESIGN_SYSTEM.md`): charcoal, ivory, signal orange, muted mint; accessible interaction states and reduced-motion support.

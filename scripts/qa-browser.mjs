@@ -76,7 +76,7 @@ async function desktopFlow() {
   await shot(page, "04-interop");
 
   await page.goto(`${BASE}/tutorial`, { waitUntil: "networkidle" });
-  await page.getByText("Two minutes.").waitFor({ timeout: 20_000 });
+  await page.getByText("See KYVERA in action.").waitFor({ timeout: 20_000 });
   const videos = page.locator("video");
   if ((await videos.count()) !== 2) throw new Error("expected two demo videos");
   for (let index = 0; index < 2; index += 1) {

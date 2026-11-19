@@ -9,9 +9,9 @@ import { ThemeToggle } from "./theme-toggle";
 const NAV = [
   { href: "/#protocol", label: "Product" },
   { href: "/verify", label: "Verify" },
-  { href: "/demo", label: "Time Machine" },
+  { href: "/demo", label: "Demo" },
   { href: "/challenge", label: "Challenge" },
-  { href: "/lab", label: "Security Lab" },
+  { href: "/lab", label: "Security" },
   { href: "/developers", label: "Developers" },
 ];
 
@@ -31,14 +31,14 @@ function Mark({ size = 32 }: { size?: number }) {
 export function Header() {
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-40 border-b border-ivory/[0.12] bg-charcoal-950/70 shadow-[0_12px_40px_-30px_rgba(0,0,0,0.8)] backdrop-blur-glass">
+    <header className="glass-nav sticky top-0 z-40">
       <div className="mx-auto flex h-[68px] max-w-[1240px] items-center justify-between px-5">
         <Link href="/" className="group flex items-center gap-3">
-          <span className="transition-opacity group-hover:opacity-85">
+          <span className="transition-opacity duration-200 group-hover:opacity-85">
             <Mark size={34} />
           </span>
           <span>
-            <span className="block text-[15px] font-semibold tracking-[0.26em] text-ivory">KYVERA</span>
+            <span className="block text-[15px] font-semibold tracking-[0.24em] text-ivory">KYVERA</span>
             <span className="mt-0.5 block font-mono text-[8px] uppercase tracking-[0.18em] text-ivory-muted">
               Identity continuity
             </span>
@@ -55,10 +55,10 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "border-b border-transparent px-3 py-2 text-[12px] transition-colors",
+                  "rounded-full px-3 py-2 text-[12px] transition-colors duration-200",
                   active
-                    ? "border-signal text-ivory"
-                    : "text-ivory-muted hover:border-ivory/30 hover:text-ivory",
+                    ? "bg-ivory/[0.07] text-ivory"
+                    : "text-ivory-muted hover:bg-ivory/[0.04] hover:text-ivory",
                 )}
               >
                 {item.label}
@@ -71,13 +71,13 @@ export function Header() {
           <ThemeToggle />
           <Link
             href="/pay#wallet"
-            className="hidden rounded-full border border-ivory/18 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-dim transition-colors hover:border-ivory/40 hover:text-ivory sm:block"
+            className="hidden rounded-full border border-ivory/15 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-dim transition-colors duration-200 hover:border-ivory/35 hover:text-ivory sm:block"
           >
             Connect wallet
           </Link>
           <Link
             href="/create"
-            className="rounded-full bg-signal px-3.5 py-2 text-[12px] font-semibold text-charcoal-950 transition-colors hover:bg-signal-bright"
+            className="rounded-full bg-signal px-3.5 py-2 text-[12px] font-semibold text-charcoal-950 transition-[background-color,transform] duration-200 hover:bg-signal-bright active:scale-[0.99]"
           >
             Create identity
           </Link>
@@ -97,9 +97,6 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Link href="/pay#wallet" className="whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.1em] text-ivory-dim">
-            Connect wallet
-          </Link>
         </nav>
       </div>
     </header>
@@ -108,7 +105,7 @@ export function Header() {
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-ivory/[0.1] py-10">
+    <footer className="mt-24 border-t border-ivory/[0.08] py-10">
       <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-5 text-[11px] text-ivory-muted sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
           <span className="mt-0.5">
@@ -126,28 +123,22 @@ export function Footer() {
             Verify
           </Link>
           <Link href="/demo" className="hover:text-ivory">
-            Time Machine
+            Demo
           </Link>
           <Link href="/challenge" className="hover:text-ivory">
-            Trust Challenge
+            Challenge
           </Link>
           <Link href="/tutorial" className="hover:text-ivory">
-            Watch demo
+            Film
           </Link>
           <Link href="/lab" className="hover:text-ivory">
-            Security Lab
+            Security
           </Link>
           <Link href="/pay" className="hover:text-ivory">
             Pay
           </Link>
-          <Link href="/interop" className="hover:text-ivory">
-            Wallet probe
-          </Link>
-          <Link href="/auth-demo" className="hover:text-ivory">
-            Auth demo
-          </Link>
-          <Link href="/merchant" className="hover:text-ivory">
-            Merchant demo
+          <Link href="/developers" className="hover:text-ivory">
+            Developers
           </Link>
           <a
             href="https://github.com/sakethdonepudi/kyvera-protocol"
@@ -158,9 +149,8 @@ export function Footer() {
             Source
           </a>
         </div>
-        <p className="max-w-sm leading-relaxed">
-          Open-source research prototype for BCH Blaze 2026. Verification is independent of any KYVERA
-          server. Demo keys are throwaway and browser-local.
+        <p className="max-w-[210px] leading-relaxed">
+          Open-source research prototype. Demo keys are throwaway and browser-local.
         </p>
       </div>
     </footer>

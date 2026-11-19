@@ -21,8 +21,8 @@ const routes = [
   ["/auth-demo", "Sign in with an identity"],
   ["/pay", "Pay the person."],
   ["/developers", "Verification is a library call"],
-  ["/tutorial", "Two minutes."],
-  ["/create", "Bind a Nostr identity"],
+  ["/tutorial", "See KYVERA in action."],
+  ["/create", "Create an identity."],
   ["/verify", "Trust the signatures"],
 ];
 

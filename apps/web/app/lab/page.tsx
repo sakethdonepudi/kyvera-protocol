@@ -65,7 +65,7 @@ export default function LabPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex rounded-[2px] border border-ivory/15 p-0.5" role="group" aria-label="Detail level">
+          <div className="flex rounded-lg border border-ivory/15 p-0.5" role="group" aria-label="Detail level">
             {[false, true].map((value) => (
               <button
                 key={String(value)}

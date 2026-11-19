@@ -29,7 +29,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-70",
+        "inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-medium transition-[background-color,border-color,color,transform,opacity] duration-200 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70",
         variants[variant],
         className,
       )}
@@ -52,7 +52,7 @@ export function Card({
   return (
     <Tag
       className={cn(
-        "rounded-xl border border-ivory/[0.13] bg-charcoal-900/55",
+        "rounded-xl border border-ivory/[0.08] bg-charcoal-900/45",
         className,
       )}
     >
@@ -179,7 +179,7 @@ export function CopyButton({ value, label = "Copy" }: { value: string; label?: s
           setCopied(false);
         }
       }}
-      className="shrink-0 rounded-full border border-ivory/15 px-2 py-1 font-mono text-[9.5px] uppercase tracking-[0.12em] text-ivory-muted transition-colors hover:border-ivory/40 hover:text-ivory"
+      className="shrink-0 rounded-full border border-ivory/15 px-2.5 py-1.5 font-mono text-[9.5px] uppercase tracking-[0.12em] text-ivory-muted transition-colors duration-200 hover:border-ivory/40 hover:text-ivory"
     >
       {copied ? "Copied" : label}
     </button>
@@ -211,7 +211,7 @@ export function Alert({
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <div className="mb-3 font-mono text-[9.5px] font-semibold uppercase tracking-[0.2em] text-ivory-muted">
+    <div className="mb-2.5 text-[11.5px] font-medium tracking-[-0.005em] text-ivory-dim">
       {children}
     </div>
   );
@@ -256,5 +256,30 @@ export function Kicker({ children }: { children: ReactNode }) {
     <div className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-ivory-muted">
       {children}
     </div>
+  );
+}
+
+export function Disclosure({
+  summary,
+  children,
+  className,
+}: {
+  summary: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <details className={cn("group", className)}>
+      <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-[11px] text-ivory-muted transition-colors hover:text-ivory-dim [&::-webkit-details-marker]:hidden">
+        <span
+          className="text-[13px] leading-none transition-transform duration-200 group-open:rotate-45"
+          aria-hidden="true"
+        >
+          +
+        </span>
+        {summary}
+      </summary>
+      <div className="mt-2 text-[11.5px] leading-relaxed text-ivory-muted">{children}</div>
+    </details>
   );
 }

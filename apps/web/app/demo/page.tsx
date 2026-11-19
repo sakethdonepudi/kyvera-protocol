@@ -4,41 +4,41 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getDemoState, type DemoState } from "@/lib/lab";
 import { TimeMachine } from "@/components/time-machine";
-import { Alert, Badge, Button, Card, CopyButton, SectionLabel, Spinner, StatusBadge, cn } from "@/components/ui";
+import { Alert, Button, Card, CopyButton, Disclosure, GlassPanel, SectionLabel, Spinner, StatusBadge, cn } from "@/components/ui";
 import { shortAddress, shortHex } from "@/lib/format";
 
 const STEPS = [
   {
     title: "Two independent keys",
-    line: "A Nostr identity key and a BCH wallet key. Neither is derived from the other.",
+    line: "One BCH wallet key, one Nostr identity key.",
   },
   {
     title: "Bind",
-    line: "Both keys sign one canonical record at sequence 0. The Nostr event carries the record.",
+    line: "Both keys sign the genesis record.",
   },
   {
     title: "Verify independently",
-    line: "The verifier checks the Schnorr signature, recovers the BCH key, and validates the chain from genesis.",
+    line: "The verifier checks both signatures and the chain.",
   },
   {
     title: "Rotate",
-    line: "The old wallet authorizes leaving, the new wallet proves control, and the Nostr key binds the transition.",
+    line: "Wallet A authorizes wallet B.",
   },
   {
     title: "History stays valid",
-    line: "Wallet A's proof is still cryptographically true. It is simply no longer the current destination.",
+    line: "Wallet A's proof is true, but no longer current.",
   },
   {
     title: "Unauthorized rotation",
-    line: "A thief with the Nostr key and a new wallet cannot produce the current wallet's signature.",
+    line: "A thief with the Nostr key cannot move the wallet.",
   },
   {
     title: "Same answer in the CLI",
-    line: "The SDK and the terminal verifier reach the same conclusion from the same signed events.",
+    line: "The SDK and the terminal verifier agree.",
   },
   {
     title: "Revoke",
-    line: "The current wallet and the identity key end the chain. Nothing falls back to wallet A.",
+    line: "The chain ends. Nothing falls back to wallet A.",
   },
 ];
 
@@ -67,30 +67,21 @@ export default function DemoPage() {
   return (
     <div className="mx-auto max-w-[1240px] px-5 py-12">
       <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-        <div className="max-w-2xl">
-          <div className="kicker text-signal">Guided demonstration · 90 seconds</div>
-          <h1 className="mt-3 font-display text-[36px] leading-[1.06] tracking-editorial text-ivory sm:text-[46px]">
-            The whole argument,
-            <br />
-            in one identity.
+        <div>
+          <h1 className="font-display text-[38px] leading-[1.04] tracking-editorial text-ivory sm:text-[52px]">
+            Explore identity continuity.
           </h1>
-          <p className="mt-3 text-[13px] leading-relaxed text-ivory-dim">
-            Deterministic, unspendable fixtures. Every verdict below is produced by the same verifier
-            functions exported by the SDK — no wallet, account or relay required.
-          </p>
+          <Disclosure summary="Demo data" className="mt-3">
+            Deterministic, unspendable fixtures. Every verdict is computed by the same verifier
+            functions exported by the SDK.
+          </Disclosure>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href="/lab"
-            className="rounded-[2px] border border-ivory/20 px-3.5 py-2 text-[12px] text-ivory-dim hover:border-ivory/45 hover:text-ivory"
-          >
-            Security lab
-          </Link>
-          <Link
-            href="/verify"
-            className="rounded-[2px] border border-ivory/20 px-3.5 py-2 text-[12px] text-ivory-dim hover:border-ivory/45 hover:text-ivory"
-          >
+        <div className="flex flex-wrap gap-5 text-[12px]">
+          <Link href="/verify" className="text-ivory-muted transition-colors hover:text-ivory">
             Live verifier
+          </Link>
+          <Link href="/lab" className="text-signal transition-colors hover:text-signal-bright">
+            Security lab →
           </Link>
         </div>
       </div>
@@ -102,7 +93,7 @@ export default function DemoPage() {
       ) : null}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[300px_1fr]">
-        <div className="min-w-0 space-y-4">
+        <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
           <Card className="overflow-hidden">
             <div className="border-b border-ivory/[0.1] p-4">
               <SectionLabel>Sequence</SectionLabel>
@@ -154,23 +145,12 @@ export default function DemoPage() {
             </div>
           </Card>
 
-          <div className="border border-ivory/[0.1] p-4">
-            <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">Progress</div>
-            <div className="mt-2 flex gap-1">
-              {STEPS.map((entry, index) => (
-                <div
-                  key={entry.title}
-                  className={cn("h-[3px] flex-1", index <= step ? "bg-signal" : "bg-ivory/10")}
-                />
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="min-w-0 space-y-4">
-          <Card className="p-5">
+          <GlassPanel className="p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-ivory-muted">
+              <div className="text-[10.5px] text-ivory-muted">
                 Step {String(step + 1).padStart(2, "0")} / {STEPS.length}
               </div>
               {resolution ? <StatusBadge status={resolution.status} /> : null}
@@ -187,7 +167,7 @@ export default function DemoPage() {
             ) : (
               <StepPanel step={step} state={state} />
             )}
-          </Card>
+          </GlassPanel>
 
           {resolution ? <TimeMachine resolution={resolution} compact /> : null}
         </div>
@@ -204,8 +184,8 @@ function StepPanel({ step, state }: { step: number; state: DemoState }) {
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <KeyPanel label="Nostr identity" value={f.npub} note="BIP-340 Schnorr key" />
         <KeyPanel label="BCH wallet A" value={f.walletA.identity.address} note="P2PKH · signmessage" />
-        <p className="sm:col-span-2 font-mono text-[9px] uppercase tracking-[0.1em] text-ivory-muted">
-          distinct secp256k1 keys · no derivation across domains
+        <p className="sm:col-span-2 text-[10.5px] text-ivory-muted">
+          Distinct secp256k1 keys. Neither is derived from the other.
         </p>
       </div>
     );
@@ -215,20 +195,15 @@ function StepPanel({ step, state }: { step: number; state: DemoState }) {
     return (
       <div className="mt-5 space-y-3">
         <div className="border border-ivory/[0.12] bg-charcoal-950/50 p-4">
-          <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
-            Genesis record · sequence 0
-          </div>
+          <div className="text-[10px] text-ivory-muted">Genesis record · sequence 0</div>
           <div className="mt-2 break-all font-mono text-[11px] text-ivory">{f.walletA.identity.address}</div>
           <div className="mt-1 font-mono text-[9px] text-ivory-muted">
             record {shortHex(f.bind.recordId, 16, 10)}
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Badge tone="accent">BCH new-key proof</Badge>
-          <Badge tone="accent">Nostr event signature</Badge>
-          <Badge tone="neutral">canonical JSON</Badge>
-          <Badge tone="neutral">previous = null</Badge>
-        </div>
+        <p className="text-[10.5px] text-ivory-muted">
+          BCH new-key proof · Nostr signature · previous = null
+        </p>
       </div>
     );
   }
@@ -240,9 +215,7 @@ function StepPanel({ step, state }: { step: number; state: DemoState }) {
           <CheckLine key={check.label} ok={check.ok} label={check.label} detail={check.detail} />
         ))}
         <p className="pt-2 text-[11px] leading-relaxed text-ivory-muted">
-          Resolved locally to <span className="text-ivory">{state.bind.status}</span>. The verifier
-          independently recomputes the payload digest, recovers the BCH public key and validates the
-          Nostr event id.
+          Resolved locally to <span className="text-ivory">{state.bind.status}</span>.
         </p>
       </div>
     );
@@ -253,23 +226,19 @@ function StepPanel({ step, state }: { step: number; state: DemoState }) {
       <div className="mt-5 space-y-3">
         <div className="grid gap-px bg-ivory/[0.1] sm:grid-cols-2">
           <div className="bg-charcoal-900 p-4">
-            <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">old wallet</div>
+            <div className="text-[10px] text-ivory-muted">Old wallet</div>
             <div className="mt-1 break-all font-mono text-[10px] text-ivory-dim">{f.walletA.identity.address}</div>
-            <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.12em] text-signal">superseded</div>
+            <div className="mt-2 text-[10px] text-signal">Superseded</div>
           </div>
           <div className="bg-charcoal-900 p-4">
-            <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">new wallet</div>
+            <div className="text-[10px] text-ivory-muted">New wallet</div>
             <div className="mt-1 break-all font-mono text-[10px] text-ivory">{f.walletB.identity.address}</div>
-            <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.12em] text-accent-bright">
-              current
-            </div>
+            <div className="mt-2 text-[10px] text-accent-bright">Current</div>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Badge tone="warn">current-key signature</Badge>
-          <Badge tone="accent">new-key signature</Badge>
-          <Badge tone="accent">Nostr signature</Badge>
-        </div>
+        <p className="text-[10.5px] text-ivory-muted">
+          Current-key signature · new-key signature · Nostr signature
+        </p>
       </div>
     );
   }
@@ -324,7 +293,7 @@ function StepPanel({ step, state }: { step: number; state: DemoState }) {
     return (
       <div className="mt-5 space-y-3">
         <div>
-          <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+          <div className="mb-1 text-[10px] text-ivory-muted">
             SDK call (the same function the UI uses)
           </div>
           <pre className="overflow-auto border border-ivory/[0.12] bg-charcoal-950/80 p-4 font-mono text-[10px] leading-relaxed text-ivory-dim">
@@ -340,9 +309,7 @@ const result = await resolveIdentity({
           </pre>
         </div>
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
-            terminal
-          </span>
+          <span className="text-[10px] text-ivory-muted">Terminal</span>
           <CopyButton value={command} />
         </div>
         <pre className="overflow-auto border border-ivory/[0.12] bg-charcoal-950/80 p-4 font-mono text-[10px] leading-relaxed text-ivory-dim">
@@ -381,9 +348,9 @@ superseded:
 function KeyPanel({ label, value, note }: { label: string; value: string; note: string }) {
   return (
     <div className="border border-ivory/[0.12] bg-charcoal-950/50 p-4">
-      <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">{label}</div>
+      <div className="text-[10px] text-ivory-muted">{label}</div>
       <div className="mt-2 break-all font-mono text-[10px] leading-relaxed text-ivory">{value}</div>
-      <div className="mt-2 font-mono text-[8.5px] uppercase tracking-[0.12em] text-ivory-muted">{note}</div>
+      <div className="mt-2 text-[10px] text-ivory-muted">{note}</div>
     </div>
   );
 }

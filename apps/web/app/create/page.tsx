@@ -38,6 +38,7 @@ import {
   Card,
   CopyButton,
   Field,
+  GlassPanel,
   Input,
   SectionLabel,
   Spinner,
@@ -260,15 +261,11 @@ export default function CreatePage() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-12">
       <div className="max-w-2xl">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent/80">
-          Create identity
-        </div>
-        <h1 className="mt-3 font-display text-[38px] leading-[1.05] tracking-editorial text-ivory">
-          Bind a Nostr identity to a BCH wallet.
+        <h1 className="font-display text-[38px] leading-[1.05] tracking-editorial text-ivory">
+          Create an identity.
         </h1>
-        <p className="mt-3 text-[13.5px] leading-relaxed text-ivory-muted">
-          Two keys, one canonical record. You see the exact bytes before publishing. Private keys
-          never leave your browser.
+        <p className="mt-3 text-[13px] leading-relaxed text-ivory-muted">
+          Two keys, one canonical record. Private keys never leave this browser.
         </p>
       </div>
 
@@ -315,8 +312,8 @@ export default function CreatePage() {
                 ) : null}
               </div>
             ) : (
-              <p className="mt-3 text-[12.5px] leading-relaxed text-ivory-muted">
-                Generate a throwaway key, or connect a NIP-07 signer.
+              <p className="mt-3 text-[12px] text-ivory-muted">
+                Generate a throwaway key or connect NIP-07.
               </p>
             )}
             {nostrError ? (
@@ -360,7 +357,7 @@ export default function CreatePage() {
             </div>
 
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-muted">Network</span>
+              <span className="text-[10px] text-ivory-muted">Network</span>
               {(["mainnet", "chipnet"] as const).map((value) => (
                 <button
                   key={value}
@@ -398,9 +395,7 @@ export default function CreatePage() {
                     <Button onClick={() => wallet.connect()} disabled={wallet.state === "connecting"}>
                       {wallet.state === "connecting" ? <Spinner /> : null} Connect Wallet
                     </Button>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-ivory-muted">
-                      Paytaca · Cashonize
-                    </p>
+                    <p className="text-[10px] text-ivory-muted">Paytaca · Cashonize</p>
                   </div>
                 ) : null}
 
@@ -414,7 +409,7 @@ export default function CreatePage() {
                     )}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
+                      <span className="text-[10px] text-ivory-muted">
                         {wallet.walletName ?? "Connected wallet"}
                       </span>
                       <Badge tone={walletVerified ? "accent" : "neutral"}>
@@ -503,7 +498,7 @@ export default function CreatePage() {
               <div className="mt-4 space-y-3">
                 {demoBch ? (
                   <div className="rounded-xl border border-ivory/[0.1] bg-charcoal-950/40 p-3.5">
-                    <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">Demo wallet</div>
+                    <div className="text-[10px] text-ivory-muted">Demo wallet</div>
                     <div className="mt-1 break-all font-mono text-[12px] text-ivory">{demoBch.identity.address}</div>
                     <div className="mt-2 flex items-center gap-2">
                       <Badge tone="warn">unfunded</Badge>
@@ -570,7 +565,7 @@ export default function CreatePage() {
           </Card>
 
           <Card className="p-5">
-            <SectionLabel>03 · What each key signs</SectionLabel>
+            <SectionLabel>03 · Signed payload</SectionLabel>
             {bchMode === "demo" && preview && preview.record.payload.bch ? (
               <div className="space-y-4">
                 <div>
@@ -627,7 +622,7 @@ export default function CreatePage() {
                 </div>
               </details>
             ) : (
-              <p className="text-[12.5px] text-ivory-muted">
+              <p className="text-[12px] text-ivory-muted">
                 Configure both keys to preview the signed payload.
               </p>
             )}
@@ -636,7 +631,7 @@ export default function CreatePage() {
         </div>
 
         <div className="space-y-4">
-          <Card className="p-5 lg:sticky lg:top-24">
+          <GlassPanel className="p-5 lg:sticky lg:top-24">
             <SectionLabel>Publish</SectionLabel>
             <div className="space-y-3 text-[12px]">
               <Row label="Subject" value={subject ? shortHex(subject, 10, 8) : "—"} />
@@ -647,7 +642,6 @@ export default function CreatePage() {
             </div>
 
             <div className="mt-4">
-              <div className="mb-2 text-[10px] uppercase tracking-[0.14em] text-muted">Relays</div>
               <RelayEditor relays={relays} onChange={setRelays} compact />
             </div>
 
@@ -694,7 +688,7 @@ export default function CreatePage() {
                 </div>
                 <Link
                   href={`/identity/${npub}`}
-                  className="block rounded-[2px] bg-signal px-4 py-2.5 text-center text-[13px] font-semibold text-charcoal-950 hover:bg-signal-bright"
+                  className="block rounded-full bg-signal px-4 py-2.5 text-center text-[13px] font-semibold text-charcoal-950 hover:bg-signal-bright"
                 >
                   Open the identity dashboard →
                 </Link>
@@ -707,7 +701,7 @@ export default function CreatePage() {
                 Signed locally. Saved in this browser even if the relay is offline.
               </p>
             )}
-          </Card>
+          </GlassPanel>
         </div>
       </div>
     </div>
@@ -729,9 +723,7 @@ function SignatureStep({
     <div className="space-y-2.5">
       <div className="rounded-xl border border-ivory/[0.1] bg-charcoal-950/40 p-3.5">
         <div className="mb-2 flex items-center justify-between gap-2">
-          <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
-            Proof message
-          </span>
+          <span className="text-[10px] text-ivory-muted">Proof message</span>
           <CopyButton value={draft.message} label="Copy message" />
         </div>
         <pre className="scroll-pane max-h-32 overflow-auto whitespace-pre-wrap break-all font-mono text-[10.5px] leading-relaxed text-accent-bright">
@@ -767,28 +759,19 @@ function WizardSteps({ stage }: { stage: WalletStage }) {
   const steps = ["Connect", "Sign", "Verified", "Publish"] as const;
   const active = steps.indexOf(stage === "publish" ? "Publish" : stage === "verified" ? "Verified" : stage === "sign" ? "Sign" : "Connect");
   return (
-    <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Wallet progress">
+    <div className="grid grid-cols-4 gap-2" role="group" aria-label="Wallet progress">
       {steps.map((label, index) => (
-        <div key={label} className="flex items-center gap-1.5">
-          {index > 0 ? (
-            <span
-              className={cn("h-px w-3", index <= active ? "bg-accent/50" : "bg-ivory/12")}
-              aria-hidden="true"
-            />
-          ) : null}
-          <span
+        <div key={label} className="min-w-0">
+          <div
             className={cn(
-              "flex items-center gap-1 font-mono text-[8.5px] uppercase tracking-[0.1em]",
-              index < active
-                ? "text-ivory-muted"
-                : index === active
-                  ? "text-signal-bright"
-                  : "text-ivory-muted/55",
+              "h-[2px] w-full rounded-full",
+              index < active ? "bg-accent/55" : index === active ? "bg-signal" : "bg-ivory/[0.12]",
             )}
-          >
+          />
+          <div className="mt-2 flex min-w-0 items-center gap-1.5">
             <span
               className={cn(
-                "flex h-3.5 w-3.5 items-center justify-center rounded-full border text-[7px]",
+                "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border text-[7px]",
                 index < active
                   ? "border-accent/40 bg-accent/15 text-accent-bright"
                   : index === active
@@ -798,8 +781,15 @@ function WizardSteps({ stage }: { stage: WalletStage }) {
             >
               {index < active ? "✓" : index + 1}
             </span>
-            {label}
-          </span>
+            <span
+              className={cn(
+                "truncate text-[9px]",
+                index === active ? "text-ivory" : "text-ivory-muted",
+              )}
+            >
+              {label}
+            </span>
+          </div>
         </div>
       ))}
     </div>

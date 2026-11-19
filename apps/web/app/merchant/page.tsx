@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   CopyButton,
+  GlassPanel,
   SectionLabel,
   Spinner,
   StatusBadge,
@@ -145,8 +146,7 @@ export default function MerchantPage() {
   return (
     <div className="mx-auto max-w-[1100px] px-5 py-10">
       <div className="max-w-2xl">
-        <div className="kicker text-signal">Merchant identity demonstration</div>
-        <h1 className="mt-3 font-display text-[36px] leading-[1.04] tracking-editorial text-ivory sm:text-[46px]">
+        <h1 className="font-display text-[38px] leading-[1.04] tracking-editorial text-ivory sm:text-[48px]">
           The payment address
           <br />
           follows the identity.
@@ -165,19 +165,20 @@ export default function MerchantPage() {
       <div className="mt-7 grid gap-5 lg:grid-cols-[1fr_360px]">
         <div className="min-w-0 space-y-4">
           <Card className="p-5">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="flex items-center gap-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e7b07a] text-[15px] font-bold text-charcoal-950">
                   S
                 </div>
                 <div>
                   <div className="font-display text-[22px] leading-none text-ivory">Sawa Market</div>
-                  <div className="mt-1 font-mono text-[8.5px] uppercase tracking-[0.16em] text-ivory-muted">
-                    Demo merchant · self-asserted
-                  </div>
+                  <div className="mt-1 text-[10px] text-ivory-muted">Demo merchant · self-asserted</div>
                 </div>
               </div>
-              <Badge tone={phase === "unverified" ? "neutral" : "accent"}>
+              <Badge
+                tone={phase === "unverified" ? "neutral" : "accent"}
+                className="shrink-0"
+              >
                 {phase === "unverified" ? "unverified" : phase === "verified" ? "verified" : "rotated"}
               </Badge>
             </div>
@@ -218,12 +219,14 @@ export default function MerchantPage() {
             ) : (
               <ul className="mt-3 space-y-2">
                 {checks.map((check) => (
-                  <li key={check.label} className="flex items-start gap-2 text-[11.5px]">
-                    <span className={check.ok ? "text-accent-bright" : "text-danger"}>
-                      {check.ok ? "✓" : "✕"}
+                  <li key={check.label} className="flex flex-col gap-0.5 text-[11.5px] sm:flex-row sm:items-start sm:gap-2">
+                    <span className="flex items-start gap-2">
+                      <span className={check.ok ? "text-accent-bright" : "text-danger"}>
+                        {check.ok ? "✓" : "✕"}
+                      </span>
+                      <span className={check.ok ? "text-ivory-dim" : "text-ivory"}>{check.label}</span>
                     </span>
-                    <span className={check.ok ? "text-ivory-dim" : "text-ivory"}>{check.label}</span>
-                    <span className="ml-auto max-w-[48%] break-all text-right font-mono text-[9px] text-ivory-muted">
+                    <span className="break-all pl-5 font-mono text-[9px] text-ivory-muted sm:ml-auto sm:max-w-[48%] sm:pl-0 sm:text-right">
                       {check.detail}
                     </span>
                   </li>
@@ -234,7 +237,7 @@ export default function MerchantPage() {
         </div>
 
         <div className="space-y-4">
-          <Card className={cn("p-5", destination ? "border-accent/30" : "border-ivory/[0.1]")}>
+          <GlassPanel className={cn("p-5", destination && "border-accent/30")}>
             <div className="flex items-center justify-between gap-3">
               <SectionLabel>Payment destination</SectionLabel>
               <Badge tone={destination ? "accent" : "neutral"}>
@@ -259,26 +262,25 @@ export default function MerchantPage() {
                 Locked until the merchant identity verifies.
               </p>
             )}
-          </Card>
+          </GlassPanel>
 
           <Card className="p-5">
             <SectionLabel>Safety</SectionLabel>
             <ul className="mt-2 space-y-1.5 text-[11px] leading-relaxed text-ivory-dim">
-              <li>◆ Only an ACTIVE chain can unlock a destination.</li>
-              <li>◆ Rotation changes the destination after verification.</li>
-              <li>◆ The old wallet is reported superseded.</li>
-              <li>◆ Deterministic fixtures; no record or payment was published.</li>
+              <li>Only an ACTIVE chain unlocks a destination.</li>
+              <li>Rotation changes the destination after verification.</li>
+              <li>Deterministic fixtures. No record or payment was published.</li>
             </ul>
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
                 href="/challenge"
-                className="font-mono text-[9px] uppercase tracking-[0.1em] text-signal hover:text-signal-bright"
+                className="text-[11px] text-signal transition-colors hover:text-signal-bright"
               >
                 Trust Challenge →
               </Link>
               <Link
                 href="/pay"
-                className="font-mono text-[9px] uppercase tracking-[0.1em] text-ivory-muted hover:text-ivory"
+                className="text-[11px] text-ivory-muted transition-colors hover:text-ivory"
               >
                 KYVERA Pay
               </Link>
@@ -293,7 +295,7 @@ export default function MerchantPage() {
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 border-b border-ivory/[0.06] pb-1.5 last:border-0">
-      <div className="font-mono text-[8px] uppercase tracking-[0.14em] text-ivory-muted">{label}</div>
+      <div className="text-[10px] text-ivory-muted">{label}</div>
       <div className="mt-0.5 break-all font-mono text-[9.5px] text-ivory-dim">{value || "—"}</div>
     </div>
   );

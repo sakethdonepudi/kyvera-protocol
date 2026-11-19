@@ -303,32 +303,25 @@ function AuthDemoInner() {
             </div>
             <div>
               <div className="font-display text-[20px] leading-none text-ivory">Sawa Market</div>
-              <div className="mt-1 font-mono text-[8.5px] uppercase tracking-[0.16em] text-ivory-muted">
-                Relying-party demo · same origin
-              </div>
+              <div className="mt-1 text-[10px] text-ivory-muted">Relying-party demo · same origin</div>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge tone="neutral">origin {originHost || "this origin"}</Badge>
-            <Badge tone="accent">secured by KYVERA</Badge>
-          </div>
+          <div className="text-[10px] text-ivory-muted">{originHost || "this origin"}</div>
         </div>
 
         <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <div className="kicker text-signal">KYVERA authentication demo</div>
-            <h1 className="mt-2 font-display text-[36px] leading-[1.03] tracking-editorial text-ivory sm:text-[46px]">
+            <h1 className="font-display text-[36px] leading-[1.03] tracking-editorial text-ivory sm:text-[48px]">
               Sign in with an identity,
               <br />
               not a password.
             </h1>
-            <p className="mt-3 max-w-2xl text-[12.5px] leading-relaxed text-ivory-dim">
-              A temporary challenge is bound to this origin, browser session, intended Nostr identity and
-              BCH address. The relying party verifies the signature and resolves the authorization chain
-              itself. It never asks KYVERA for a login decision.
+            <p className="mt-3 max-w-xl text-[12.5px] leading-relaxed text-ivory-dim">
+              A temporary challenge bound to this origin, session, identity and BCH address. The relying
+              party verifies the chain itself.
             </p>
           </div>
-          <Link href="/developers" className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-signal hover:text-signal-bright">
+          <Link href="/developers" className="text-[11px] text-signal transition-colors hover:text-signal-bright">
             Integration docs →
           </Link>
         </div>
@@ -391,9 +384,7 @@ function AuthDemoInner() {
                 </div>
                 <div className="break-all font-mono text-[10px] text-ivory-dim">{toNpub(resolution.subject)}</div>
                 <div className="rounded-lg border border-ivory/[0.1] bg-charcoal-950/40 p-3">
-                  <div className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
-                    current BCH identity
-                  </div>
+                  <div className="text-[10px] text-ivory-muted">Current BCH identity</div>
                   <div className="mt-1 break-all font-mono text-[11px] text-ivory">{activeAddress ?? "none asserted"}</div>
                   <div className="mt-1 font-mono text-[9px] text-ivory-muted">
                     sequence #{resolution.head?.record.payload.sequence ?? "—"} · checked {timestamp(resolution.checkedAt)}
@@ -428,9 +419,7 @@ function AuthDemoInner() {
               </div>
               <div className="mt-3">
                 <div className="mb-1 flex items-center justify-between">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-ivory-muted">
-                    Request digest
-                  </span>
+                  <span className="text-[10px] text-ivory-muted">Request digest</span>
                   <CopyButton value={requestDigest || request.challenge} label="Copy challenge" />
                 </div>
                 <div className="break-all rounded-lg border border-ivory/[0.1] bg-charcoal-950/40 p-3 font-mono text-[9px] text-ivory-muted">
@@ -446,8 +435,8 @@ function AuthDemoInner() {
                 </Button>
               </div>
               <p className="mt-2 text-[10px] leading-relaxed text-ivory-muted">
-                The event signs the challenge plus a digest of the full request: origin, session, intended
-                identity, address, protocol and expiry. A challenge is consumed on first successful use.
+                The event signs the challenge and the full request. A challenge is consumed on first
+                successful use.
               </p>
             </Card>
           ) : null}
@@ -490,8 +479,7 @@ function AuthDemoInner() {
               <div>
                 <div className="font-display text-[26px] leading-tight text-ivory">Not signed in.</div>
                 <p className="mt-2 text-[11.5px] leading-relaxed text-ivory-dim">
-                  Sign-in issues a short-lived local application session. Logout removes it; revocation or
-                  rotation invalidates it on the next revalidation.
+                  A short-lived local session. Rotation or revocation invalidates it on revalidation.
                 </p>
                 {sessionNotice ? (
                   <div className="mt-3">
@@ -516,8 +504,7 @@ function AuthDemoInner() {
           <Card className="p-5">
             <SectionLabel>03 · Negative checks</SectionLabel>
             <p className="text-[11px] leading-relaxed text-ivory-muted">
-              These use real verifier functions. The unauthorized-rotation case uses deterministic,
-              unspendable fixtures.
+              Real verifier functions. Deterministic fixtures.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Button variant="secondary" onClick={replay} disabled={!lastEvent || !resolution}>
@@ -543,8 +530,7 @@ function AuthDemoInner() {
               </Button>
             </div>
             <p className="mt-2 text-[10px] leading-relaxed text-ivory-muted">
-              Revoke/rotate are available only for a demo identity whose keys are in this browser. They
-              publish real signed records to the configured relay.
+              Revoke and rotate require a browser-local demo identity. They publish real signed records.
             </p>
           </Card>
         </div>
@@ -556,7 +542,7 @@ function AuthDemoInner() {
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 border-b border-ivory/[0.06] pb-1.5 last:border-0">
-      <div className="font-mono text-[8px] uppercase tracking-[0.14em] text-ivory-muted">{label}</div>
+      <div className="text-[10px] text-ivory-muted">{label}</div>
       <div className="mt-0.5 break-all font-mono text-[9.5px] text-ivory-dim">{value || "—"}</div>
     </div>
   );

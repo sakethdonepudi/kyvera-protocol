@@ -15,7 +15,7 @@ if (!BASE) {
 
 const routes = [
   ["/", "Keys change."],
-  ["/create", "Bind a Nostr identity"],
+  ["/create", "Create an identity."],
   ["/challenge", "Five stages."],
   ["/verify", "Trust the signatures"],
   ["/auth-demo", "Sign in with an identity"],
@@ -25,7 +25,7 @@ const routes = [
   ["/lab", "scenarios executed"],
   ["/interop", "Verify wallet signature"],
   ["/developers", "Verification is a library call"],
-  ["/tutorial", "Two minutes."],
+  ["/tutorial", "See KYVERA in action."],
 ];
 
 const failures = [];

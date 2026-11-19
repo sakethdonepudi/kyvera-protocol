@@ -230,7 +230,7 @@ export default function DevelopersPage() {
           </p>
           <Link
             href="/interop"
-            className="mt-3 inline-block rounded-[2px] border border-ivory/20 px-3 py-2 text-[12px] text-ivory hover:border-ivory/45"
+            className="mt-3 inline-block rounded-full border border-ivory/20 px-3 py-2 text-[12px] text-ivory hover:border-ivory/45"
           >
             Open the wallet probe
           </Link>
