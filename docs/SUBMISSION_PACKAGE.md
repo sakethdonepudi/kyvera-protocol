@@ -16,7 +16,8 @@
 | **Three-minute MP4** | https://kyvera-alpha.vercel.app/demo/kyvera-judge-demo-3min.mp4 |
 | **Trust Challenge** | https://kyvera-alpha.vercel.app/challenge |
 | **Standalone verifier** | https://kyvera-alpha.vercel.app/kyvera-standalone.html |
-| **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol |
+| **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol (public) |
+| **Release** | https://github.com/sakethdonepudi/kyvera-protocol/releases/tag/v4.0.0 |
 | **Deployed commit** | `2f16977` (also exposed as `<meta name="kyvera-commit">`); release tag `v4.0.0` |
 
 The GitHub repository is **public**; the deployed site is public.
