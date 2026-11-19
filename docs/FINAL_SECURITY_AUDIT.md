@@ -15,7 +15,7 @@ No mainnet transaction was broadcast and no external Nostr event was published.
 
 | Category | Status | Evidence |
 | --- | --- | --- |
-| **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 54 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `02c2512` with `--frozen-lockfile`, test and build |
+| **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 56 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `02c2512` with `--frozen-lockfile`, test and build |
 | **Verified with real wallets** | No | No Paytaca, Cashonize or Selene device/extension was available; no wallet-produced signature was recorded |
 | **Verified on public relays** | Partial | Read-only probe: `wss://relay.damus.io` failed, `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published |
 | **Verified in production** | No | `next start` works locally; no public deployment exists |
@@ -566,8 +566,8 @@ return a large event set. Add a cap/timeout before production.
 pnpm install --frozen-lockfile
 pnpm test                 # 136 tests, 13 files
 pnpm typecheck
-pnpm build                # 16 routes
-pnpm qa:browser           # 54/54, 0 console/page errors
+pnpm build                # 17 routes
+pnpm qa:browser           # 56/56, 0 console/page errors
 pnpm rp:demo              # 10/10, no KYVERA API/relay
 pnpm audit --prod
 ```

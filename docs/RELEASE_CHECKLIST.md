@@ -14,11 +14,12 @@
 | Repository commit | `git rev-parse HEAD` | `82a3e1b…` (3.0 working tree) |
 | Unit/integration/security tests | `pnpm test` | **136/136 pass**, 13 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
-| Production build | `pnpm build` | pass, 16 routes |
-| Browser QA | `pnpm qa:browser` | **54/54**, 0 console/page errors |
+| Production build | `pnpm build` | pass, 17 routes |
+| Browser QA | `pnpm qa:browser` | **56/56**, 0 console/page errors |
 | Independent relying party | `pnpm rp:demo` | **10/10**, no KYVERA API/relay |
 | Relay health | `pnpm relay:health <urls>` | read-only EOSE check; 2/2 for defaults |
 | Post-deployment smoke | `BASE=https://… pnpm smoke:deploy` | routes, headers, bundle, console errors |
+| Demo videos | `/tutorial` | 90s + 3min MP4, posters, WebVTT captions, native controls |
 | History-wide secret scan | manual scan across 32 commits | no tracked keys/env secrets |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |
@@ -124,11 +125,11 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 | Production relay fallback (no localhost) | ✅ `wss://nos.lol,wss://relay.primal.net`, both EOSE on 2026-11-19 |
 | Security headers | ✅ verified on `next start` |
 | Static assets (`/vectors.json`, standalone, icon) | ✅ 200 |
-| Routes | ✅ 16 routes build and render (`/pay` included) |
+| Routes | ✅ 17 routes build and render (`/pay`, `/tutorial` included) |
 | KYVERA Pay policy tests | ✅ `tests/pay.test.ts` (12) |
 | WizardConnect pairing | ✅ dialog opens; ❌ untested with a physical wallet |
 | Theme / glass system | ✅ dark + warm light, reduced motion, mobile |
-| Browser QA | ✅ **54/54**, challenge/merchant/pay/theme/auth-demo included |
+| Browser QA | ✅ **56/56**, challenge/merchant/tutorial/pay/theme/auth-demo included |
 | CSP + WASM | ✅ fixed and smoke-tested |
 | No secrets in client bundle | ✅ scanned |
 | Demo/lab/standalone work without relay | ✅ |

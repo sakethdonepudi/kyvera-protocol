@@ -53,7 +53,7 @@ pnpm relay:health wss://nos.lol wss://relay.primal.net
 pnpm rp:demo
 ```
 
-Expected: 136 tests, typecheck clean, 16 routes, 2/2 relays healthy, 10/10 RP
+Expected: 136 tests, typecheck clean, 17 routes, 2/2 relays healthy, 10/10 RP
 checks.
 
 ## 4. Deploy (only with authorization)

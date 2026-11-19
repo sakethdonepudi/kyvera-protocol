@@ -15,7 +15,7 @@
 | `pnpm typecheck` | **pass** for core, bch, nostr, verifier and web |
 | `pnpm build` | **pass** (Next.js production build; one third-party top-level-await warning) |
 | `pnpm demo:lifecycle` | **all assertions pass** (6 lifecycle scenarios) |
-| Browser end-to-end | **pass** (54/54 checks: create → challenge demo/live → merchant rotation → pay handoff → auth-demo session → time machine → verify → auth → revoke, WizardConnect dialog, mobile, reduced motion, warm light, keyboard; 0 console errors) |
+| Browser end-to-end | **pass** (56/56 checks: create → challenge demo/live → merchant rotation → pay handoff → auth-demo session → tutorial video → time machine → verify → auth → revoke, WizardConnect dialog, mobile, reduced motion, warm light, keyboard; 0 console errors) |
 | Deterministic vectors | **byte-identical on regeneration** (`sha256 074af1d4…`) |
 | Independent BCH interop vector | **pass** (signature from `nostr-bch-bind v1`) |
 | CLI end-to-end against local relay | **pass** (exit code 0 for ACTIVE and SUPERSEDED) |
@@ -265,7 +265,7 @@ Fast-check seeds are randomized per run; failures print a reproducible counterex
 
 ## 5. Browser end-to-end evidence
 
-Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **54/54 checks passed, 0 console/page errors.**
+Executed with Playwright (`scripts/qa-browser.mjs`) against `localhost:3000` and the local relay `ws://127.0.0.1:7777`. **56/56 checks passed, 0 console/page errors.**
 
 Flow:
 
@@ -289,6 +289,7 @@ Flow:
 18. Reduced motion: transitions collapse to ~0ms.
 19. Warm-light theme toggles via `data-theme`.
 20. Keyboard: Tab reaches navigation links with a visible focus target.
+21. `/tutorial` renders both MP4 players with posters, native controls and WebVTT caption tracks; muted playback advances `currentTime` without errors.
 
 Screenshots: `.context/screens/qa/01-landing.png` … `13-pay-revoked.png` (gitignored, local evidence).
 

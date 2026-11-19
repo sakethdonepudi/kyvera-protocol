@@ -11,6 +11,7 @@ for (const [name,url,waitFor] of [
  ["merchant","/merchant","Sawa Market"],
  ["interop","/interop","Verify wallet signature"],
  ["pay","/pay","Pay the person"],
+ ["tutorial","/tutorial","Two minutes."],
  ["auth-demo","/auth-demo","Sign in with an identity"],
  ["developers","/developers","Verification is a library call"],
 ]){

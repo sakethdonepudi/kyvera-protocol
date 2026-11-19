@@ -1,0 +1,25 @@
+WEBVTT
+
+1
+00:00.000 --> 00:12.000
+A BCH wallet can change. A Nostr identity can persist. Which wallet is authorized now?
+
+2
+00:12.000 --> 00:30.000
+KYVERA binds two independent keys: BCH and Nostr. Both signatures are verified locally.
+
+3
+00:30.000 --> 00:50.000
+Signed records form a hash-linked authorization chain. Relays only supply evidence.
+
+4
+00:50.000 --> 00:70.000
+An authorized rotation moves the current wallet to B and marks A superseded.
+
+5
+00:70.000 --> 00:82.000
+Wallet A's historical proof stays valid. It is simply no longer current.
+
+6
+00:82.000 --> 00:90.000
+KYVERA. Keys change. Trust shouldn't disappear.

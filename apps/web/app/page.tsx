@@ -43,17 +43,32 @@ export default function LandingPage() {
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/demo"
+                  href="/create"
                   className="inline-flex items-center gap-2 rounded-full bg-signal px-5 py-3 text-[13px] font-semibold text-charcoal-950 transition-colors hover:bg-signal-bright"
                 >
-                  Explore Live Demo
+                  Create Identity
                   <span aria-hidden="true">→</span>
                 </Link>
                 <Link
-                  href="/verify"
+                  href="/challenge"
                   className="inline-flex items-center gap-2 rounded-full border border-ivory/25 bg-ivory/[0.03] px-5 py-3 text-[13px] text-ivory backdrop-blur-sm transition-colors hover:border-ivory/55 hover:bg-ivory/[0.07]"
                 >
-                  Verify an Identity
+                  Try Trust Challenge
+                </Link>
+                <Link
+                  href="/tutorial"
+                  className="inline-flex items-center gap-2 rounded-full border border-signal/35 bg-signal/[0.05] px-5 py-3 text-[13px] text-signal-bright transition-colors hover:bg-signal/[0.1]"
+                >
+                  Watch Demo
+                </Link>
+              </div>
+
+              <div className="mt-4 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/verify"
+                  className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-ivory-muted hover:text-signal"
+                >
+                  Verify an identity →
                 </Link>
                 <Link
                   href="/pay"
@@ -61,9 +76,6 @@ export default function LandingPage() {
                 >
                   Pay by identity →
                 </Link>
-              </div>
-
-              <div className="mt-4 flex flex-wrap items-center gap-4">
                 <a
                   href="/kyvera-standalone.html"
                   target="_blank"
@@ -82,7 +94,7 @@ export default function LandingPage() {
 
               <div className="mt-10 grid max-w-lg grid-cols-3 gap-px bg-ivory/[0.1]">
                 {[
-                  ["94", "automated tests"],
+                  ["136", "automated tests"],
                   ["8", "explicit states"],
                   ["0", "verification servers"],
                 ].map(([value, label]) => (
@@ -107,6 +119,45 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-[1240px] px-5 pb-2 pt-4">
+        <Link
+          href="/tutorial"
+          className="group grid gap-5 rounded-2xl border border-ivory/[0.1] bg-ivory/[0.02] p-4 transition-colors hover:border-ivory/25 sm:grid-cols-[1.15fr_1fr] sm:items-center"
+        >
+          <div className="relative aspect-video overflow-hidden rounded-xl border border-ivory/[0.08] bg-black">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/demo/kyvera-explainer-poster.jpg"
+              alt="KYVERA Trust Challenge demonstration poster"
+              className="h-full w-full object-cover opacity-85 transition-opacity group-hover:opacity-100"
+              width={1920}
+              height={1080}
+              loading="lazy"
+            />
+            <span className="absolute inset-0 flex items-center justify-center">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full border border-ivory/30 bg-charcoal-950/70 text-[18px] text-ivory backdrop-blur-sm">
+                ▶
+              </span>
+            </span>
+          </div>
+          <div className="px-2 pb-2 sm:py-4">
+            <div className="kicker text-signal">Watch the 90-second explainer</div>
+            <h2 className="mt-3 font-display text-[28px] leading-tight tracking-editorial text-ivory">
+              The trust model,
+              <br />
+              without the jargon.
+            </h2>
+            <p className="mt-2 max-w-md text-[12px] leading-relaxed text-ivory-muted">
+              Dual-key binding, independent verification, rotation and the difference between a valid
+              old proof and a current authorization.
+            </p>
+            <span className="mt-4 inline-flex items-center gap-2 font-mono text-[9.5px] uppercase tracking-[0.14em] text-signal">
+              Watch Demo →
+            </span>
+          </div>
+        </Link>
       </section>
 
       <section className="mx-auto max-w-[1240px] px-5 py-20">

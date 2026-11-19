@@ -21,6 +21,7 @@ const routes = [
   ["/auth-demo", "Sign in with an identity"],
   ["/pay", "Pay the person."],
   ["/developers", "Verification is a library call"],
+  ["/tutorial", "Two minutes."],
   ["/create", "Bind a Nostr identity"],
   ["/verify", "Trust the signatures"],
 ];
@@ -69,6 +70,28 @@ for (const script of scripts) {
     failures.push(`production bundle contains local relay: ${script}`);
     break;
   }
+}
+
+await page.goto(`${BASE}/tutorial`, { waitUntil: "networkidle" });
+const videos = page.locator("video");
+if ((await videos.count()) !== 2) failures.push("tutorial does not render two videos");
+for (let index = 0; index < (await videos.count()); index += 1) {
+  const video = videos.nth(index);
+  if (!(await video.getAttribute("poster"))) failures.push(`video ${index} missing poster`);
+  if (!(await video.evaluate((element) => element.controls))) failures.push(`video ${index} missing controls`);
+  if ((await video.locator("track[kind=captions]").count()) !== 1) {
+    failures.push(`video ${index} missing captions`);
+  }
+}
+if ((await videos.count()) > 0) {
+  await videos.first().evaluate(async (element) => {
+    element.muted = true;
+    await element.play();
+  });
+  await page
+    .waitForFunction(() => Boolean(document.querySelector("video")?.currentTime > 0.2), { timeout: 15_000 })
+    .catch(() => failures.push("tutorial MP4 did not start playback"));
+  await videos.first().evaluate((element) => element.pause());
 }
 
 await page.goto(`${BASE}/verify?npub=npub1invalid`, { waitUntil: "networkidle" });

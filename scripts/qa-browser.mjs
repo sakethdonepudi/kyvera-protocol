@@ -75,6 +75,32 @@ async function desktopFlow() {
   record("wallet probe verifies independent vector", true);
   await shot(page, "04-interop");
 
+  await page.goto(`${BASE}/tutorial`, { waitUntil: "networkidle" });
+  await page.getByText("Two minutes.").waitFor({ timeout: 20_000 });
+  const videos = page.locator("video");
+  if ((await videos.count()) !== 2) throw new Error("expected two demo videos");
+  for (let index = 0; index < 2; index += 1) {
+    const video = videos.nth(index);
+    if (!(await video.getAttribute("poster"))) throw new Error("missing video poster");
+    if (!(await video.evaluate((element) => element.controls))) {
+      throw new Error("missing video controls");
+    }
+    if ((await video.locator("track[kind=captions]").count()) !== 1) {
+      throw new Error("missing captions track");
+    }
+  }
+  await page.locator("video").first().evaluate(async (element) => {
+    element.muted = true;
+    await element.play();
+  });
+  await page.waitForFunction(() => {
+    const video = document.querySelector("video");
+    return Boolean(video && video.currentTime > 0.2);
+  }, { timeout: 15_000 });
+  await page.locator("video").first().evaluate((element) => element.pause());
+  record("tutorial plays the MP4 with posters and captions", true);
+  await shot(page, "05-tutorial");
+
   await page.goto(`${BASE}/challenge`, { waitUntil: "networkidle" });
   await page.getByText("Five stages.").waitFor({ timeout: 20_000 });
   const stages = page.locator("ol button");
@@ -287,6 +313,7 @@ async function mobileFlow() {
     ["mobile-pay", "/pay"],
     ["mobile-challenge", "/challenge"],
     ["mobile-merchant", "/merchant"],
+    ["mobile-tutorial", "/tutorial"],
   ]) {
     await page.goto(`${BASE}${path}`, { waitUntil: "networkidle" });
     await page.waitForTimeout(1000);

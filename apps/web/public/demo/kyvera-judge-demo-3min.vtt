@@ -1,0 +1,37 @@
+WEBVTT
+
+1
+00:00.000 --> 00:12.000
+KYVERA is a decentralized identity-continuity protocol for BCH and Nostr.
+
+2
+00:12.000 --> 00:30.000
+Create a binding with two independent keys. No server holds the identity.
+
+3
+00:30.000 --> 00:50.000
+The Trust Challenge runs Bind, Verify, Authenticate, Rotate and Prove with real verifier logic.
+
+4
+00:50.000 --> 01:10.000
+Authentication uses a fresh, single-use challenge and a short-lived relying-party session.
+
+5
+01:10.000 --> 01:30.000
+Rotation requires the old wallet, the new wallet and the Nostr key.
+
+6
+01:30.000 --> 01:50.000
+Historical proof remains valid after rotation; current authorization moves.
+
+7
+01:50.000 --> 02:10.000
+The merchant demo updates its payment destination only after verification.
+
+8
+02:10.000 --> 02:25.000
+The standalone relying party verifies the same public protocol without KYVERA's website.
+
+9
+02:25.000 --> 02:41.000
+Fail-closed policy blocks partial or stale relay states. Real-wallet and public-relay interoperability remain untested.

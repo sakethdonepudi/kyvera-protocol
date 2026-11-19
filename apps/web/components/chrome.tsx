@@ -128,6 +128,9 @@ export function Footer() {
           <Link href="/challenge" className="hover:text-ivory">
             Trust Challenge
           </Link>
+          <Link href="/tutorial" className="hover:text-ivory">
+            Watch demo
+          </Link>
           <Link href="/lab" className="hover:text-ivory">
             Security Lab
           </Link>

@@ -98,6 +98,7 @@ Smoke-test:
 | `/auth-demo` | Relying-party sign-in, session issuance, replay/logout/revocation states |
 | `/challenge` | Five-stage Trust Challenge, guided demo and live identity mode |
 | `/merchant` | Self-asserted merchant, verified payment destination and rotation |
+| `/tutorial` | Embedded 90-second explainer and three-minute judge walkthrough |
 | `/developers` | SDK docs and vector download |
 | `/kyvera-standalone.html` | Single-file demo loads from the host |
 | `/vectors.json` | Deterministic vectors served |
