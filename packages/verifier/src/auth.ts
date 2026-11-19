@@ -322,8 +322,60 @@ export function validateAppSession(
 }
 
 /**
- * Temporary relying-party state: single-use requests and short-lived sessions.
- * This is deliberately in-memory; a production RP would persist it.
+ * Storage boundary for relying-party challenges and sessions.
+ *
+ * `takeRequest` must atomically remove and return a challenge so two concurrent
+ * verifications cannot both consume it. The default implementation is
+ * in-memory; an independent relying party can provide a durable store.
+ */
+export interface AuthRequestStore {
+  putRequest(request: AuthRequest): void;
+  takeRequest(challenge: string): AuthRequest | undefined;
+  putSession(session: AppSession): void;
+  getSession(token: string): AppSession | undefined;
+  deleteSession(token: string): boolean;
+  prune(now: number): void;
+}
+
+export class MemoryAuthRequestStore implements AuthRequestStore {
+  private readonly pending = new Map<string, AuthRequest>();
+  private readonly sessions = new Map<string, AppSession>();
+
+  putRequest(request: AuthRequest): void {
+    this.pending.set(request.challenge, request);
+  }
+
+  takeRequest(challenge: string): AuthRequest | undefined {
+    const request = this.pending.get(challenge);
+    if (request) this.pending.delete(challenge);
+    return request;
+  }
+
+  putSession(session: AppSession): void {
+    this.sessions.set(session.token, session);
+  }
+
+  getSession(token: string): AppSession | undefined {
+    return this.sessions.get(token);
+  }
+
+  deleteSession(token: string): boolean {
+    return this.sessions.delete(token);
+  }
+
+  prune(now: number): void {
+    for (const [key, request] of this.pending) {
+      if (now > request.expiresAt) this.pending.delete(key);
+    }
+    for (const [key, session] of this.sessions) {
+      if (now > session.expiresAt) this.sessions.delete(key);
+    }
+  }
+}
+
+/**
+ * Relying-party state: single-use requests and short-lived sessions.
+ * The default store is in-memory; pass a durable store for an independent RP.
  */
 export class AuthRequestService {
   readonly origin: string;
@@ -332,8 +384,7 @@ export class AuthRequestService {
   private readonly ttlSeconds: number;
   private readonly sessionTtlSeconds: number;
   private readonly clock: () => number;
-  private readonly pending = new Map<string, AuthRequest>();
-  private readonly sessions = new Map<string, AppSession>();
+  private readonly store: AuthRequestStore;
 
   constructor(options: {
     origin: string;
@@ -342,6 +393,7 @@ export class AuthRequestService {
     sessionTtlSeconds?: number;
     now?: () => number;
     sessionId?: string;
+    store?: AuthRequestStore;
   }) {
     this.origin = options.origin;
     this.domain = options.domain ?? (() => {
@@ -355,6 +407,7 @@ export class AuthRequestService {
     this.ttlSeconds = options.ttlSeconds ?? 120;
     this.sessionTtlSeconds = options.sessionTtlSeconds ?? 900;
     this.clock = options.now ?? (() => Math.floor(Date.now() / 1000));
+    this.store = options.store ?? new MemoryAuthRequestStore();
   }
 
   issue(input: { expectedSubject?: string | null; expectedAddress?: string | null } = {}): AuthRequest {
@@ -368,7 +421,7 @@ export class AuthRequestService {
       now: this.clock(),
     });
     request.sessionId = this.sessionId;
-    this.pending.set(request.challenge, request);
+    this.store.putRequest(request);
     return request;
   }
 
@@ -383,12 +436,13 @@ export class AuthRequestService {
     } catch {
       return { check: { authenticated: false, code: "EVENT_MALFORMED", message: "malformed authentication event" } };
     }
-    const request = challenge ? this.pending.get(challenge) : undefined;
+    // Consume atomically before verification. A challenge is never reusable,
+    // even if the first response fails verification.
+    const request = challenge ? this.store.takeRequest(challenge) : undefined;
     if (!request) {
       return { check: { authenticated: false, code: "UNKNOWN_CHALLENGE", message: "request was not issued or was already used" } };
     }
     if (this.clock() > request.expiresAt) {
-      this.pending.delete(request.challenge);
       return { check: { authenticated: false, code: "CHALLENGE_EXPIRED", message: "authentication request has expired" } };
     }
     const check = verifyAuthRequestEvent({
@@ -400,37 +454,30 @@ export class AuthRequestService {
       expectedSessionId: this.sessionId,
     });
     if (!check.authenticated) return { check };
-    this.pending.delete(request.challenge);
     const session = issueAppSession(request, resolution, {
       ttlSeconds: this.sessionTtlSeconds,
       now: this.clock(),
     });
-    this.sessions.set(session.token, session);
+    this.store.putSession(session);
     return { check, session };
   }
 
   validate(token: string, resolution: VerifyAuthRequestOptions["resolution"]): SessionCheck {
-    const session = this.sessions.get(token);
+    const session = this.store.getSession(token);
     if (!session) return { valid: false, code: "SESSION_UNKNOWN", message: "application session was logged out or never issued" };
     return validateAppSession(session, resolution, this.clock());
   }
 
   logout(token: string): boolean {
-    return this.sessions.delete(token);
+    return this.store.deleteSession(token);
   }
 
   getSession(token: string): AppSession | undefined {
-    return this.sessions.get(token);
+    return this.store.getSession(token);
   }
 
   prune(): void {
-    const now = this.clock();
-    for (const [key, request] of this.pending) {
-      if (now > request.expiresAt) this.pending.delete(key);
-    }
-    for (const [key, session] of this.sessions) {
-      if (now > session.expiresAt) this.sessions.delete(key);
-    }
+    this.store.prune(this.clock());
   }
 }
 

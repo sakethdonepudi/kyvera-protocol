@@ -19,6 +19,7 @@
     "@kyvera/core": "workspace:*",
     "@kyvera/nostr": "workspace:*",
     "@kyvera/verifier": "workspace:*",
+    "@kyvera/wallet-bch": "workspace:*",
     "@wizardconnect/core": "^0.2.11",
     "@wizardconnect/dapp": "^0.2.8",
     "@wizardconnect/react": "^0.2.7",

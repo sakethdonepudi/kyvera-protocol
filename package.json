@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "KYVERA — verifiable identity lifecycle for Bitcoin Cash and Nostr",
+  "description": "KYVERA \u2014 verifiable identity lifecycle for Bitcoin Cash and Nostr",
   "license": "MIT",
   "packageManager": "pnpm@9.15.9",
   "engines": {
@@ -33,14 +33,18 @@
     "smoke:deploy": "node scripts/post-deploy-smoke.mjs",
     "prod:qa": "node scripts/prod-readonly-qa.mjs",
     "test:public-relay": "node scripts/public-relay-identity-test.mjs",
-    "cli": "pnpm -r --filter \"./packages/*\" build && node packages/verifier/dist/cli.js"
+    "cli": "pnpm -r --filter \"./packages/*\" build && node packages/verifier/dist/cli.js",
+    "rp:persist": "pnpm -r --filter \"./packages/*\" build && node examples/relying-party/persist-demo.mjs",
+    "sdk:verify": "pnpm -r --filter \"./packages/*\" build && node examples/sdk-node/verify.mjs"
   },
   "devDependencies": {
     "@bitauth/libauth": "3.1.0-next.8",
     "@kyvera/bch": "workspace:*",
     "@kyvera/core": "workspace:*",
     "@kyvera/nostr": "workspace:*",
+    "@kyvera/sdk": "workspace:*",
     "@kyvera/verifier": "workspace:*",
+    "@kyvera/wallet-bch": "workspace:*",
     "@noble/curves": "^1.9.0",
     "@noble/hashes": "^1.8.0",
     "@types/node": "^22.10.2",

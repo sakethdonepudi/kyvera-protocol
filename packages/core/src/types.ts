@@ -5,11 +5,25 @@ import { canonicalize } from "./canonical.js";
 export const PROTOCOL = "kyvera" as const;
 export const PROTOCOL_VERSION = 1 as const;
 
-/** NIP-78 application-specific data event kind. */
+/**
+ * Legacy NIP-78 kind. NIP-78 is intended for private application data and
+ * relays MAY require NIP-42 AUTH or serve it only to the owner, so it is kept
+ * for backward compatibility and private/mirror use. New public records also
+ * publish a regular-event mirror (NOSTR_PUBLIC_KIND).
+ */
 export const NOSTR_KIND = 30078 as const;
+/**
+ * Experimental public discovery kind. This is a regular event kind in the
+ * 1000–9999 range (NIP-01), not a registered NIP kind. It is deliberately not
+ * claimed as a standard; see docs/protocol/NOSTR_DISCOVERY_RFC.md.
+ */
+export const NOSTR_PUBLIC_KIND = 1078 as const;
+/** Kinds the verifier accepts. New publications mirror to both. */
+export const NOSTR_KINDS = [NOSTR_PUBLIC_KIND, NOSTR_KIND] as const;
+export type KyveraEventKind = (typeof NOSTR_KINDS)[number];
 /** Value of the `k` tag. Indexable via `{"#k":["kyvera-v1"]}`. */
 export const NOSTR_K_TAG = "kyvera-v1" as const;
-/** Addressable-event `d` tag prefix. One event per subject/sequence/digest. */
+/** `d` tag prefix. One event per subject/sequence/digest. */
 export const NOSTR_D_PREFIX = "kyvera:v1" as const;
 
 export type BchNetwork = "mainnet" | "chipnet";

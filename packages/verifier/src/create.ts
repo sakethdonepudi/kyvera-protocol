@@ -13,7 +13,7 @@ import {
   type SignedRecord,
 } from "@kyvera/core";
 import { signBitcoinMessage } from "@kyvera/bch";
-import { buildRecordEvent, type NostrSigner } from "@kyvera/nostr";
+import { buildPublicRecordEvent, buildRecordEvent, type NostrSigner } from "@kyvera/nostr";
 
 export function signBchProof(
   privateKey: Uint8Array,
@@ -31,7 +31,10 @@ export function signBchProof(
 
 export interface CreatedRecord {
   record: SignedRecord;
+  /** Legacy kind-30078 envelope (retained for compatibility). */
   event: KyveraEvent;
+  /** Public regular-event mirror. Publish this for public discovery. */
+  publicEvent: KyveraEvent;
   recordId: string;
   payloadDigest: string;
 }
@@ -39,9 +42,12 @@ export interface CreatedRecord {
 async function finish(record: SignedRecord, signer: NostrSigner): Promise<CreatedRecord> {
   const built = await buildRecordEvent(record, signer);
   if (!built.ok || !built.event) throw new Error(`${built.code}: ${built.message}`);
+  const publicBuilt = await buildPublicRecordEvent(record, signer);
+  if (!publicBuilt.ok || !publicBuilt.event) throw new Error(`${publicBuilt.code}: ${publicBuilt.message}`);
   return {
     record,
     event: built.event,
+    publicEvent: publicBuilt.event,
     recordId: recordDigest(record),
     payloadDigest: digestOf(record.payload),
   };

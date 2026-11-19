@@ -84,7 +84,7 @@ sequenceDiagram
   UI->>B: sign KYVERA/v1/bch-proof message
   B-->>UI: 65-byte compact signature
   UI->>UI: seal record, canonicalize
-  UI->>N: sign kind 30078 event
+  UI->>N: sign public kind 1078 + legacy 30078 events
   N-->>UI: signed event
   UI->>R: EVENT
   R-->>UI: OK

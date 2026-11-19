@@ -1,5 +1,5 @@
 import {
-  NOSTR_KIND,
+  NOSTR_KINDS,
   NOSTR_K_TAG,
   findAddressInChain,
   type BchNetwork,
@@ -231,7 +231,7 @@ export async function resolveAddress(options: ResolveAddressOptions): Promise<Ad
 
   const full = await queryRelays(
     options.relays,
-    [{ kinds: [NOSTR_KIND], authors: subjects, "#k": [NOSTR_K_TAG] }],
+    [{ kinds: [...NOSTR_KINDS], authors: subjects, "#k": [NOSTR_K_TAG] }],
     { connectionTimeoutMs: options.connectionTimeoutMs, queryTimeoutMs: options.queryTimeoutMs },
   );
   const sync = summarizeRelays(full.reports);

@@ -49,7 +49,7 @@ This matrix records evidence for the full user journey, not merely the existence
 
 | Evidence | Location |
 | --- | --- |
-| NIP-78 kind 30078 events, `d`/`k`/`b`/`s` tags | `packages/nostr/src/event.ts` |
+| Public kind 1078 + legacy NIP-78 kind 30078 events, `d`/`k`/`b`/`s` tags | `packages/nostr/src/event.ts`, `docs/protocol/NOSTR_DISCOVERY_RFC.md` |
 | Multi-relay queries, per-relay reports, partial sync | `packages/nostr/src/relay.ts`, `packages/verifier/src/discovery.ts` |
 | Address discovery and subject discovery | `packages/verifier/src/discovery.ts` |
 | Automated | `tests/relay.test.ts` (13), `tests/chain.test.ts` |

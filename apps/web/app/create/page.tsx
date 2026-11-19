@@ -7,9 +7,9 @@ import { buildBchProofMessage } from "@kyvera/core";
 import {
   decodeP2pkhAddress,
   generateBchKeyPair,
-  verifyBitcoinMessageSignature,
   type BchKeyPair,
 } from "@kyvera/bch";
+import { verifyManualSignature } from "@kyvera/wallet-bch";
 import {
   generateNostrSecretKey,
   signerFromSecretKey,
@@ -23,7 +23,7 @@ import { useWizardConnect, WizardConnectQRDialog } from "@wizardconnect/react";
 import {
   completeExternalBind,
   prepareExternalBind,
-  publish,
+  publishRecord,
   type BindDraft,
 } from "@/lib/identity";
 import { getNip07Provider, nip07Signer } from "@/lib/nip07";
@@ -186,10 +186,15 @@ export default function CreatePage() {
       setSignatureCheck(null);
       return;
     }
-    const result = verifyBitcoinMessageSignature(address, draft.message, trimmed);
+    const result = verifyManualSignature({
+      address,
+      message: draft.message,
+      signature: trimmed,
+      expectedNetwork: network,
+    });
     setSignatureCheck({
       ok: result.ok,
-      message: result.ok ? "Signature recovers to this address." : result.message,
+      message: result.message,
     });
   }, [signature, draft, address]);
 
@@ -212,13 +217,17 @@ export default function CreatePage() {
     setPhase("publishing");
     try {
       let event: KyveraEvent;
+      let publicEvent: KyveraEvent;
       if (bchMode === "demo") {
         if (!preview) throw new Error("preview is not ready yet");
         event = preview.event;
+        publicEvent = preview.publicEvent;
       } else {
         if (!draft) throw new Error("prepare and sign the BCH proof message first");
         if (!signature.trim()) throw new Error("paste the wallet signature");
-        event = await completeExternalBind({ signer, draft, signature });
+        const built = await completeExternalBind({ signer, draft, signature });
+        event = built.event;
+        publicEvent = built.publicEvent;
       }
 
       const stored: StoredIdentity = {
@@ -236,12 +245,12 @@ export default function CreatePage() {
               },
             ]
           : [],
-        events: [event],
+        events: [event, publicEvent],
         createdAt: Date.now(),
       };
       saveIdentity(stored);
       setPublishedEvent(event);
-      const result = await publish(relays, event);
+      const result = await publishRecord(relays, { event, publicEvent });
       setReports(result);
       setPhase("published");
     } catch (error) {

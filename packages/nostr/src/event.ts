@@ -2,6 +2,8 @@ import {
   NOSTR_D_PREFIX,
   NOSTR_K_TAG,
   NOSTR_KIND,
+  NOSTR_KINDS,
+  NOSTR_PUBLIC_KIND,
   canonicalRecord,
   payloadDigest as computePayloadDigest,
   recordId as computeRecordId,
@@ -97,11 +99,11 @@ export interface BuildEventResult {
   event?: KyveraEvent;
 }
 
-/**
- * Signs a record as a NIP-78 event. The signer's public key MUST be the
- * record's subject; this is the Nostr half of the dual-key authorization.
- */
-export async function buildRecordEvent(record: SignedRecord, signer: NostrSigner): Promise<BuildEventResult> {
+async function buildEventOfKind(
+  record: SignedRecord,
+  signer: NostrSigner,
+  kind: number,
+): Promise<BuildEventResult> {
   const pubkey = await signer.getPublicKey();
   if (pubkey !== record.payload.subject) {
     return {
@@ -111,7 +113,7 @@ export async function buildRecordEvent(record: SignedRecord, signer: NostrSigner
     };
   }
   const template: UnsignedEventTemplate = {
-    kind: NOSTR_KIND,
+    kind,
     created_at: record.payload.issuedAt,
     tags: recordTags(record),
     content: canonicalRecord(record),
@@ -120,6 +122,51 @@ export async function buildRecordEvent(record: SignedRecord, signer: NostrSigner
   const parsed = parseRecordEvent(event);
   if (!parsed.ok) return { ok: false, code: parsed.code, message: parsed.message };
   return { ok: true, code: "OK", message: "ok", event };
+}
+
+/**
+ * Legacy NIP-78 envelope. Kept for backward compatibility and for relays that
+ * accept application-data events. NIP-78 is not the public discovery layer.
+ */
+export async function buildRecordEvent(record: SignedRecord, signer: NostrSigner): Promise<BuildEventResult> {
+  return buildEventOfKind(record, signer, NOSTR_KIND);
+}
+
+/**
+ * Public discovery mirror. This regular event is the primary public record for
+ * new publications; the legacy kind-30078 envelope may also be published.
+ */
+export async function buildPublicRecordEvent(
+  record: SignedRecord,
+  signer: NostrSigner,
+): Promise<BuildEventResult> {
+  return buildEventOfKind(record, signer, NOSTR_PUBLIC_KIND);
+}
+
+export interface RecordEventPair {
+  legacy?: KyveraEvent;
+  public?: KyveraEvent;
+}
+
+/** Builds both envelopes from the same canonical record. */
+export async function buildRecordEventPair(
+  record: SignedRecord,
+  signer: NostrSigner,
+): Promise<{ ok: boolean; code: string; message: string; events?: RecordEventPair }> {
+  const legacy = await buildRecordEvent(record, signer);
+  const publicEvent = await buildPublicRecordEvent(record, signer);
+  if (!legacy.ok || !legacy.event) {
+    return { ok: false, code: legacy.code, message: legacy.message };
+  }
+  if (!publicEvent.ok || !publicEvent.event) {
+    return { ok: false, code: publicEvent.code, message: publicEvent.message };
+  }
+  return {
+    ok: true,
+    code: "OK",
+    message: "ok",
+    events: { legacy: legacy.event, public: publicEvent.event },
+  };
 }
 
 export interface ParsedRecordEvent {
@@ -152,8 +199,12 @@ export function parseRecordEvent(event: KyveraEvent): ParsedRecordEvent {
   if (!signatureValid) {
     return { ok: false, code: "NOSTR_SIGNATURE_INVALID", message: "event id or Schnorr signature is invalid" };
   }
-  if (fresh.kind !== NOSTR_KIND) {
-    return { ok: false, code: "NOSTR_KIND_INVALID", message: `expected kind ${NOSTR_KIND}` };
+  if (!(NOSTR_KINDS as readonly number[]).includes(fresh.kind)) {
+    return {
+      ok: false,
+      code: "NOSTR_KIND_INVALID",
+      message: `expected a KYVERA public kind (${NOSTR_PUBLIC_KIND}) or legacy kind (${NOSTR_KIND})`,
+    };
   }
   if (typeof fresh.content !== "string" || fresh.content.length === 0 || fresh.content.length > 16_384) {
     return { ok: false, code: "CONTENT_LENGTH", message: "event content is empty or too large" };

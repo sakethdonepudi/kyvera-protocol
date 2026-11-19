@@ -71,10 +71,16 @@ export default function DemoPage() {
           <h1 className="font-display text-[38px] leading-[1.04] tracking-editorial text-ivory sm:text-[52px]">
             Explore identity continuity.
           </h1>
-          <Disclosure summary="Demo data" className="mt-3">
-            Deterministic, unspendable fixtures. Every verdict is computed by the same verifier
-            functions exported by the SDK.
-          </Disclosure>
+          <div className="mt-3 flex flex-wrap items-center gap-4">
+            <span className="inline-flex items-center gap-1.5 text-[10.5px] text-ivory-muted">
+              <span className="h-1.5 w-1.5 rounded-full bg-signal" />
+              Offline fixture mode
+            </span>
+            <Disclosure summary="Demo data">
+              Deterministic, unspendable fixtures. Every verdict is computed by the same verifier
+              functions exported by the SDK.
+            </Disclosure>
+          </div>
         </div>
         <div className="flex flex-wrap gap-5 text-[12px]">
           <Link href="/verify" className="text-ivory-muted transition-colors hover:text-ivory">

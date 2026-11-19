@@ -1,4 +1,4 @@
-import { NOSTR_KIND, NOSTR_K_TAG, type KyveraEvent } from "@kyvera/core";
+import { NOSTR_KINDS, NOSTR_K_TAG, type KyveraEvent } from "@kyvera/core";
 import { Relay, useWebSocketImplementation, type Subscription } from "nostr-tools/relay";
 import type { Filter } from "nostr-tools";
 
@@ -68,11 +68,11 @@ function ensureWebSocket(): Promise<void> {
 }
 
 export function subjectFilter(subject: string): Filter {
-  return { kinds: [NOSTR_KIND], authors: [subject], "#k": [NOSTR_K_TAG] };
+  return { kinds: [...NOSTR_KINDS], authors: [subject], "#k": [NOSTR_K_TAG] };
 }
 
 export function addressFilter(address: string): Filter {
-  return { kinds: [NOSTR_KIND], "#k": [NOSTR_K_TAG], "#b": [address.toLowerCase()] };
+  return { kinds: [...NOSTR_KINDS], "#k": [NOSTR_K_TAG], "#b": [address.toLowerCase()] };
 }
 
 function withDefaults(options: RelayOptions): Required<RelayOptions> {

@@ -17,6 +17,7 @@ import {
   verifyBchIdentityProof,
 } from "@kyvera/bch";
 import {
+  buildPublicRecordEvent,
   buildRecordEvent,
   generateNostrSecretKey,
   publishToRelays,
@@ -31,6 +32,7 @@ import {
   createRotateRecord,
   previousStateFrom,
   resolveIdentity,
+  type CreatedRecord,
   type IdentityResolution,
 } from "@kyvera/verifier";
 import { appendEvent, addBchKey, getIdentity, saveIdentity, type StoredIdentity } from "./store";
@@ -68,16 +70,42 @@ export async function createDemoIdentity(
         privateKey: binToHex(bch.privateKey),
       },
     ],
-    events: [created.event],
+    events: [created.event, created.publicEvent],
     createdAt: Date.now(),
   };
   saveIdentity(stored);
-  await publish(relays, created.event);
+  await publishRecord(relays, created);
   return { stored, event: created.event };
 }
 
 export async function publish(relays: string[], event: KyveraEvent): Promise<RelayPublishReport[]> {
   return publishToRelays(relays, event);
+}
+
+/**
+ * Publishes the public discovery event and the legacy kind-30078 mirror.
+ * Reports are merged per relay so the UI can show whether either envelope was
+ * accepted. The public event is authoritative for new verifiers.
+ */
+export async function publishRecord(
+  relays: string[],
+  created: Pick<CreatedRecord, "event" | "publicEvent">,
+): Promise<RelayPublishReport[]> {
+  const [legacy, publicReports] = await Promise.all([
+    publishToRelays(relays, created.event),
+    publishToRelays(relays, created.publicEvent),
+  ]);
+  return legacy.map((report, index) => {
+    const pub = publicReports[index];
+    return {
+      ...report,
+      ok: report.ok || Boolean(pub?.ok),
+      message: [
+        report.ok ? "legacy accepted" : `legacy: ${report.message}`,
+        pub?.ok ? "public accepted" : `public: ${pub?.message ?? "not attempted"}`,
+      ].join(" · "),
+    };
+  });
 }
 
 export function signerFor(stored: StoredIdentity): NostrSigner {
@@ -122,13 +150,14 @@ export async function rotateDemoIdentity(
     issuedAt: Math.floor(Date.now() / 1000),
   });
   appendEvent(stored.subject, created.event);
+  appendEvent(stored.subject, created.publicEvent);
   addBchKey(stored.subject, {
     address: next.identity.address,
     network,
     publicKey: next.publicKey,
     privateKey: binToHex(next.privateKey),
   });
-  await publish(relays, created.event);
+  await publishRecord(relays, created);
   return { event: created.event, newAddress: next.identity.address };
 }
 
@@ -148,7 +177,8 @@ export async function revokeDemoIdentity(
     issuedAt: Math.floor(Date.now() / 1000),
   });
   appendEvent(stored.subject, created.event);
-  await publish(relays, created.event);
+  appendEvent(stored.subject, created.publicEvent);
+  await publishRecord(relays, created);
   return created.event;
 }
 
@@ -188,7 +218,7 @@ export async function completeExternalBind(input: {
   signer: NostrSigner;
   draft: BindDraft;
   signature: string;
-}): Promise<KyveraEvent> {
+}): Promise<{ event: KyveraEvent; publicEvent: KyveraEvent }> {
   if (!input.draft.payload.bch) throw new Error("draft has no BCH identity");
   const subject = input.draft.payload.subject;
   const check = verifyBchIdentityProof({
@@ -209,7 +239,9 @@ export async function completeExternalBind(input: {
   ]);
   const built = await buildRecordEvent(record, input.signer);
   if (!built.ok || !built.event) throw new Error(`${built.code}: ${built.message}`);
-  return built.event;
+  const publicBuilt = await buildPublicRecordEvent(record, input.signer);
+  if (!publicBuilt.ok || !publicBuilt.event) throw new Error(`${publicBuilt.code}: ${publicBuilt.message}`);
+  return { event: built.event, publicEvent: publicBuilt.event };
 }
 
 export async function storePublishedEvent(input: {
@@ -217,6 +249,7 @@ export async function storePublishedEvent(input: {
   npub: string;
   mode: "demo" | "nip07";
   event: KyveraEvent;
+  publicEvent?: KyveraEvent;
 }): Promise<StoredIdentity> {
   const existing = getIdentity(input.subject);
   const stored: StoredIdentity = existing ?? {
@@ -228,8 +261,10 @@ export async function storePublishedEvent(input: {
     events: [],
     createdAt: Date.now(),
   };
-  if (!stored.events.some((event) => event.id === input.event.id)) {
-    stored.events = [...stored.events, input.event];
+  for (const event of [input.event, input.publicEvent]) {
+    if (event && !stored.events.some((existing) => existing.id === event.id)) {
+      stored.events = [...stored.events, event];
+    }
   }
   saveIdentity(stored);
   return stored;

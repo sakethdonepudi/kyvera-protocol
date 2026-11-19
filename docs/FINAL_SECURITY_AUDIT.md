@@ -15,7 +15,7 @@ No mainnet transaction was broadcast and no external Nostr event was published.
 
 | Category | Status | Evidence |
 | --- | --- | --- |
-| **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 57 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `e01eaea` with `--frozen-lockfile`, test and build |
+| **Verified locally** | Yes | 136 tests at audit time; V5 adds 17 → 153; typecheck; production build; 57 browser checks; `pnpm rp:demo` 13/13; `pnpm rp:persist` 7/7; local and public lifecycle tests; fresh clone tested |
 | **Verified with real wallets** | No | No Paytaca, Cashonize or Selene device/extension was available; no wallet-produced signature was recorded |
 | **Verified on public relays** | Partial | Read-only probe: `wss://relay.damus.io` failed, `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published |
 | **Verified in production** | Yes, limited | Public Vercel deployment at https://kyvera-alpha.vercel.app; HTTPS smoke covers routes, headers, video and bundle. No real-wallet or public-relay publication. |
@@ -563,15 +563,15 @@ return a large event set. Add a cap/timeout before production.
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm test                 # 136 tests, 13 files
+pnpm test                 # 153 tests, 16 files (V5)
 pnpm typecheck
 pnpm build                # 17 routes
 pnpm qa:browser           # 57/57, 0 console/page errors
-pnpm rp:demo              # 10/10, no KYVERA API/relay
+pnpm rp:demo              # 13/13, no KYVERA API/relay
 pnpm audit --prod
 ```
 
-Fresh clone of deployed commit `e01eaea`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 136/136, `pnpm build` pass.
+Fresh clone of deployed commit `e01eaea`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 136/136 at that commit, `pnpm build` pass. V5 working tree: 153/153.
 
 ---
 

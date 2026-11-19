@@ -1,85 +1,73 @@
-# Disposable Public-Relay Identity Test
+# Disposable Nostr Relay Lifecycle Test
 
-**Status:** not executed. This procedure publishes public Nostr events and
-requires explicit authorization first.
+**Status:** local run PASS; public run PASS on `wss://nos.lol` and `wss://relay.primal.net` with explicit authorization on 2026-11-19. Short-term retention observed; indefinite retention is not claimed.
 
-Do not run this against a production identity, a funded wallet, or without the
-relay operator’s terms being acceptable to you.
+Do not run this against a production identity, a funded wallet, or without accepting the relay operator's terms.
 
 ---
 
-## Authorization gate
+## Local run (no public publication)
 
-The script refuses to run unless **both** are set:
+```bash
+pnpm relay
+I_AUTHORIZE_LOCAL_RELAY_TEST=yes \
+KYVERA_PUBLIC_RELAY=ws://127.0.0.1:7777 \
+node scripts/public-relay-identity-test.mjs
+```
+
+This publishes disposable records only to the local relay. See [`docs/audits/DISCOVERY_EVIDENCE.md`](audits/DISCOVERY_EVIDENCE.md) for observed results.
+
+---
+
+## Public run (explicit authorization required)
+
+Executed evidence: [`docs/audits/DISCOVERY_EVIDENCE.md`](audits/DISCOVERY_EVIDENCE.md).
 
 ```bash
 export I_AUTHORIZE_PUBLIC_RELAY_TEST=yes
 export KYVERA_PUBLIC_RELAY=wss://relay.example
+node scripts/public-relay-identity-test.mjs
 ```
 
-`I_AUTHORIZE_PUBLIC_RELAY_TEST=yes` is an explicit statement that publishing two
-disposable events to that relay is authorized. The script rejects localhost and
-non-`wss://` endpoints.
+The script refuses to run without both variables. It rejects non-`wss://` public endpoints.
 
-## What it publishes
+### What it publishes
 
 1. A **bind** record signed by a fresh Nostr key and a fresh unfunded BCH P2PKH key.
-2. A **revoke** record for the same identity, immediately after the binding is observed.
+2. A **rotate A→B** record signed by wallet A, wallet B and the Nostr key.
+3. A **forged rotate** event signed by the Nostr key and an attacker wallet, but without a valid current-wallet proof. The relay may accept the event; the verifier must reject it.
+4. A **revoke** record signed by wallet B and the Nostr key.
 
-The keys exist only in process memory and are discarded when the process exits.
-No private key, seed phrase or WIF is printed. No transaction is created and no
-funds are spent.
+Legacy kind `30078` and public kind `1078` envelopes are published for bind/rotate/revoke. The forged event is legacy-only.
 
-## Procedure
+Keys exist only in process memory. No private key, seed phrase or WIF is printed. No transaction is created and no funds are spent.
 
-```bash
-pnpm relay:health wss://relay.example
-I_AUTHORIZE_PUBLIC_RELAY_TEST=yes \
-KYVERA_PUBLIC_RELAY=wss://relay.example \
-pnpm test:public-relay
-```
+### Observed outputs to record
 
-Expected output:
+- relay URL and NIP-11/health result;
+- public and legacy event IDs;
+- relay `OK` acknowledgements;
+- resolution status, assurance and history length after each step;
+- forged rejection code;
+- retrieval counts by kind;
+- missing-history status;
+- a later re-query to observe retention.
 
-```text
-Disposable public-relay identity test
-relay:   wss://relay.example
-npub:    npub1…
-address: bitcoincash:q…
-bind:    <event id> [{"url":"…","ok":true,…}]
-observed: ACTIVE · ACTIVE_HEAD · FULL
-revoke:  <event id> [...]
-observed: REVOKED · REVOKED_HEAD · FULL
-Test complete. The identity is revoked; no active public address remains.
-```
+### What this proves
 
-Then independently verify:
-
-1. Open `/verify?npub=<printed npub>` and confirm `REVOKED` and both records.
-2. Open `/verify?address=<printed address>` and confirm `REVOKED`, not `SUPERSEDED`.
-3. Re-run `pnpm relay:health wss://relay.example` and confirm EOSE.
-4. Wait and re-query to observe relay retention/pruning behavior.
-5. Record the relay URL, timestamp, event IDs, observation results and whether
-   history remained complete.
-
-## What this proves
-
-- A public relay accepted a KYVERA kind-30078 binding and revocation.
-- Discovery can retrieve and resolve the lifecycle.
+- A public relay accepted the dual-envelope format.
+- Discovery can retrieve and reconstruct the full lifecycle.
 - The revoked address is not presented as active.
-- Relay retention can be observed over time.
+- An unauthorized rotation is rejected even if a relay stores it.
 
-## What this does not prove
+### What this does not prove
 
-- That the relay retains history indefinitely.
-- That the relay set cannot withhold events.
+- Indefinite retention.
+- Global completeness or protection from a colluding relay set.
 - Real-wallet compatibility.
 - Mainnet payment or transaction finality.
-- That the relay operator endorses KYVERA.
+- Relay endorsement of KYVERA.
 
-## Cleanup
+### Cleanup
 
-The identity is revoked by the script, so no active address remains. If the
-script is interrupted after bind but before revoke, publish the revocation from
-the same process is not possible after exit; treat the test address as a
-disposable, unfunded public record and record the partial result.
+The identity ends revoked, so no active address remains. If the process is interrupted after bind, the unfunded disposable records may remain public; record the partial result and do not reuse the test label.

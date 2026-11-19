@@ -1,0 +1,25 @@
+{
+  "name": "@kyvera/wallet-bch",
+  "version": "0.1.0",
+  "description": "Capability-based Bitcoin Cash wallet adapters and independent signmessage verification for KYVERA",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@kyvera/bch": "workspace:*",
+    "@kyvera/core": "workspace:*"
+  }
+}

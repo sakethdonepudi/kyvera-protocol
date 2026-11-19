@@ -130,25 +130,39 @@ Packages:
 5. invalidates the session after logout, rotation or revocation.
 
 `pnpm rp:demo` is a separate Node application using only the public packages. It
-prints 10/10 checks with no KYVERA API or relay.
+prints 13/13 checks with no KYVERA API or relay. `pnpm rp:persist` adds a durable file-backed store and 7/7 checks for session persistence, rotation invalidation and revocation invalidation.
 
 ## 9. Decentralized discovery
 
-Records are kind-30078 events with a unique `d` tag:
-`kyvera:v1:<subject>:<sequence>:<payload digest>`.
+Each record is dual-published:
+
+- public regular event kind `1078` (experimental, unregistered);
+- legacy NIP-78 kind `30078` mirror.
+
+Both carry the unique `d` tag `kyvera:v1:<subject>:<sequence>:<payload digest>`.
+The verifier accepts both, queries both and de-duplicates by record ID.
+
+NIP-78 is private application data and may be AUTH-gated, so it is no longer the
+sole public discovery mechanism. See `docs/protocol/NOSTR_DISCOVERY_RFC.md`.
 
 The verifier queries configured relays, reports per-relay status, and surfaces
 `FULL` / `PARTIAL` / `UNSYNCED`. Sensitive actions fail closed unless every relay
 responds. Missing history returns `STALE`; conflicting branches return `CONFLICT`.
 
+Public evidence: a disposable bind → rotate → revoke lifecycle was published to
+`wss://nos.lol` and `wss://relay.primal.net`; both relays accepted both envelopes,
+the full 3-record history was reconstructed, a forged rotation was rejected, and
+short-term retention was observed. See `docs/audits/DISCOVERY_EVIDENCE.md`.
+
 ## 10. Testing evidence
 
 | Check | Result |
 | --- | --- |
-| Unit / integration / security | **136/136**, 13 files |
+| Unit / integration / security | **153/153**, 16 files |
 | Browser QA | **57/57**, 0 console/page errors |
 | Production build | pass, 17 routes |
-| Standalone relying party | **10/10** |
+| Standalone relying party | **13/13** |
+| Durable relying party | **7/7** |
 | Production HTTPS smoke | pass, 9 routes, headers, bundle, video |
 | Relay health | 2/2 (`wss://nos.lol`, `wss://relay.primal.net`) |
 | Dependency audit | 0 known vulnerabilities |
@@ -175,11 +189,11 @@ See [`REQUIREMENTS_MATRIX.md`](REQUIREMENTS_MATRIX.md) and
 
 | Requirement | Evidence |
 | --- | --- |
-| R1 identity creation / management | `/create`, 136 tests, browser QA |
+| R1 identity creation / management | `/create`, 153 tests, browser QA |
 | R2 dual-key binding | `/challenge` Bind, binding/vector/property tests |
-| R3 decentralized discovery | kind-30078, relay tests, `/verify`, `/challenge` live |
-| R4 verification & authentication | `/auth-demo`, `/challenge`, `pnpm rp:demo` |
-| R5 working prototype + docs | live site, GitHub, videos, SDK, CLI, standalone verifier |
+| R3 decentralized discovery | public kind 1078 + legacy kind 30078; two-relay lifecycle evidence; relay tests |
+| R4 verification & authentication | `/auth-demo`, `/challenge`, `pnpm rp:demo` 13/13, `pnpm rp:persist` 7/7 |
+| R5 working prototype + docs | live site, GitHub, videos, `@kyvera/sdk`, `@kyvera/wallet-bch`, CLI, standalone verifier |
 | Rotation stretch | rotation, Time Machine, challenge Rotate/Prove |
 | Payment stretch | BIP21 handoff only; no txid or transaction claim |
 
@@ -187,7 +201,7 @@ See [`REQUIREMENTS_MATRIX.md`](REQUIREMENTS_MATRIX.md) and
 
 - No independent security audit or formal verification.
 - No physical Paytaca/Cashonize/Selene test; no wallet-produced signature recorded.
-- Public-relay history retention and first-contact completeness are not proven.
+- Public-relay retention was observed short-term on two relays; indefinite retention and global completeness are not proven.
 - A relay set that withholds a newer revocation can still look `ACTIVE`; a
   checkpoint mitigates rollbacks after a previously observed head.
 - `/pay` is a BIP21 handoff. It does not construct/broadcast a transaction,

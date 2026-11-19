@@ -12,12 +12,13 @@
 | Check | Command | Result |
 | --- | --- | --- |
 | Repository commit | `git rev-parse HEAD` | `e01eaea` (4.3) |
-| Unit/integration/security tests | `pnpm test` | **136/136 pass**, 13 files, ~3s |
+| Unit/integration/security tests | `pnpm test` | **153/153 pass**, 16 files |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 17 routes |
 | Browser QA | `pnpm qa:browser` | **57/57**, 0 console/page errors |
 | UI 4.3 responsive evidence | `docs/screenshots/4.3/` | 375 / 390 / 768 / 1440 px, no horizontal overflow |
-| Independent relying party | `pnpm rp:demo` | **10/10**, no KYVERA API/relay |
+| Independent relying party | `pnpm rp:demo` | **13/13**, no KYVERA API/relay |
+| Durable relying party | `pnpm rp:persist` | **7/7**, file-backed sessions |
 | Relay health | `pnpm relay:health <urls>` | read-only EOSE check; 2/2 for defaults |
 | Post-deployment smoke | `BASE=https://… pnpm smoke:deploy` | routes, headers, bundle, console errors |
 | Narrated demo films | `/tutorial` | 97s + 189s MP4, H.264/AAC 30fps, posters, WebVTT captions, native controls; audio mean -16.7 dB |
@@ -66,10 +67,11 @@ Every important claim links to a source, test or running demonstration.
 | Payment destination policy | `apps/web/lib/pay.ts` | `tests/pay.test.ts` (12), browser QA |
 | WizardConnect pairing | `apps/web/app/pay/page.tsx` | browser QA dialog; physical wallet untested |
 | Warm light theme | `globals.css`, `tailwind.config.ts`, toggle | browser QA theme check |
-| 136-test suite | `tests/` | `pnpm test` |
+| 153-test suite | `tests/` | `pnpm test` |
 | Relying-party authentication | `apps/web/app/auth-demo/page.tsx`, `packages/verifier/src/auth.ts` | `tests/auth-request.test.ts` (12), browser QA |
 | Trust Challenge | `apps/web/app/challenge/page.tsx`, `apps/web/lib/challenge.ts` | browser QA demo + live; security suite |
-| Standalone relying party | `examples/relying-party/demo.mjs` | `pnpm rp:demo` → 10/10 |
+| Standalone relying party | `examples/relying-party/demo.mjs` | `pnpm rp:demo` → 13/13 |
+| Durable relying party | `examples/relying-party/persist-demo.mjs` | `pnpm rp:persist` → 7/7 |
 | Merchant rotation demo | `apps/web/app/merchant/page.tsx` | browser QA destination update |
 | Paytaca compliance matrix | `docs/PAYTACA_COMPLIANCE.md` | requirement-to-evidence mapping |
 | Lab runs real verifier functions | `apps/web/lib/lab.ts`, `app/lab` | browser QA, standalone |

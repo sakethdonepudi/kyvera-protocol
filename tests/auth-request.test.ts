@@ -272,4 +272,14 @@ describe("relying-party authentication request", () => {
       code: "SESSION_EXPIRED",
     });
   });
+  it("consumes a challenge even when the first verification fails", async () => {
+    const rp = service();
+    const request = rp.issue({ expectedSubject: identity.subject });
+    const stranger = await strangerSigner();
+    const bad = await buildAuthRequestEvent({ request, signer: stranger.signer, createdAt: T });
+    expect(rp.verify(bad, resolutionFor(identity)).check.code).toBe("SUBJECT_MISMATCH");
+    const good = await buildAuthRequestEvent({ request, signer: identity.signer, createdAt: T });
+    expect(rp.verify(good, resolutionFor(identity)).check.code).toBe("UNKNOWN_CHALLENGE");
+  });
+
 });

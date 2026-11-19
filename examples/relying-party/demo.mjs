@@ -10,17 +10,20 @@
  * Run: pnpm rp:demo
  */
 import { createHash } from "node:crypto";
-import { signerFromSecretKey } from "@kyvera/nostr";
-import { testBchKeyPair } from "@kyvera/bch";
 import {
   AuthRequestService,
+  KyveraClient,
   buildAuthRequestEvent,
   createBindRecord,
   createRevokeRecord,
   createRotateRecord,
   resolveEvents,
+  signerFromSecretKey,
+  testBchKeyPair,
+  toNpub,
+  toVerificationResult,
   validateAppSession,
-} from "@kyvera/verifier";
+} from "@kyvera/sdk";
 
 const T = 1_794_000_000;
 const NOW = T + 3_600;
@@ -163,6 +166,39 @@ async function main() {
       incomplete.reasonCode === "MISSING_CHAIN_SEGMENT" &&
       incomplete.head?.record.payload.sequence === 0,
     `${incomplete.status} · ${incomplete.reasonCode} · head #${incomplete.head?.record.payload.sequence ?? "?"}`,
+  );
+
+  const publicOnly = resolveEvents([bind.publicEvent, rotate.publicEvent, revoke.publicEvent], {
+    now: NOW,
+  }).resolution;
+  check(
+    "public regular-event mirror resolves the full lifecycle",
+    publicOnly.status === "REVOKED" && publicOnly.history.length === 3,
+    `${publicOnly.status} · public kind ${bind.publicEvent.kind}`,
+  );
+
+  const structured = toVerificationResult(
+    {
+      ...revoked,
+      assurance: "FULL",
+      sync: { relays: [], responded: 0, total: 0, assurance: "FULL" },
+      sources: {},
+    },
+    toNpub(subject),
+  );
+  check(
+    "SDK separates cryptographic validity from current authorization",
+    structured.cryptographicValidity === true &&
+      structured.historicalValidity.valid === true &&
+      structured.currentAuthorization.authorized === false &&
+      structured.status === "REVOKED",
+    `status ${structured.status} · records ${structured.historicalValidity.records.length}`,
+  );
+
+  const offline = new KyveraClient({ relays: [], now: () => NOW });
+  check(
+    "SDK reports UNSYNCED without relays",
+    (await offline.verify(toNpub(subject))).evidenceCompleteness.assurance === "UNSYNCED",
   );
 
   const passed = results.filter((result) => result.ok).length;

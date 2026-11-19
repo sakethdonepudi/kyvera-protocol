@@ -177,11 +177,18 @@ Only P2PKH is supported. P2SH and token-aware addresses are rejected, because `s
 
 ## 6. Nostr event
 
-### 6.1 Event
+### 6.1 Envelopes
+
+A record is published in two envelopes with identical `content` and tags:
+
+| Kind | Role |
+| --- | --- |
+| `1078` | Public regular-event discovery (experimental, unregistered) |
+| `30078` | Legacy NIP-78 application-data mirror |
 
 ```json
 {
-  "kind": 30078,
+  "kind": 1078,
   "created_at": 1794000000,
   "tags": [...],
   "content": "<KCJ-1 signed record>",
@@ -191,7 +198,9 @@ Only P2PKH is supported. P2SH and token-aware addresses are rejected, because `s
 }
 ```
 
-`kind 30078` is NIP-78 application-specific data. `created_at` MUST equal `payload.issuedAt`. `pubkey` MUST equal `payload.subject`. The event `id`/`sig` follow NIP-01 and are BIP-340 Schnorr signatures.
+`created_at` MUST equal `payload.issuedAt`. `pubkey` MUST equal `payload.subject`. The event `id`/`sig` follow NIP-01 and are BIP-340 Schnorr signatures. A verifier MUST accept both kinds and de-duplicate by record id.
+
+NIP-78 kind `30078` is private application data and may be AUTH-gated; it is retained for compatibility, not as the sole public discovery mechanism. See [`docs/protocol/NOSTR_DISCOVERY_RFC.md`](protocol/NOSTR_DISCOVERY_RFC.md).
 
 ### 6.2 Tags
 
@@ -216,20 +225,20 @@ Verification rules:
 - `alt` is optional and unvalidated;
 - unknown tags are ignored for forward compatibility, but cannot change the computed authorizations.
 
-The `d` value includes the payload digest, so two conflicting records at the same sequence produce different addressable-event keys and can both be retained by a relay. This is what makes equivocation observable.
+The `d` value includes the payload digest, so two conflicting records at the same sequence produce different keys and can both be retained. For public kind `1078`, regular-event semantics mean records are not replaced; for legacy kind `30078`, the unique `d` value prevents addressable replacement from collapsing the lifecycle. This is what makes equivocation observable.
 
 ### 6.3 Discovery filters
 
 By subject:
 
 ```json
-{ "kinds": [30078], "authors": ["<subject>"], "#k": ["kyvera-v1"] }
+{ "kinds": [1078, 30078], "authors": ["<subject>"], "#k": ["kyvera-v1"] }
 ```
 
 By address:
 
 ```json
-{ "kinds": [30078], "#k": ["kyvera-v1"], "#b": ["<cashaddr>"] }
+{ "kinds": [1078, 30078], "#k": ["kyvera-v1"], "#b": ["<cashaddr>"] }
 ```
 
 A verifier MUST NOT trust the `b` tag alone. It uses the tag only to discover candidate subjects, then fetches each subject's full chain and re-verifies it.

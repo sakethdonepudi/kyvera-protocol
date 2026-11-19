@@ -7,6 +7,8 @@ const alias = {
   "@kyvera/bch": path.resolve(root, "packages/bch/src/index.ts"),
   "@kyvera/nostr": path.resolve(root, "packages/nostr/src/index.ts"),
   "@kyvera/verifier": path.resolve(root, "packages/verifier/src/index.ts"),
+  "@kyvera/sdk": path.resolve(root, "packages/sdk/src/index.ts"),
+  "@kyvera/wallet-bch": path.resolve(root, "packages/wallet-bch/src/index.ts"),
 };
 
 export default defineConfig({

@@ -55,7 +55,7 @@ async function main() {
     issuedAt: now + 1,
   });
 
-  const toPublish = [bind.event, rotation.event];
+  const toPublish = [bind.event, bind.publicEvent, rotation.event, rotation.publicEvent];
   let revocation = null;
   if (revoke) {
     revocation = await createRevokeRecord({
@@ -64,7 +64,7 @@ async function main() {
       currentBchPrivateKey: walletB.privateKey,
       issuedAt: now + 2,
     });
-    toPublish.push(revocation.event);
+    toPublish.push(revocation.event, revocation.publicEvent);
   }
 
   for (const event of toPublish) {

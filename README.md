@@ -54,6 +54,10 @@ KYVERA treats identity as a state machine with authorization rules, not as a dir
 
 ## 2.1 What is new in this iteration
 
+- **V5 public SDK**: `@kyvera/sdk` exposes `KyveraClient`, structured cryptographic/historical/current-authorization/evidence results, auth helpers and evidence export. See [`docs/SDK_QUICKSTART.md`](docs/SDK_QUICKSTART.md).
+- **V5 public discovery**: each record is dual-published as an experimental regular event (kind `1078`) and a legacy NIP-78 mirror (kind `30078`). The verifier accepts both and de-duplicates by record ID. See [`docs/protocol/NOSTR_DISCOVERY_RFC.md`](docs/protocol/NOSTR_DISCOVERY_RFC.md).
+- **V5 wallet adapter**: `@kyvera/wallet-bch` reports connect/address/signing capabilities separately and verifies manual wallet proofs. See [`docs/WALLET_ADAPTERS.md`](docs/WALLET_ADAPTERS.md).
+- **V5 independent relying party**: `pnpm rp:demo` (13/13) and `pnpm rp:persist` (7/7) demonstrate authentication, durable sessions, replay rejection and rotation/revocation invalidation. See [`docs/RELYING_PARTY_GUIDE.md`](docs/RELYING_PARTY_GUIDE.md).
 - **4.3 premium interface** ([`docs/UI_UX_43.md`](docs/UI_UX_43.md)): reduced documentation-style copy, a verifier-driven BIND → ROTATE → REVOKE timeline, a minimal tutorial cinema selector, visible glass surfaces and 375–1440px visual QA. Protocol and security behavior unchanged.
 - **Trust Challenge** (`/challenge`): five executable stages — Bind, Verify, Authenticate, Rotate, Prove — in a deterministic guided demo or against a live stored identity. The final stage shows a historically valid wallet that is no longer authorized.
 - **Merchant example** (`/merchant`): a self-asserted demo merchant whose payment destination unlocks only after verification, then moves to the new wallet after an authorized rotation.
@@ -80,7 +84,9 @@ apps/web/                 Next.js App Router UI (create, dashboard, verify, auth
 packages/core/            Canonical JSON, record model, chain state machine
 packages/bch/             CashAddr handling, wallet signmessage signing/verification
 packages/nostr/           NIP-78 event encoding, relay queries, publishing
-packages/verifier/        Independent verifier, lifecycle SDK, challenge service, CLI
+packages/verifier/        Independent verifier, lifecycle resolution, challenge service, CLI
+packages/sdk/             Developer-facing SDK and structured verification result
+packages/wallet-bch/      Capability-based BCH wallet adapters and manual proof verification
 examples/                 Executable node verifier and lifecycle demonstration
 demo/                     Single-file standalone browser demonstration
 tests/                    Unit, security, property and relay integration tests, vectors
@@ -192,12 +198,13 @@ open demo/kyvera-standalone.html
 ## 8. Running tests
 
 ```bash
-pnpm test           # 136 tests across 13 files (unit, integration, security, property)
+pnpm test           # 153 tests across 16 files (unit, integration, security, property, SDK, wallet, discovery)
 pnpm typecheck      # strict TypeScript for every package
 pnpm build          # production build
 pnpm demo:lifecycle # executable lifecycle demo with assertions
 pnpm qa:browser     # Playwright: desktop, mobile, reduced motion, keyboard
-pnpm rp:demo        # independent relying party: 10/10 checks
+pnpm rp:demo        # independent relying party: 13/13 checks
+pnpm rp:persist     # durable file-backed sessions: 7/7 checks
 pnpm relay:health   # read-only production relay EOSE check
 BASE=https://your-deployment pnpm smoke:deploy  # post-deployment smoke test
 pnpm demo:standalone# rebuild the single-file browser demo
@@ -337,13 +344,13 @@ Honest status as of 2026-11-19:
 - [x] Chain resolution with eight explicit result states
 - [x] Relay discovery, partial-sync and rollback-checkpoint handling
 - [x] Independent TypeScript SDK and CLI
-- [x] 136 automated tests (unit, integration, security, property-based), deterministic vectors, executable lifecycle demo
+- [x] 153 automated tests (unit, integration, security, property-based, SDK, wallet, discovery), deterministic vectors, executable lifecycle demo
 - [x] Responsive editorial web application, verified end-to-end in Chrome, mobile viewport, reduced motion and keyboard navigation
 - [x] Identity Time Machine with per-record proof and relay inspection
 - [x] Interactive security laboratory with six real scenarios
 - [x] Trust Challenge with five executable stages and separate demo/live modes
 - [x] Rotation-aware merchant example with a verified payment destination
-- [x] Standalone relying-party application (`pnpm rp:demo`, 10/10 checks)
+- [x] Standalone relying-party applications (`pnpm rp:demo` 13/13, `pnpm rp:persist` 7/7)
 - [x] Single-file standalone browser demonstration (no install)
 - [x] Wallet interoperability probe and manual test instructions
 - [x] Competitive audit of Kola Link, CashLink ID, BCH Identity Bridge and prior art
