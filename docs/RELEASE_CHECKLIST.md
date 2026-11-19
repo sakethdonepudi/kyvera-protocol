@@ -19,7 +19,7 @@
 | Independent relying party | `pnpm rp:demo` | **10/10**, no KYVERA API/relay |
 | Relay health | `pnpm relay:health <urls>` | read-only EOSE check; 2/2 for defaults |
 | Post-deployment smoke | `BASE=https://… pnpm smoke:deploy` | routes, headers, bundle, console errors |
-| Demo videos | `/tutorial` | 90s + 3min MP4, posters, WebVTT captions, native controls |
+| Narrated demo films | `/tutorial` | 92s + 184s MP4, H.264/AAC 30fps, posters, WebVTT captions, native controls; audio mean -16.7 dB |
 | History-wide secret scan | manual scan across 32 commits | no tracked keys/env secrets |
 | Lifecycle demo | `pnpm demo:lifecycle` | all assertions pass |
 | Standalone HTML | `node scripts/test-standalone.mjs` | 6 scenarios, 0 errors |

@@ -44,6 +44,7 @@ export default function TutorialPage() {
           on-chain transaction is simulated.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
+          <Badge tone="accent">narrated</Badge>
           <Badge tone="accent">captions</Badge>
           <Badge tone="neutral">no autoplay</Badge>
           <Badge tone="neutral">demo fixtures</Badge>

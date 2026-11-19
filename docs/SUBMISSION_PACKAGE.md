@@ -12,8 +12,8 @@
 | --- | --- |
 | **Live website** | https://kyvera-alpha.vercel.app |
 | **Three-minute judge walkthrough** | https://kyvera-alpha.vercel.app/tutorial |
-| **90-second explainer** | https://kyvera-alpha.vercel.app/demo/kyvera-explainer-90s.mp4 |
-| **Three-minute MP4** | https://kyvera-alpha.vercel.app/demo/kyvera-judge-demo-3min.mp4 |
+| **90-second explainer** | https://kyvera-alpha.vercel.app/demo/kyvera-explainer-90s.mp4 (92s, narrated, AAC) |
+| **Three-minute MP4** | https://kyvera-alpha.vercel.app/demo/kyvera-judge-demo-3min.mp4 (184s, narrated, AAC) |
 | **Trust Challenge** | https://kyvera-alpha.vercel.app/challenge |
 | **Standalone verifier** | https://kyvera-alpha.vercel.app/kyvera-standalone.html |
 | **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol (public) |
@@ -214,8 +214,9 @@ pnpm rp:demo
 
 ## 15. Video files
 
-- `apps/web/public/demo/kyvera-explainer-90s.mp4` — 1920×1080, H.264, ~91s
-- `apps/web/public/demo/kyvera-judge-demo-3min.mp4` — 1920×1080, H.264, ~161s
+- `apps/web/public/demo/kyvera-explainer-90s.mp4` — 1920×1080, H.264, AAC, 30fps, 92s
+- `apps/web/public/demo/kyvera-judge-demo-3min.mp4` — 1920×1080, H.264, AAC, 30fps, 184s
+- Narration: Microsoft Edge Neural TTS, `en-US-AndrewNeural`; scripts and audio evidence in [`VIDEO_NARRATION.md`](VIDEO_NARRATION.md).
 - Posters and WebVTT captions are in the same directory.
 - Embedded with native controls at `/tutorial`; no autoplay with sound.
 

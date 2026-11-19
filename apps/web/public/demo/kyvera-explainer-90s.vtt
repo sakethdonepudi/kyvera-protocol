@@ -1,25 +1,77 @@
 WEBVTT
 
 1
-00:00.000 --> 00:12.000
-A BCH wallet can change. A Nostr identity can persist. Which wallet is authorized now?
+00:00:00.400 --> 00:00:02.192
+A wallet address can change.
 
 2
-00:12.000 --> 00:30.000
-KYVERA binds two independent keys: BCH and Nostr. Both signatures are verified locally.
+00:00:02.192 --> 00:00:05.323
+But the identity behind it shouldn't have to disappear.
 
 3
-00:30.000 --> 00:50.000
-Signed records form a hash-linked authorization chain. Relays only supply evidence.
+00:00:05.323 --> 00:00:10.784
+In decentralized systems, proving who controls an address is only the beginning.
 
 4
-00:50.000 --> 00:70.000
-An authorized rotation moves the current wallet to B and marks A superseded.
+00:00:10.784 --> 00:00:14.257
+The harder question is what happens when that address changes.
 
 5
-00:70.000 --> 00:82.000
-Wallet A's historical proof stays valid. It is simply no longer current.
+00:00:17.800 --> 00:00:18.894
+Meet KYVERA.
 
 6
-00:82.000 --> 00:90.000
-KYVERA. Keys change. Trust shouldn't disappear.
+00:00:18.894 --> 00:00:26.644
+An open-source identity continuity protocol connecting Bitcoin Cash and Nostr through independent cryptographic proofs.
+
+7
+00:00:26.644 --> 00:00:28.394
+No shared private keys.
+
+8
+00:00:28.394 --> 00:00:30.894
+No centralized identity provider.
+
+9
+00:00:34.400 --> 00:00:37.415
+Each binding is cryptographically verified.
+
+10
+00:00:37.415 --> 00:00:43.665
+Independent applications can inspect the evidence and determine whether an authorization chain is valid.
+
+11
+00:00:47.200 --> 00:00:51.426
+When a wallet changes, KYVERA preserves the authorization history.
+
+12
+00:00:51.426 --> 00:00:58.597
+The old proof remains historically valid, but the old wallet is no longer the currently authorized destination.
+
+13
+00:01:02.200 --> 00:01:10.860
+KYVERA also supports challenge-response authentication, revocation, and explicit detection of conflicting or incomplete evidence.
+
+14
+00:01:10.860 --> 00:01:15.584
+When the available information is uncertain, sensitive actions are blocked.
+
+15
+00:01:19.100 --> 00:01:20.484
+Your keys change.
+
+16
+00:01:20.484 --> 00:01:22.563
+Your identity continues.
+
+17
+00:01:22.563 --> 00:01:23.378
+KYVERA.
+
+18
+00:01:23.378 --> 00:01:24.576
+Keys change.
+
+19
+00:01:24.576 --> 00:01:26.352
+Trust shouldn't disappear.

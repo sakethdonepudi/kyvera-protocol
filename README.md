@@ -5,7 +5,7 @@
 
 KYVERA is an open-source decentralized identity lifecycle protocol connecting Bitcoin Cash wallets with Nostr identities. It is a BCH Blaze 2026 submission for the Paytaca Decentralized Identity bounty.
 
-**Live:** https://kyvera-alpha.vercel.app · **Watch:** https://kyvera-alpha.vercel.app/tutorial · **Submission package:** [`docs/SUBMISSION_PACKAGE.md`](docs/SUBMISSION_PACKAGE.md)
+**Live:** https://kyvera-alpha.vercel.app · **Watch the narrated films:** https://kyvera-alpha.vercel.app/tutorial · **Submission package:** [`docs/SUBMISSION_PACKAGE.md`](docs/SUBMISSION_PACKAGE.md)
 
 The project answers a question that existing BCH↔Nostr bindings do not:
 
