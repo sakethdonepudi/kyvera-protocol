@@ -1,7 +1,7 @@
 # KYVERA Final Security Audit
 
 **Date:** 2026-11-19
-**Scope:** audit began at `6cc811f`; fixes in `dfb0023`; fail-closed hardening in `02c2512`; narrated/branded release in `89b117f`; 4.3 interface in `e01eaea`; V5 SDK/discovery in `0651b06`
+**Scope:** audit began at `6cc811f`; fixes in `dfb0023`; fail-closed hardening in `02c2512`; narrated/branded release in `89b117f`; 4.3 interface in `e01eaea`; V5 SDK/discovery in `da86470`
 **Type:** internal red-team review and reproducible test audit
 **Not:** an independent third-party security audit, a formal verification, or a warranty
 
@@ -571,7 +571,7 @@ pnpm rp:demo              # 13/13, no KYVERA API/relay
 pnpm audit --prod
 ```
 
-Fresh clone of deployed commit `0651b06`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 154/154, `pnpm build` pass.
+Fresh clone of deployed commit `da86470`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 154/154, `pnpm build` pass.
 
 ---
 

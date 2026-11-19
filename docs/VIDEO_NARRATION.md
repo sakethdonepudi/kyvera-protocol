@@ -18,6 +18,7 @@ KYVERA application.
 **Preview:** `apps/web/public/demo/kyvera-v5-preview.mp4` (15s, silent, 1280×720, 851 KB)  
 **Poster:** `apps/web/public/demo/kyvera-v5-poster.webp` (30 KB WebP)  
 **Recorded application:** KYVERA v5.0.1, deployed commit `0651b06`  
+**Film release:** v5.0.2, deployed commit `da86470`  
 **Production source:** `scripts/film-v5/`
 
 ### Exact narration
