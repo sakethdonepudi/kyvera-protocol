@@ -19,12 +19,16 @@
 | **Trust Challenge** | https://kyvera-alpha.vercel.app/challenge |
 | **Standalone verifier** | https://kyvera-alpha.vercel.app/kyvera-standalone.html |
 | **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol (public) |
-| **Release** | https://github.com/sakethdonepudi/kyvera-protocol/releases/tag/v4.1.0 |
-| **Deployed commit** | `fbeb6b0` (also exposed as `<meta name="kyvera-commit">`); release tag `v4.1.0` |
+| **Release** | https://github.com/sakethdonepudi/kyvera-protocol/releases/tag/v4.2.0 |
+| **Deployed commit** | `89b117f` (also exposed as `<meta name="kyvera-commit">`); release tag `v4.2.0` |
 
 The GitHub repository is **public**; the deployed site is public.
 
 ---
+
+## 2. Brand assets
+
+Approved raster identity is in `apps/web/public/brand` (black-background artwork; not vector). The K emblem is used for navigation, footer, favicon and application icons; the primary logo is used on the tutorial, Open Graph preview and video intro/outro.
 
 ## 2. Problem
 

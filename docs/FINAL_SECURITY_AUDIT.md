@@ -1,7 +1,7 @@
 # KYVERA Final Security Audit
 
 **Date:** 2026-11-19
-**Scope:** audit began at `6cc811f`; fixes in `dfb0023`; fail-closed hardening in `02c2512`; narrated release in `fbeb6b0`
+**Scope:** audit began at `6cc811f`; fixes in `dfb0023`; fail-closed hardening in `02c2512`; narrated/branded release in `89b117f`
 **Type:** internal red-team review and reproducible test audit
 **Not:** an independent third-party security audit, a formal verification, or a warranty
 
@@ -15,7 +15,7 @@ No mainnet transaction was broadcast and no external Nostr event was published.
 
 | Category | Status | Evidence |
 | --- | --- | --- |
-| **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 57 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `fbeb6b0` with `--frozen-lockfile`, test and build |
+| **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 57 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `89b117f` with `--frozen-lockfile`, test and build |
 | **Verified with real wallets** | No | No Paytaca, Cashonize or Selene device/extension was available; no wallet-produced signature was recorded |
 | **Verified on public relays** | Partial | Read-only probe: `wss://relay.damus.io` failed, `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published |
 | **Verified in production** | Yes, limited | Public Vercel deployment at https://kyvera-alpha.vercel.app; HTTPS smoke covers routes, headers, video and bundle. No real-wallet or public-relay publication. |
@@ -571,7 +571,7 @@ pnpm rp:demo              # 10/10, no KYVERA API/relay
 pnpm audit --prod
 ```
 
-Fresh clone of deployed commit `fbeb6b0`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 136/136, `pnpm build` pass.
+Fresh clone of deployed commit `89b117f`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 136/136, `pnpm build` pass.
 
 ---
 
