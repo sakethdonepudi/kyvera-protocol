@@ -19,8 +19,7 @@
 | **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol |
 | **Deployed commit** | `2f16977` (also exposed as `<meta name="kyvera-commit">`); release tag `v4.0.0` |
 
-The GitHub repository is currently **private**. Changing visibility requires
-explicit owner confirmation; the deployed site is public.
+The GitHub repository is **public**; the deployed site is public.
 
 ---
 

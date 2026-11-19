@@ -333,7 +333,7 @@ A manual scan across all 32 commits checked tracked paths and patches for privat
 - No `.env`, `.env.local` or credential file is tracked; only `.env.example` and production example values.
 - All tracked `NEXT_PUBLIC_*` values are public build-time configuration.
 - Demo keys are labelled throwaway keys in `localStorage` and are not funded.
-- The repository is still private; a dedicated secret scanner and independent review are still recommended before making it public.
+- The repository is now public after this manual scan. A dedicated secret scanner and independent review are still recommended.
 
 ## 9. Conclusion
 

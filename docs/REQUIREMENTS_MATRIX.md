@@ -17,7 +17,7 @@ implementation, test evidence, demo route, documentation and remaining limits.
 | **R2** Cryptographic BCH–Nostr binding with distinct keys | Canonical KCJ-1 records; BCH `signmessage`; BIP-340 Nostr proof; `KEY_REUSE` check | `tests/binding.test.ts`, `tests/interop.test.ts`, `tests/property.test.ts` | `/challenge` stage Bind, `/demo` | `docs/PROTOCOL.md` | P2PKH only; no multisig/CashTokens |
 | **R3** Decentralized discovery | kind 30078 events; multi-relay resolution; per-relay sync; `STALE`/`PARTIAL`/`UNSYNCED` | `tests/relay.test.ts`, `tests/chain.test.ts` | `/verify`, `/challenge` live mode | `docs/INTEGRATION.md` | Relay sets can withhold history; checkpoints detect known rollbacks only |
 | **R4** Independent verification and authentication | `@kyvera/verifier`; `/auth-demo`; standalone RP; single-use challenges; origin/session/identity/address binding | `tests/auth-request.test.ts`, `tests/security-challenge.test.ts`, `/auth-demo` browser journey | `/auth-demo`, `/challenge` stage Authenticate, `pnpm rp:demo` | `docs/PAYTACA_COMPLIANCE.md`, `docs/INTEGRATION.md` | Browser session store is in-memory; production RP must persist |
-| **R5** Working prototype, source and documentation | 17 routes; monorepo; CLI; standalone verifier | 136 tests, 56 browser checks, production build | all routes | README, `docs/`, `docs/JUDGE_3_MINUTE.md` | Repository is private; public Vercel demo is live |
+| **R5** Working prototype, source and documentation | 17 routes; monorepo; CLI; standalone verifier | 136 tests, 56 browser checks, production build | all routes | README, `docs/`, `docs/JUDGE_3_MINUTE.md` | Repository is public; public Vercel demo is live |
 
 ---
 
@@ -78,4 +78,4 @@ pnpm dev
 - `/pay` is a BIP21 handoff; it does not construct or broadcast a transaction and
   does not display a txid.
 - `/merchant` is a self-asserted demo; no third-party credential or attestation.
-- Public deployment is live at https://kyvera-alpha.vercel.app; GitHub remains private; no bounty submission was performed.
+- Public deployment is live at https://kyvera-alpha.vercel.app; GitHub is public; no bounty submission was performed.

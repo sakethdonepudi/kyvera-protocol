@@ -347,7 +347,7 @@ Honest status as of 2026-11-19:
 - [x] Submission eligibility analysis, deployment guide, release checklist, judge script and submission draft
 - [ ] Live wallet interoperability test (Electron Cash / Cashonize / Paytaca)
 - [x] GitHub main push, public Vercel deployment, MP4 demos and embedded tutorial
-- [ ] Repository visibility public (requires owner confirmation)
+- [x] Repository visibility public
 - [ ] Bounty submission
 - [ ] WizardConnect integration and at least one mainnet BCH transaction (Mainnet Track requirements)
 - [ ] Independent security review

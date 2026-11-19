@@ -41,7 +41,7 @@ those capabilities.
 | **R2** Dual-key BCH–Nostr binding | ✅ | Canonical records, proof verification, key-reuse tests | Local prototype |
 | **R3** Decentralized discovery | ✅ local / ◐ public | Multi-relay tests, `STALE`/`PARTIAL`; no public KYVERA event | Do not claim public retention |
 | **R4** Independent verification and authentication | ✅ local | `@kyvera/verifier`, `/auth-demo`, `/challenge`, `pnpm rp:demo` 10/10; fail-closed on PARTIAL | Strong local evidence |
-| **R5** Working prototype + documentation | ✅ | Live Vercel app, SDK, CLI, standalone verifier, videos, docs; repository remains private | Public demo ready |
+| **R5** Working prototype + documentation | ✅ | Live Vercel app, SDK, CLI, standalone verifier, videos, docs; repository is public | Public demo ready |
 | Rotation stretch goal | ✅ | Rotation, revocation, Time Machine, challenge stage | Local prototype |
 | Payment stretch goal | ◐ | BIP21 handoff only; no transaction or txid | **Do not claim completed payment** |
 | Mainnet Track | ❌ | No wallet-tested integration, no mainnet tx, no deployment | **No claim** |

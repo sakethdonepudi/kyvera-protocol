@@ -140,7 +140,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 
 ## 6. Outstanding blockers
 
-1. **Repository visibility** — `sakethdonepudi/kyvera-protocol` is currently **private**. Mainnet Track requires a public GitHub/lab link.
+1. **Repository visibility** — `sakethdonepudi/kyvera-protocol` is now **public**.
 2. **Deployment** — no public URL; required for Mainnet Track and strongly expected for the bounty.
 3. **Mainnet Track features** — WizardConnect adapter is integrated but untested with a physical wallet; no XO integration; payments are a BIP21 handoff without in-app broadcast/txid.
 4. **Wallet interoperability** — no real wallet signature recorded.
@@ -154,7 +154,7 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md).
 ## 7. Exact manual actions required
 
 1. **Confirm eligibility:** message Paytaca/BLAZE: "For the Decentralized Identity bounty, is a DoraHacks Mainnet Track submission required, and do the live-demo/WizardConnect/mainnet-transaction rules apply?" Record the answer in `SUBMISSION_ELIGIBILITY.md`.
-2. **Make the repository public** (or grant judges access) after reviewing history for secrets. Current visibility is private.
+2. **Repository is public** after a secret scan; keep it public for the submission.
 3. **Deploy** to Vercel using `vercel.json` and the production env; verify headers/routes with `DEPLOYMENT.md` §4.
 4. **Test one wallet end to end:** install Paytaca or Cashonize, pair at `/create`, derive the address, sign the exact proof message, verify the badge changes only after the signature check, publish, and record the result using `WALLET_DEVICE_TEST.md`.
 5. **Decide on Mainnet Track:** if required, add WizardConnect (or XO) and one clearly usable mainnet BCH transaction feature; do not spend BCH without authorization.
