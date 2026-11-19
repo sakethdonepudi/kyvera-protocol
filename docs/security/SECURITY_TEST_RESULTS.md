@@ -1,7 +1,7 @@
 # KYVERA V5 Security Test Results
 
 **Date:** 2026-11-19
-**Baseline:** `6620fad` + V5 working tree
+**Baseline:** `801e2af` (V5)
 **Status:** executed locally; not independently audited
 
 ## 1. Commands

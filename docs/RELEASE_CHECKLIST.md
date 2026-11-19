@@ -1,7 +1,7 @@
 # Release Checklist
 
 **Date:** 2026-11-19
-**Candidate:** `e01eaea` (KYVERA 4.3)
+**Candidate:** `801e2af` (KYVERA 5.0)
 **Target:** BCH Blaze 2026 · Paytaca Decentralized Identity bounty
 **Status:** public demo deployed; repository public; bounty not submitted.
 
@@ -11,7 +11,7 @@
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Repository commit | `git rev-parse HEAD` | `e01eaea` (4.3) |
+| Repository commit | `git rev-parse HEAD` | `801e2af` (5.0) |
 | Unit/integration/security tests | `pnpm test` | **153/153 pass**, 16 files |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 17 routes |
