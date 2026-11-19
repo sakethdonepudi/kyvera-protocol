@@ -70,6 +70,30 @@ describe("@kyvera/sdk", () => {
     expect(result.historicalValidity.records).toHaveLength(3);
   });
 
+  it("keeps cryptographic validity when a forged candidate is rejected", async () => {
+    const identity = await makeIdentity("sdk-forged");
+    const rotated = await rotate(identity, identity.bind, identity.bchA, identity.bchB);
+    const revoked = await revoke(identity, rotated, identity.bchB);
+    const base = withSync(
+      resolveEvents([identity.bind.event, rotated.event, revoked.event], { now: T0 + 3_600 }).resolution,
+      "FULL",
+    );
+    const result = toVerificationResult(
+      {
+        ...base,
+        rejected: [
+          { eventId: "forged", code: "BCH_SIGNATURE_NOT_BY_ADDRESS", message: "forged current proof" },
+        ],
+      },
+      identity.subject,
+    );
+    expect(result.status).toBe("REVOKED");
+    expect(result.cryptographicValidity).toBe(true);
+    expect(result.historicalValidity.valid).toBe(true);
+    expect(result.currentAuthorization.authorized).toBe(false);
+    expect(result.checks.find((check) => check.id === "candidate_rejections")?.ok).toBe(false);
+  });
+
   it("rejects an invalid subject with a typed error", async () => {
     const client = new KyveraClient({ relays: [] });
     await expect(client.resolve("not-a-key")).rejects.toBeInstanceOf(KyveraSdkError);

@@ -158,7 +158,7 @@ short-term retention was observed. See `docs/audits/DISCOVERY_EVIDENCE.md`.
 
 | Check | Result |
 | --- | --- |
-| Unit / integration / security | **153/153**, 16 files |
+| Unit / integration / security | **154/154**, 16 files |
 | Browser QA | **57/57**, 0 console/page errors |
 | Production build | pass, 17 routes |
 | Standalone relying party | **13/13** |
@@ -189,7 +189,7 @@ See [`REQUIREMENTS_MATRIX.md`](REQUIREMENTS_MATRIX.md) and
 
 | Requirement | Evidence |
 | --- | --- |
-| R1 identity creation / management | `/create`, 153 tests, browser QA |
+| R1 identity creation / management | `/create`, 154 tests, browser QA |
 | R2 dual-key binding | `/challenge` Bind, binding/vector/property tests |
 | R3 decentralized discovery | public kind 1078 + legacy kind 30078; two-relay lifecycle evidence; relay tests |
 | R4 verification & authentication | `/auth-demo`, `/challenge`, `pnpm rp:demo` 13/13, `pnpm rp:persist` 7/7 |

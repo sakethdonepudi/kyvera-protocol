@@ -12,7 +12,7 @@
 | Check | Command | Result |
 | --- | --- | --- |
 | Repository commit | `git rev-parse HEAD` | `801e2af` (5.0) |
-| Unit/integration/security tests | `pnpm test` | **153/153 pass**, 16 files |
+| Unit/integration/security tests | `pnpm test` | **154/154 pass**, 16 files |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 17 routes |
 | Browser QA | `pnpm qa:browser` | **57/57**, 0 console/page errors |
@@ -67,7 +67,7 @@ Every important claim links to a source, test or running demonstration.
 | Payment destination policy | `apps/web/lib/pay.ts` | `tests/pay.test.ts` (12), browser QA |
 | WizardConnect pairing | `apps/web/app/pay/page.tsx` | browser QA dialog; physical wallet untested |
 | Warm light theme | `globals.css`, `tailwind.config.ts`, toggle | browser QA theme check |
-| 153-test suite | `tests/` | `pnpm test` |
+| 154-test suite | `tests/` | `pnpm test` |
 | Relying-party authentication | `apps/web/app/auth-demo/page.tsx`, `packages/verifier/src/auth.ts` | `tests/auth-request.test.ts` (12), browser QA |
 | Trust Challenge | `apps/web/app/challenge/page.tsx`, `apps/web/lib/challenge.ts` | browser QA demo + live; security suite |
 | Standalone relying party | `examples/relying-party/demo.mjs` | `pnpm rp:demo` → 13/13 |

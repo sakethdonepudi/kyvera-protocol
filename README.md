@@ -198,7 +198,7 @@ open demo/kyvera-standalone.html
 ## 8. Running tests
 
 ```bash
-pnpm test           # 153 tests across 16 files (unit, integration, security, property, SDK, wallet, discovery)
+pnpm test           # 154 tests across 16 files (unit, integration, security, property, SDK, wallet, discovery)
 pnpm typecheck      # strict TypeScript for every package
 pnpm build          # production build
 pnpm demo:lifecycle # executable lifecycle demo with assertions
@@ -344,7 +344,7 @@ Honest status as of 2026-11-19:
 - [x] Chain resolution with eight explicit result states
 - [x] Relay discovery, partial-sync and rollback-checkpoint handling
 - [x] Independent TypeScript SDK and CLI
-- [x] 153 automated tests (unit, integration, security, property-based, SDK, wallet, discovery), deterministic vectors, executable lifecycle demo
+- [x] 154 automated tests (unit, integration, security, property-based, SDK, wallet, discovery), deterministic vectors, executable lifecycle demo
 - [x] Responsive editorial web application, verified end-to-end in Chrome, mobile viewport, reduced motion and keyboard navigation
 - [x] Identity Time Machine with per-record proof and relay inspection
 - [x] Interactive security laboratory with six real scenarios

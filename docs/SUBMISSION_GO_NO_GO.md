@@ -25,7 +25,7 @@ those capabilities.
 
 | Environment | Status | What was actually verified |
 | --- | --- | --- |
-| **Verified locally** | ✅ | 153/153 tests across 16 files; strict typecheck; production build; 57/57 browser checks; `pnpm rp:demo` 13/13; `pnpm rp:persist` 7/7; local and public lifecycle tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
+| **Verified locally** | ✅ | 154/154 tests across 16 files; strict typecheck; production build; 57/57 browser checks; `pnpm rp:demo` 13/13; `pnpm rp:persist` 7/7; local and public lifecycle tests; fresh-clone install/test/build (see §3); no production dependency vulnerabilities |
 | **Verified with real wallets** | ❌ | No Paytaca, Cashonize or Selene installation was available. No wallet pairing, wallet-produced message signature, account switch, wrong network, rejection or disconnect was recorded |
 | **Verified on public relays** | ✅ | Disposable bind → rotate → revoke lifecycle published to `wss://nos.lol` and `wss://relay.primal.net`; both accepted both envelopes; full history reconstructed; forged rotation rejected; short-term retention observed |
 | **Verified in production** | ✅ limited | Public Vercel deployment at https://kyvera-alpha.vercel.app; HTTPS routes, headers, video and bundle smoke pass. Full production auth/payment behavior still depends on external relays |
@@ -37,7 +37,7 @@ those capabilities.
 
 | Requirement | Local status | Evidence | Submission claim |
 | --- | --- | --- | --- |
-| **R1** Self-held identity creation/management | ✅ | `/create`, 153 tests, browser QA | Local prototype |
+| **R1** Self-held identity creation/management | ✅ | `/create`, 154 tests, browser QA | Local prototype |
 | **R2** Dual-key BCH–Nostr binding | ✅ | Canonical records, proof verification, key-reuse tests | Local prototype |
 | **R3** Decentralized discovery | ✅ local + public | Dual-envelope records, multi-relay tests, two-relay public lifecycle, forged rejection | Short-term public retention observed |
 | **R4** Independent verification and authentication | ✅ local | `@kyvera/sdk`, `/auth-demo`, `/challenge`, `pnpm rp:demo` 13/13, `pnpm rp:persist` 7/7; fail-closed on PARTIAL | Strong local evidence |
@@ -52,7 +52,7 @@ those capabilities.
 
 ```text
 pnpm install --frozen-lockfile   PASS (fresh clone)
-pnpm test                        PASS 153/153, 16 files
+pnpm test                        PASS 154/154, 16 files
 pnpm typecheck                   PASS
 pnpm build                       PASS, 17 routes
 pnpm qa:browser                  PASS 57/57, 0 console/page errors
@@ -62,7 +62,7 @@ pnpm audit --prod                PASS, 0 known vulnerabilities
 ```
 
 Fresh clone: `git clone` of the deployed commit `801e2af`, `pnpm install --frozen-lockfile`,
-`pnpm test` (153/153) and `pnpm build` passed. The install emits a non-fatal warning that
+`pnpm test` (154/154) and `pnpm build` passed. The install emits a non-fatal warning that
 the `kyvera-verify` bin points to an unbuilt `dist/cli.js`; it resolves after
 `pnpm build` or `pnpm cli`.
 
@@ -114,7 +114,7 @@ reduced-motion checks pass in browser QA. This is not a full WCAG audit.
   authorization chain and rejects unauthorized transitions.
 - It demonstrates rotation, revocation, conflicts, stale history and independent
   relying-party authentication.
-- It has 153 automated tests, 57 browser checks and 13/13 + 7/7 standalone relying
+- It has 154 automated tests, 57 browser checks and 13/13 + 7/7 standalone relying
   party demonstration.
 - It is honest about wallet and payment limitations.
 

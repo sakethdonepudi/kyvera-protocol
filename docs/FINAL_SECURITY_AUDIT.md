@@ -563,7 +563,7 @@ return a large event set. Add a cap/timeout before production.
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm test                 # 153 tests, 16 files (V5)
+pnpm test                 # 154 tests, 16 files (V5)
 pnpm typecheck
 pnpm build                # 17 routes
 pnpm qa:browser           # 57/57, 0 console/page errors
@@ -571,7 +571,7 @@ pnpm rp:demo              # 13/13, no KYVERA API/relay
 pnpm audit --prod
 ```
 
-Fresh clone of deployed commit `801e2af`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 153/153, `pnpm build` pass.
+Fresh clone of deployed commit `801e2af`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 154/154, `pnpm build` pass.
 
 ---
 

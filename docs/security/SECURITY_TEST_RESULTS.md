@@ -19,7 +19,7 @@ pnpm rp:persist
 
 | Suite | Result |
 | --- | --- |
-| Unit/integration/security tests | **153/153** (see final count after V5 additions) |
+| Unit/integration/security tests | **154/154** (see final count after V5 additions) |
 | Typecheck | pass (7 projects) |
 | Production build | pass |
 | Browser QA | 57/57, 0 console/page errors |

@@ -91,7 +91,12 @@ export function toVerificationResult(
   npub: string,
 ): KyveraVerificationResult {
   const records = resolution.history.map(toHistorical);
-  const historicalValid = records.length > 0 && resolution.rejected.length === 0;
+  // A rejected candidate event is not the same as an invalid history. The
+  // verifier may reject a forged/unauthorized event while the valid chain is
+  // completely intact (for example, a forged rotation against a revoked
+  // identity). Cryptographic validity therefore describes the history, not
+  // every event a relay happened to return.
+  const historicalValid = records.length > 0;
   const cryptographicValidity =
     historicalValid && resolution.status !== "INVALID" && resolution.status !== "UNKNOWN";
   const authorized = resolution.status === "ACTIVE" && resolution.activeBch !== null;
@@ -104,8 +109,8 @@ export function toVerificationResult(
       id: "cryptographic_proofs",
       ok: cryptographicValidity,
       detail: historicalValid
-        ? `${records.length} valid record(s), ${resolution.rejected.length} rejected`
-        : `${records.length} valid record(s), ${resolution.rejected.length} rejected; status ${resolution.status}`,
+        ? `${records.length} valid record(s), ${resolution.rejected.length} rejected candidate(s)`
+        : `${records.length} valid record(s), ${resolution.rejected.length} rejected candidate(s); status ${resolution.status}`,
     },
     {
       id: "chain_active",
@@ -130,9 +135,12 @@ export function toVerificationResult(
         : "none",
     },
     {
-      id: "no_rejected_records",
+      id: "candidate_rejections",
       ok: resolution.rejected.length === 0,
-      detail: resolution.rejected.length === 0 ? "none" : `${resolution.rejected.length} rejected`,
+      detail:
+        resolution.rejected.length === 0
+          ? "none"
+          : `${resolution.rejected.length} candidate(s) excluded from the valid chain`,
     },
   ];
 

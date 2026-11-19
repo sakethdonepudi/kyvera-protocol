@@ -11,7 +11,7 @@
 
 | Check | Result |
 | --- | --- |
-| `pnpm test` | **153 / 153 tests pass** across 16 files (V5 additions) |
+| `pnpm test` | **153 / 154 tests pass** across 16 files (V5 additions) |
 | `pnpm typecheck` | **pass** for core, bch, nostr, verifier and web |
 | `pnpm build` | **pass** (Next.js production build; one third-party top-level-await warning) |
 | `pnpm demo:lifecycle` | **all assertions pass** (6 lifecycle scenarios) |

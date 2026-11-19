@@ -147,7 +147,7 @@ Implemented after this baseline:
 - Dual-envelope discovery: public kind `1078` + legacy kind `30078`.
 - Public lifecycle PASS on `wss://nos.lol` and `wss://relay.primal.net`, including forged-rotation rejection and short-term retention.
 - `pnpm rp:persist` durable file-backed session demo (7/7).
-- 153 tests across 16 files.
+- 154 tests across 16 files.
 
 Still open:
 
