@@ -19,8 +19,8 @@
 | **Trust Challenge** | https://kyvera-alpha.vercel.app/challenge |
 | **Standalone verifier** | https://kyvera-alpha.vercel.app/kyvera-standalone.html |
 | **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol (public) |
-| **Release** | https://github.com/sakethdonepudi/kyvera-protocol/releases/tag/v5.0.0 |
-| **Deployed commit** | `801e2af` (also exposed as `<meta name="kyvera-commit">`); release tag `v5.0.0` |
+| **Release** | https://github.com/sakethdonepudi/kyvera-protocol/releases/tag/v5.0.1 |
+| **Deployed commit** | `0651b06` (also exposed as `<meta name="kyvera-commit">`); release tag `v5.0.1` |
 
 The GitHub repository is **public**; the deployed site is public.
 
