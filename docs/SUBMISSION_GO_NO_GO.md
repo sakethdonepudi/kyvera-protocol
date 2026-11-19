@@ -3,7 +3,7 @@
 **Date:** 2026-11-19
 **Project:** KYVERA
 **Bounty:** Paytaca Decentralized Identity · BCH Blaze 2026
-**Baseline:** commit `02c2512` (fail-closed hardening; audit fixes in `dfb0023`)
+**Baseline:** deployed commit `2f16977`; hardening `02c2512`; audit fixes `dfb0023`
 
 ---
 

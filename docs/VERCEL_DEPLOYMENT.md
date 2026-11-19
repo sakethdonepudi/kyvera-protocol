@@ -1,7 +1,7 @@
-# Vercel Deployment Preparation
+# Vercel Deployment
 
-**Status:** configuration prepared; not deployed. Deployment requires explicit
-authorization.
+**Status:** deployed at https://kyvera-alpha.vercel.app (commit `2f16977`).
+The repository remains private; changing visibility requires owner confirmation.
 
 ---
 

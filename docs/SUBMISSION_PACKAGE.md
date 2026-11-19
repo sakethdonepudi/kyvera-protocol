@@ -17,7 +17,7 @@
 | **Trust Challenge** | https://kyvera-alpha.vercel.app/challenge |
 | **Standalone verifier** | https://kyvera-alpha.vercel.app/kyvera-standalone.html |
 | **GitHub** | https://github.com/sakethdonepudi/kyvera-protocol |
-| **Deployed commit** | Exposed as `<meta name="kyvera-commit">`; release tag `v4.0.0` |
+| **Deployed commit** | `2f16977` (also exposed as `<meta name="kyvera-commit">`); release tag `v4.0.0` |
 
 The GitHub repository is currently **private**. Changing visibility requires
 explicit owner confirmation; the deployed site is public.
