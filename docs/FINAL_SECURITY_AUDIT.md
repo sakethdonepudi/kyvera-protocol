@@ -1,7 +1,7 @@
 # KYVERA Final Security Audit
 
 **Date:** 2026-11-19
-**Scope:** audit began at `6cc811f`; fixes and evidence are committed in `dfb0023`
+**Scope:** audit began at `6cc811f`; fixes in `dfb0023`; fail-closed hardening in `02c2512`
 **Type:** internal red-team review and reproducible test audit
 **Not:** an independent third-party security audit, a formal verification, or a warranty
 
@@ -15,7 +15,7 @@ No mainnet transaction was broadcast and no external Nostr event was published.
 
 | Category | Status | Evidence |
 | --- | --- | --- |
-| **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 54 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `dfb0023` with `--frozen-lockfile`, test and build |
+| **Verified locally** | Yes | 136 unit/integration/security tests; typecheck; production build; 54 browser checks; `pnpm rp:demo` 10/10; local relay tests; fresh clone of `02c2512` with `--frozen-lockfile`, test and build |
 | **Verified with real wallets** | No | No Paytaca, Cashonize or Selene device/extension was available; no wallet-produced signature was recorded |
 | **Verified on public relays** | Partial | Read-only probe: `wss://relay.damus.io` failed, `wss://nos.lol` connected and answered a kind-30078 query. No KYVERA event was published |
 | **Verified in production** | No | `next start` works locally; no public deployment exists |
@@ -572,17 +572,19 @@ pnpm rp:demo              # 10/10, no KYVERA API/relay
 pnpm audit --prod
 ```
 
-Fresh clone of commit `dfb0023`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 136/136, `pnpm build` pass.
+Fresh clone of commit `02c2512`: `pnpm install --frozen-lockfile` (non-fatal unbuilt-bin warning), `pnpm test` 136/136, `pnpm build` pass.
 
 ---
 
 ## 12. Conclusion
 
-The locally testable core is internally consistent and the three confirmed HIGH
-code defects were fixed with regression tests. The remaining HIGH risks are
-architectural or external: first-contact relay withholding, PARTIAL freshness,
-real-wallet behavior, public-relay retention and the absence of a transaction-level
-payment flow.
+The locally testable core is internally consistent. Confirmed HIGH code defects
+(H-01, H-02, H-03) were fixed with regression tests; H-05 now fails closed and
+H-07 is partially fixed with tested relay defaults, health checks and a relay
+transport error fix. The remaining HIGH risks are architectural or external:
+first-contact relay withholding (H-04), real-wallet behavior (H-06), public-relay
+retention/deployment (H-07) and the absence of a transaction-level payment flow
+(H-08).
 
 This is **not** an independent security audit, and it is **not** evidence of
 production readiness or real-wallet compatibility.
