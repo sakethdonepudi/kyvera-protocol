@@ -1,6 +1,6 @@
 # Vercel Deployment
 
-**Status:** deployed at https://kyvera-alpha.vercel.app (commit `89b117f`).
+**Status:** deployed at https://kyvera-alpha.vercel.app (commit `e01eaea`).
 The repository is public; the deployed site is public.
 
 ---

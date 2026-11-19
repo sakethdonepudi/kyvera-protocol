@@ -1,9 +1,9 @@
 # Release Checklist
 
-**Date:** 2026-11-18
-**Candidate:** `82a3e1b` + KYVERA 3.0 working tree
+**Date:** 2026-11-19
+**Candidate:** `e01eaea` (KYVERA 4.3)
 **Target:** BCH Blaze 2026 · Paytaca Decentralized Identity bounty
-**Status:** public demo deployed; repository private; bounty not submitted.
+**Status:** public demo deployed; repository public; bounty not submitted.
 
 ---
 
@@ -11,11 +11,12 @@
 
 | Check | Command | Result |
 | --- | --- | --- |
-| Repository commit | `git rev-parse HEAD` | `82a3e1b…` (3.0 working tree) |
+| Repository commit | `git rev-parse HEAD` | `e01eaea` (4.3) |
 | Unit/integration/security tests | `pnpm test` | **136/136 pass**, 13 files, ~3s |
 | Type checking | `pnpm typecheck` | pass, 5 projects |
 | Production build | `pnpm build` | pass, 17 routes |
 | Browser QA | `pnpm qa:browser` | **57/57**, 0 console/page errors |
+| UI 4.3 responsive evidence | `docs/screenshots/4.3/` | 375 / 390 / 768 / 1440 px, no horizontal overflow |
 | Independent relying party | `pnpm rp:demo` | **10/10**, no KYVERA API/relay |
 | Relay health | `pnpm relay:health <urls>` | read-only EOSE check; 2/2 for defaults |
 | Post-deployment smoke | `BASE=https://… pnpm smoke:deploy` | routes, headers, bundle, console errors |
